@@ -1,15 +1,28 @@
-import { useState } from "react";
 
-const Input = ({ type ,value, onChange }) => {
+const Input = ({ type = "text", value, onChange, label, name, id, radioValue, required, ...rest }) => {
+  const inputProps = {
+    type,
+    id,
+    name,
+    onChange,
+    required,
+    ...rest,
+  };
+
+  if (type === "radio") {
+    inputProps.value = radioValue;
+    inputProps.checked = value === radioValue;
+  } else {
+    inputProps.value = value;
+  }
+
+  console.log(value, typeof value);
+  console.log(radioValue, typeof radioValue);
 
   return (
     <div>
-      <input
-        type={type || "text"}
-        placeholder="Enter your answer..."
-        value={value}
-        onChange={onChange}
-      />
+      <input {...inputProps} />
+      <label htmlFor={id}>{label}</label>
     </div>
   );
 };

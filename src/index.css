@@ -43,6 +43,23 @@ li {
   font-weight: medium;
 }
 
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 0 15px;
+}
+
+.questions-page {
+  display: flex;
+  flex-direction: column;
+  margin-block: 10vh;
+}
+
+.questions-page button {
+  margin: auto;
+}
+
 .question-face {
   font-size: 16px;
   font-weight: bold;

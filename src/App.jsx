@@ -3,38 +3,28 @@ import { nanoid } from 'nanoid'
 import './App.css'
 import Questions from './Questions'
 import Input from './components/Input'
+import { getQuestions, getCategories } from './services/triviaService'
 
 function App() {
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(false)
   const [quizzical, setQuizzical] = useState(false)
   const [score, setScore] = useState(0)
+  const [subjects, setSubjects] = useState([])
   const [category, setCategory] = useState("")
 
   const startQuiz = () => {
     setLoading(true)
     setQuizzical(false)
-    async function fetchRequest() {
-      const response = await fetch(`https://opentdb.com/api.php?amount=5&category=${category}&difficulty=easy&type=multiple`)
-      if (!response.ok) {
-        const message = `An error has occured: ${response.status}`;
-        setLoading(false)
-        throw new Error(message);
-      }
-      const data = await response.json();
-      return data.results
-    }
 
-    fetchRequest().then(results => {
-
-      const newArray = []
-      results.map(obj => newArray.push({
-        id: nanoid(),
-        question: obj.question,
-        answer: obj.correct_answer,
-        options: obj.incorrect_answers.map(option => ({ id: nanoid(), option })).concat({ id: nanoid(), option: obj.correct_answer }).sort((a, b) => 0.5 - Math.random()),
-        selectedOption: "",
-      }))
+    getQuestions({ amount: 5, category, difficulty: "easy", type: "multiple" }).then(results => {
+      const newArray = results.map(question => {
+        return {
+          ...question,
+          id: nanoid(),
+          selectedOption: ""
+        }
+      })
 
       setQuestions(newArray)
 
@@ -43,7 +33,6 @@ function App() {
   }
 
   const handleSelect = ({ target }) => {
-    setCategory(target.value)
     setQuestions(prevQuetions => prevQuetions.map(question => {
       if (question.id === target.parentElement.parentElement.parentElement.id) {
         return { ...question, selectedOption: target.value }
@@ -68,25 +57,14 @@ function App() {
 
   }
 
-  const [subjects, setSubjects] = useState([])
-  const fetchSubjects = () => {
-    async function fetchRequest() {
-      const response = await fetch('https://opentdb.com/api_category.php')
-      if (!response.ok) {
-        const message = `An error has occured: ${response.status}`;
-        throw new Error(message);
-      }
-      const data = await response.json();
-      return data.trivia_categories
-    }
-
-    fetchRequest().then(results => {
-      setSubjects(results)
-    })
+  const handleCtegoryChange = (e) => {
+    setCategory(e.target.value)
   }
 
   useEffect(() => {
-    fetchSubjects()
+    getCategories().then(results => {
+      setSubjects(results)
+    })
   }, [])
 
   return (
@@ -110,22 +88,25 @@ function App() {
         <section className='start-page'>
           <h1>Quizzical</h1>
           <p>Select a subject and click "Start Quiz"</p>
-          <div className='subjects'>
-            <ul>
-              {subjects.map(subject => {
-                return (
-                  <li key={subject.id}>
-                    <Input
-                      type="radio"
-                      value={subject.id}
-                      onChange={handleSelect}
-                    />
-                    <p>{subject.name}</p>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
+          <fieldset className='subjects'>
+            <legend>Subjects</legend>
+            {subjects.map(subject => {
+              return (
+                <Input
+                  className='subject'
+                  key={subject.id}
+                  type="radio"
+                  label={subject.name}
+                  name="category"
+                  id={subject.id}
+                  radioValue={String(subject.id)}
+                  value={category}
+                  onChange={handleCtegoryChange}
+                />
+              )
+            })}
+          </fieldset>
+          {category === "" && <p className='error'>Please select a subject to start the quiz</p>}
           <button onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
         </section>
       }
