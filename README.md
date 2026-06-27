@@ -46,5 +46,3 @@ npm run preview
 **Notes & suggestions**
 - The app uses Vite for development; see `package.json` for available scripts.
 - Consider improving keyboard focus styles and adding tests for critical flows.
-
-If you'd like, I can also: update the demo link badge, add contribution guidelines, or add a minimal CI workflow — tell me which one to do next.
