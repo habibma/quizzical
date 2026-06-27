@@ -38,11 +38,3 @@ Preview the production build locally:
 ```bash
 npm run preview
 ```
-
-**Project layout**
-- `src/` — React source files (components, styles)
-- `public/` — static assets
-
-**Notes & suggestions**
-- The app uses Vite for development; see `package.json` for available scripts.
-- Consider improving keyboard focus styles and adding tests for critical flows.
