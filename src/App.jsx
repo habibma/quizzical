@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
 import './App.css'
 import Questions from './Questions'
+import Input from './components/Input'
 
 function App() {
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(false)
   const [quizzical, setQuizzical] = useState(false)
-  const [score, setScore] = useState (0)
+  const [score, setScore] = useState(0)
+  const [category, setCategory] = useState("")
 
   const startQuiz = () => {
     setLoading(true)
     setQuizzical(false)
     async function fetchRequest() {
-      const response = await fetch('https://opentdb.com/api.php?amount=5&category=18&difficulty=easy&type=multiple')
+      const response = await fetch(`https://opentdb.com/api.php?amount=5&category=${category}&difficulty=easy&type=multiple`)
       if (!response.ok) {
         const message = `An error has occured: ${response.status}`;
         setLoading(false)
@@ -27,23 +29,24 @@ function App() {
 
       const newArray = []
       results.map(obj => newArray.push({
-      id: nanoid(),
-      question: obj.question,
-      answer: obj.correct_answer,
-      options: obj.incorrect_answers.map(option => ({id: nanoid(), option})).concat({id: nanoid(), option: obj.correct_answer}).sort((a, b) => 0.5 - Math.random()),
-      selectedOption: "",
-    }))
+        id: nanoid(),
+        question: obj.question,
+        answer: obj.correct_answer,
+        options: obj.incorrect_answers.map(option => ({ id: nanoid(), option })).concat({ id: nanoid(), option: obj.correct_answer }).sort((a, b) => 0.5 - Math.random()),
+        selectedOption: "",
+      }))
 
-    setQuestions(newArray)
+      setQuestions(newArray)
 
-    setLoading(false)
+      setLoading(false)
     })
   }
 
-  const handleSelect = ({target}) => {
+  const handleSelect = ({ target }) => {
+    setCategory(target.value)
     setQuestions(prevQuetions => prevQuetions.map(question => {
       if (question.id === target.parentElement.parentElement.parentElement.id) {
-        return {...question, selectedOption: target.value }
+        return { ...question, selectedOption: target.value }
       }
       return question;
     }))
@@ -56,7 +59,7 @@ function App() {
     setScore(0)
 
     questions.map(question => {
-      if(question.selectedOption === question.answer) {
+      if (question.selectedOption === question.answer) {
         setScore(score => score + 1)
       } else {
         return;
@@ -65,18 +68,39 @@ function App() {
 
   }
 
+  const [subjects, setSubjects] = useState([])
+  const fetchSubjects = () => {
+    async function fetchRequest() {
+      const response = await fetch('https://opentdb.com/api_category.php')
+      if (!response.ok) {
+        const message = `An error has occured: ${response.status}`;
+        throw new Error(message);
+      }
+      const data = await response.json();
+      return data.trivia_categories
+    }
+
+    fetchRequest().then(results => {
+      setSubjects(results)
+    })
+  }
+
+  useEffect(() => {
+    fetchSubjects()
+  }, [])
+
   return (
     <div className='container'>
-      { questions.length > 0 ?
+      {questions.length > 0 ?
         <section className='questions-page'>
           <ul>
             <Questions
-              questions= {questions}
+              questions={questions}
               onChange={handleSelect}
               quizzical={quizzical}
             />
           </ul>
-          { quizzical ?
+          {quizzical ?
             <div className='score-borad'><span>You scored {score}/5 correct answers</span><button onClick={startQuiz}>Play again</button></div>
             :
             <button onClick={checkAnswer}>Check answers</button>
@@ -85,11 +109,27 @@ function App() {
         :
         <section className='start-page'>
           <h1>Quizzical</h1>
-          <p>Start your quiz by clicking on below butotn</p>
-          <button onClick={startQuiz}>{loading? "Loading..." : "Start Quiz"}</button>
+          <p>Select a subject and click "Start Quiz"</p>
+          <div className='subjects'>
+            <ul>
+              {subjects.map(subject => {
+                return (
+                  <li key={subject.id}>
+                    <Input
+                      type="radio"
+                      value={subject.id}
+                      onChange={handleSelect}
+                    />
+                    <p>{subject.name}</p>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+          <button onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
         </section>
       }
-    <footer><small>Coded by <a href='https://habibmote.com/' target='_blank'>Habib Mote</a></small></footer>
+      <footer><small>Coded by <a href='https://habibmote.com/' target='_blank'>Habib Mote</a></small></footer>
     </div>
   )
 }
