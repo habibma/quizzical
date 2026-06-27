@@ -1,14 +1,50 @@
-# What is QUIZZICAL
-"Quizzical" is a solo project given by Scrimba's course named "Learn React" held on Coursera.
+# Quizzical
 
-## What this app does
-Users are given several random questions fetched from "Open TRIVIA DATABASE" and the answers are checked and then the user's score is visible at the end.
+Quizzical is a small single-page quiz app built while following Scrimba's "Learn React" course. It fetches multiple-choice questions from the Open Trivia Database and presents them to the user in a simple, interactive UI.
 
-## What is interesting about this project
-This SPA (Single-page application), thanks to React, has been coded componential using conditional rendering (without React Router library) and maintains a single source of truth (SSOT) by storing and handling given data in an abject state created by the useState hook.
-Components are functional and states are passed down through props.
+**Live demo:** https://quizzical-mote.netlify.app/
 
-## How this app works
-Especially, for this kind of app named Quizzical, The questions get fetched after the user clicks on the start button. The questions type is multiple choice and are designed using radio buttons. Although the questions might be the same, options are randomly ordered. After the user responses are checked, correct answers and user-selected options will be indicated by colors thanks to conditional class and conditional inline style.
+**Features**
+- Fetches quiz questions from the Open Trivia Database
+- Multiple-choice questions with randomized answer order
+- Immediate feedback and final score display
+- Accessible controls (labels tied to inputs)
 
-**You can see the UI on [Netlify](https://quizzical-mote.netlify.app/)**
+**Tech stack**
+- React + Vite
+- html-entities, nanoid
+
+**Quick start**
+Clone the repo and install dependencies:
+
+```bash
+npm install
+```
+
+Start the dev server:
+
+```bash
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+**Project layout**
+- `src/` — React source files (components, styles)
+- `public/` — static assets
+
+**Notes & suggestions**
+- The app uses Vite for development; see `package.json` for available scripts.
+- Consider improving keyboard focus styles and adding tests for critical flows.
+
+If you'd like, I can also: update the demo link badge, add contribution guidelines, or add a minimal CI workflow — tell me which one to do next.
