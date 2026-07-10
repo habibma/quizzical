@@ -1,9 +1,9 @@
 import {decode} from 'html-entities';
 
-const Question = (props) => {
+const Question = ({ id, questionId, option, answer, selectedOption, onChange, quizzical }) => {
     let styles;
-    if (props.quizzical) {
-        if (props.option === props.answer){
+    if (quizzical) {
+        if (option === answer){
             styles = {
                 backgroundColor: "#94D7A2",
                 color: "black",
@@ -11,13 +11,13 @@ const Question = (props) => {
                 borderColor: "#94D7A2"
             }
         }
-        if (props.option !== props.answer && props.option === props.selectedOption){
+        if (option !== answer && option === selectedOption){
             styles = {
                 backgroundColor: "#F8BCBC",
                 borderColor: "#F8BCBC"
             }
         }
-        if (props.option === props.answer && props.option !== props.selectedOption){
+        if (option === answer && option !== selectedOption){
             styles = {
                 backgroundColor: "#94D7A2",
                 borderColor: "#94D7A2"
@@ -29,27 +29,27 @@ const Question = (props) => {
         <div>
             <input
             type='radio'
-            name={`option-${props.questionId}`}
-            id={props.id}
-            value={props.option}
-            onChange={props.onChange}
-            checked={props.selectedOption === props.option}
-            disabled={props.quizzical}
+            name={`option-${questionId}`}
+            id={id}
+            value={option}
+            onChange={onChange}
+            checked={selectedOption === option}
+            disabled={quizzical}
             />
             <label
-                htmlFor={props.id}
+                htmlFor={id}
                 className='option'
                 style={styles}
             >
-            { decode(props.option) }
+            { decode(option) }
             </label>
         </div>
     )
 }
 
-const Questions = (props) => {
+const Questions = ({ questions, onChange, quizzical }) => {
 
-    const questionFace = props.questions.map(question => {
+    const questionFace = questions.map(question => {
         return (
             <li key={question.id} id={question.id} className='query'>
                 <h3 className='question-face'>
@@ -65,8 +65,8 @@ const Questions = (props) => {
                                 option={option}
                                 answer={question.answer}
                                 selectedOption={question.selectedOption}
-                                onChange={props.onChange}
-                                quizzical={props.quizzical}
+                                onChange={onChange}
+                                quizzical={quizzical}
                             />
                         )
                     })}
