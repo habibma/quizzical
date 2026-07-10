@@ -84,27 +84,29 @@ function App() {
         </section>
   )
 
+  const categories = subjects.map(subject => {
+    return (
+      <Input
+        className='subject'
+        key={subject.id}
+        type="radio"
+        label={subject.name}
+        name="category"
+        id={subject.id}
+        radioValue={String(subject.id)}
+        value={category}
+        onChange={handleCtegoryChange}
+      />
+    )
+  })
+
   const startPage = (
     <section className='start-page'>
       <h1>Quizzical</h1>
       <p>Select a subject and click "Start Quiz"</p>
       <fieldset className='subjects'>
         <legend>Subjects</legend>
-        {subjects.map(subject => {
-          return (
-            <Input
-              className='subject'
-              key={subject.id}
-              type="radio"
-              label={subject.name}
-              name="category"
-              id={subject.id}
-              radioValue={String(subject.id)}
-              value={category}
-              onChange={handleCtegoryChange}
-            />
-          )
-        })}
+        {categories.length > 0 ? categories : <p className='info'>Loading subjects...</p>}
       </fieldset>
       {category === "" && <p className='error'>Please select a subject to start the quiz</p>}
       <button onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
