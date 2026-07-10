@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
 import './App.css'
-import Questions from './Questions'
+import Questions from './components/Questions'
 import Input from './components/Input'
 import { getQuestions, getCategories } from './services/triviaService'
 

@@ -13,8 +13,7 @@ export async function getQuestions(options) {
 	question: obj.question,
 	answer: obj.correct_answer,
 	options: obj.incorrect_answers
-	  .map((option) => ({ id: option, option }))
-	  .concat({ id: obj.correct_answer, option: obj.correct_answer })
+	  .concat(obj.correct_answer)
 	  .sort(() => 0.5 - Math.random()),
 	selectedOption: "",
   }));
