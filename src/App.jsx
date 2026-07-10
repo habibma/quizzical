@@ -108,8 +108,8 @@ function App() {
         <legend>Subjects</legend>
         {categories.length > 0 ? categories : <p className='info'>Loading subjects...</p>}
       </fieldset>
-      {category === "" && <p className='error'>Please select a subject to start the quiz</p>}
-      <button onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
+      {category === "" && <p className='error'>Please select a subject to start the quiz!</p>}
+      <button disabled={category === ""} onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
     </section>
   )
 

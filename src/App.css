@@ -43,6 +43,13 @@
 
 }
 
+.error {
+  color: rgb(249, 55, 55);
+  font-size: 12px;
+  margin-top: 10px;
+  font-weight: light;
+}
+
 .start-page h1 {
   font-size: 30px;
   margin-bottom: 0;
@@ -63,6 +70,11 @@ button:active {
   box-shadow: inset 2px 2px rgb(92, 92, 92);
   color: var(--secondary-color);
   user-select: none;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: auto;
 }
 
 footer {
