@@ -67,10 +67,8 @@ function App() {
     })
   }, [])
 
-  return (
-    <div className='container'>
-      {questions.length > 0 ?
-        <section className='questions-page'>
+  const QuestionPage = (
+    <section className='questions-page'>
           <ul>
             <Questions
               questions={questions}
@@ -84,31 +82,41 @@ function App() {
             <button onClick={checkAnswer}>Check answers</button>
           }
         </section>
+  )
+
+  const startPage = (
+    <section className='start-page'>
+      <h1>Quizzical</h1>
+      <p>Select a subject and click "Start Quiz"</p>
+      <fieldset className='subjects'>
+        <legend>Subjects</legend>
+        {subjects.map(subject => {
+          return (
+            <Input
+              className='subject'
+              key={subject.id}
+              type="radio"
+              label={subject.name}
+              name="category"
+              id={subject.id}
+              radioValue={String(subject.id)}
+              value={category}
+              onChange={handleCtegoryChange}
+            />
+          )
+        })}
+      </fieldset>
+      {category === "" && <p className='error'>Please select a subject to start the quiz</p>}
+      <button onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
+    </section>
+  )
+
+  return (
+    <div className='container'>
+      {questions.length > 0 ?
+        QuestionPage
         :
-        <section className='start-page'>
-          <h1>Quizzical</h1>
-          <p>Select a subject and click "Start Quiz"</p>
-          <fieldset className='subjects'>
-            <legend>Subjects</legend>
-            {subjects.map(subject => {
-              return (
-                <Input
-                  className='subject'
-                  key={subject.id}
-                  type="radio"
-                  label={subject.name}
-                  name="category"
-                  id={subject.id}
-                  radioValue={String(subject.id)}
-                  value={category}
-                  onChange={handleCtegoryChange}
-                />
-              )
-            })}
-          </fieldset>
-          {category === "" && <p className='error'>Please select a subject to start the quiz</p>}
-          <button onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
-        </section>
+        startPage
       }
       <footer><small>Coded by <a href='https://habibmote.com/' target='_blank'>Habib Mote</a></small></footer>
     </div>
