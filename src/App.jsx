@@ -67,7 +67,7 @@ function App() {
     })
   }, [])
 
-  const QuestionPage = (
+  const questionPage = (
     <section className='questions-page'>
           <ul>
             <Questions
@@ -116,7 +116,7 @@ function App() {
   return (
     <div className='container'>
       {questions.length > 0 ?
-        QuestionPage
+        questionPage
         :
         startPage
       }
