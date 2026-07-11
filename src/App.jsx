@@ -80,7 +80,7 @@ function App() {
             />
           </ul>
           {quizzical ?
-            <div className='score-borad'><span>You scored {score}/5 correct answers</span><button onClick={startQuiz}>Play again</button></div>
+            <div className='score-borad'><span>You scored {score}/5 correct answers</span><button className='btn' onClick={startQuiz}>Play again</button></div>
             :
             <button className='btn' onClick={checkAnswer}>Check answers</button>
           }
