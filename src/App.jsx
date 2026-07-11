@@ -12,6 +12,7 @@ function App() {
   const [score, setScore] = useState(0)
   const [subjects, setSubjects] = useState([])
   const [category, setCategory] = useState("")
+  const [theme, setTheme] = useState("light")
 
   const startQuiz = () => {
     setLoading(true)
@@ -65,7 +66,9 @@ function App() {
     getCategories().then(results => {
       setSubjects(results)
     })
-  }, [])
+
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme])
 
   const questionPage = (
     <section className='questions-page'>
@@ -79,7 +82,7 @@ function App() {
           {quizzical ?
             <div className='score-borad'><span>You scored {score}/5 correct answers</span><button onClick={startQuiz}>Play again</button></div>
             :
-            <button onClick={checkAnswer}>Check answers</button>
+            <button className='btn' onClick={checkAnswer}>Check answers</button>
           }
         </section>
   )
@@ -102,25 +105,28 @@ function App() {
 
   const startPage = (
     <section className='start-page'>
-      <h1>Quizzical</h1>
       <p>Select a subject and click "Start Quiz"</p>
       <fieldset className='subjects'>
         <legend>Subjects</legend>
         {categories.length > 0 ? categories : <p className='info'>Loading subjects...</p>}
       </fieldset>
       {category === "" && <p className='error'>Please select a subject to start the quiz!</p>}
-      <button disabled={category === ""} onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
+      <button className='btn' disabled={category === ""} onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
     </section>
   )
 
   return (
     <div className='container'>
+      <header className='header'>
+        <h1>Quizzical</h1>
+        <button className='theme-btn' onClick={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? "Dark Mode" : "Light Mode"}</button>
+      </header>
       {questions.length > 0 ?
         questionPage
         :
         startPage
       }
-      <footer><small>Coded by <a href='https://habibmote.com/' target='_blank'>Habib Mote</a></small></footer>
+      <footer><small>Coded by <a className='link' href='https://habibmote.com/' target='_blank'>Habib Mote</a></small></footer>
     </div>
   )
 }

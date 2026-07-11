@@ -5,9 +5,27 @@
   --danger-color: #F24E1E;
 
   --text-color: #293264;
+  --link-color: #4D5B9E;
 
   --background-color: #F5F7FB;
   --surface-color: #F5F7FB;
+
+  --hover-color: #3b4a8c;
+
+  --border-radius: 10px;
+  /* --shadow: 0 4px 4px rgba(0, 0, 0, 0.1) */
+}
+
+[data-theme="dark"] {
+  --primary-color: #4D5B9E;
+  --secondary-color: #F5F7FB;
+  --danger-color: #F24E1E;
+
+  --text-color: #F5F7FB;
+  --link-color: #727892;
+
+  --background-color: #293264;
+  --surface-color: #3B4A8C;
 
   --hover-color: #3b4a8c;
 
