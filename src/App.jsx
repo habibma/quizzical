@@ -12,7 +12,9 @@ function App() {
   const [score, setScore] = useState(0)
   const [subjects, setSubjects] = useState([])
   const [category, setCategory] = useState("")
-  const [theme, setTheme] = useState("light")
+
+  const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [theme, setTheme] = useState(prefersDarkMode ? "dark" : "light")
 
   const startQuiz = () => {
     setLoading(true)
