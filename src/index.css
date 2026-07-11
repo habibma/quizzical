@@ -3,6 +3,7 @@
   --primary-color: #4D5B9E;
   --secondary-color: #F5F7FB;
   --danger-color: #F24E1E;
+  --success-color: #4BB543;
 
   --text-color: #293264;
   --link-color: #4D5B9E;
@@ -20,7 +21,7 @@
   --primary-color: #4D5B9E;
   --secondary-color: #F5F7FB;
   --danger-color: #F24E1E;
-
+  --success-color: #4BB543;
   --text-color: #F5F7FB;
   --link-color: #727892;
 
@@ -55,19 +56,6 @@ ul {
 
 li {
  list-style: none;
-}
-
-input[type="radio"] {
-  display: none;
-}
-
-input[type="radio"]:checked + label{
-  background-color: var(--hover-color);
-  border-color: var(--hover-color);
-}
-
-input[type="radio"]:disabled + label {
-  opacity: 0.65;
 }
 
 fieldset {
