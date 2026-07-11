@@ -69,28 +69,6 @@ input[type="radio"]:disabled + label {
   text-decoration: none;
 }
 
-/* header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.theme-btn {
-  padding: 10px;
-  border-radius: var(--border-radius);
-  border: none;
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  cursor: pointer;
-  justify-self: flex-end;
-
-  &:hover {
-    background-color: var(--hover-color);
-    transition: background-color 0.3s ease;
-  }
-}
-
 .error {
   color: rgb(249, 55, 55);
   font-size: 12px;
@@ -126,6 +104,29 @@ p.info {
   cursor: auto;
 }
 
+/* header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-btn {
+  padding: 10px;
+  border-radius: var(--border-radius);
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  cursor: pointer;
+  justify-self: flex-end;
+
+  &:hover {
+    background-color: var(--hover-color);
+    transition: background-color 0.3s ease;
+  }
+}
+
+/* footer */
 footer {
   display: flex;
   justify-content: center;
