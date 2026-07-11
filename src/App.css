@@ -1,3 +1,4 @@
+/* root styles */
 :root {
   --primary-color: #4D5B9E;
   --secondary-color: #F5F7FB;
@@ -5,6 +6,7 @@
   --hover-color: #3b4a8c;
 }
 
+/* start page */
 .start-page {
   display: flex;
   flex-direction: column;
@@ -46,6 +48,22 @@
 
 }
 
+.start-page h1 {
+  font-size: 30px;
+  margin-bottom: 0;
+}
+
+/* general */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  max-width: 900px;
+  margin: auto;
+  padding: 0 20px;
+}
+
 .error {
   color: rgb(249, 55, 55);
   font-size: 12px;
@@ -53,9 +71,10 @@
   font-weight: light;
 }
 
-.start-page h1 {
-  font-size: 30px;
-  margin-bottom: 0;
+p.info {
+  font-size: 12px;
+  color: #4D5B9E;
+  margin-top: 10px;
 }
 
 button {
@@ -85,4 +104,45 @@ footer {
   justify-content: center;
   margin-top: 150px;
   margin-bottom: 10px;
+}
+
+/* question page */
+.query {
+  margin-bottom: 25px;
+  border-bottom: 1px solid #DBDEF0;
+  padding-bottom: 25px;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option {
+  width: fit-content;
+  padding: 5px 25px;
+  border: 1px solid #4D5B9E;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: medium;
+}
+
+.questions-page button {
+  margin: auto;
+}
+
+.question-face {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.score-borad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.score-borad span {
+  flex-grow: 2;
 }
