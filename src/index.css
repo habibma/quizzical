@@ -1,3 +1,20 @@
+/* root styles */
+:root {
+  --primary-color: #4D5B9E;
+  --secondary-color: #F5F7FB;
+  --danger-color: #F24E1E;
+
+  --text-color: #293264;
+
+  --background-color: #F5F7FB;
+  --surface-color: #F5F7FB;
+
+  --hover-color: #3b4a8c;
+
+  --border-radius: 10px;
+  /* --shadow: 0 4px 4px rgba(0, 0, 0, 0.1) */
+}
+
 * {
   box-sizing: border-box;
 }
@@ -6,9 +23,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Karla', sans-serif;
-  background-color: #F5F7FB;
-
-  color: #293264;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 p {
@@ -28,8 +44,8 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked + label{
-  background-color: #D6DBF5;
-  border-color: #D6DBF5;
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
 }
 
 input[type="radio"]:disabled + label {
