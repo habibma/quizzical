@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid'
 import './App.css'
 import Questions from './components/Questions'
 import Input from './components/Input'
+import Button from "./components/Button"
 import { getQuestions, getCategories } from './services/triviaService'
 
 function App() {
@@ -82,9 +83,9 @@ function App() {
             />
           </ul>
           {quizzical ?
-            <div className='score-borad'><span>You scored {score}/5 correct answers</span><button className='btn' onClick={startQuiz}>Play again</button></div>
+            <div className='score-borad'><span>You scored {score}/5 correct answers</span><Button onClick={startQuiz} text="Play again" /></div>
             :
-            <button className='btn' onClick={checkAnswer}>Check answers</button>
+            <Button onClick={checkAnswer} text="Check answers" />
           }
         </section>
   )
@@ -113,7 +114,7 @@ function App() {
         {categories.length > 0 ? categories : <p className='info'>Loading subjects...</p>}
       </fieldset>
       {category === "" && <p className='error'>Please select a subject to start the quiz!</p>}
-      <button className='btn' disabled={category === ""} onClick={startQuiz}>{loading ? "Loading..." : "Start Quiz"}</button>
+      <Button disabled={category === ""} onClick={startQuiz} text={loading ? "Loading..." : "Start Quiz"} />
     </section>
   )
 
@@ -121,7 +122,7 @@ function App() {
     <div className='container'>
       <header className='header'>
         <h1>Quizzical</h1>
-        <button className='theme-btn' onClick={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? "Dark Mode" : "Light Mode"}</button>
+        <Button className='theme-btn' onClick={() => setTheme(theme === "light" ? "dark" : "light")} text={theme === "light" ? "Dark Mode" : "Light Mode"} />
       </header>
       {questions.length > 0 ?
         questionPage
