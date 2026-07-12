@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import { nanoid } from 'nanoid'
 import './App.css'
 import Questions from './components/Questions'
@@ -6,7 +7,9 @@ import Input from './components/Input'
 import Button from "./components/Button"
 import Header from './components/Header'
 import { getQuestions, getCategories } from './services/triviaService'
-import Navbar from './components/Navbar'
+// pages
+import Dashboard from './pages/Admin/Dashboard'
+import About from './pages/About/About'
 
 function App() {
   const [questions, setQuestions] = useState([])
@@ -84,19 +87,19 @@ function App() {
 
   const questionPage = (
     <section className='questions-page'>
-          <ul>
-            <Questions
-              questions={questions}
-              onChange={handleSelect}
-              quizzical={quizzical}
-            />
-          </ul>
-          {quizzical ?
-            <div className='score-borad'><span>You scored {score}/5 correct answers</span><Button onClick={startQuiz} text="Play again" /></div>
-            :
-            <Button onClick={checkAnswer} text="Check answers" />
-          }
-        </section>
+      <ul>
+        <Questions
+          questions={questions}
+          onChange={handleSelect}
+          quizzical={quizzical}
+        />
+      </ul>
+      {quizzical ?
+        <div className='score-borad'><span>You scored {score}/5 correct answers</span><Button onClick={startQuiz} text="Play again" /></div>
+        :
+        <Button onClick={checkAnswer} text="Check answers" />
+      }
+    </section>
   )
 
   const categories = subjects.map(subject => {
@@ -127,16 +130,26 @@ function App() {
     </section>
   )
 
+  const Home = () => {
+    return (
+      <div className='container'>
+        <Header theme={theme} setTheme={setTheme} />
+        {questions.length > 0 ?
+          questionPage
+          :
+          startPage
+        }
+        <footer><small>Coded by <a className='link' href='https://habibmote.com/' target='_blank'>Habib Mote</a></small></footer>
+      </div>
+    )
+  }
+
   return (
-    <div className='container'>
-      <Header theme={theme} setTheme={setTheme} />
-      {questions.length > 0 ?
-        questionPage
-        :
-        startPage
-      }
-      <footer><small>Coded by <a className='link' href='https://habibmote.com/' target='_blank'>Habib Mote</a></small></footer>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/About" element={<About />} />
+      <Route path="/admin" element={<Dashboard />} />
+    </Routes>
   )
 }
 
