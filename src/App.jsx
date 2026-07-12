@@ -1,16 +1,24 @@
 import { useState, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { nanoid } from 'nanoid'
+import { getQuestions, getCategories } from './services/triviaService'
 import './App.css'
+// components
 import Questions from './components/Questions'
 import Input from './components/Input'
 import Button from "./components/Button"
 import Header from './components/Header'
-import { getQuestions, getCategories } from './services/triviaService'
 // pages
-import Dashboard from './pages/Admin/Dashboard'
 import About from './pages/About/About'
 import Footer from './components/Footer'
+// admin pages
+import AdminLayout from './pages/Admin/AdminLayout'
+import Dashboard from './pages/Admin/Dashboard'
+//import Questions from './pages/Admin/Questions'
+import Quizzes from './pages/Admin/Quizzes'
+import Categories from './pages/Admin/Categories'
+import Settings from './pages/Admin/Settings'
+import Statistics from './pages/Admin/Statistics'
 
 function App() {
   const [questions, setQuestions] = useState([])
@@ -149,7 +157,14 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/About" element={<About />} />
-      <Route path="/admin" element={<Dashboard />} />
+      <Route path="/admin" element={<AdminLayout />} >
+        <Route index element={<Dashboard />} />
+        {/* <Route path="questions" element={<Questions />} /> */}
+        <Route path="quizzes" element={<Quizzes />} />
+        <Route path="categories" element={<Categories />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="statistics" element={<Statistics />} />
+      </Route>
     </Routes>
   )
 }
