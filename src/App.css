@@ -26,6 +26,7 @@
     border-radius: var(--border-radius);
     padding: 5px 10px;
     font-size: 12px;
+    font-family: "Poppins", sans-serif;
 
     &:hover {
       scale: 1.05;
@@ -154,6 +155,7 @@ footer {
   cursor: pointer;
   font-size: 12px;
   font-weight: medium;
+  font-family: "Poppins", sans-serif;
 }
 
 .questions-page button {
