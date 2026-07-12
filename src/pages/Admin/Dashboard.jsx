@@ -1,3 +1,4 @@
+import Footer from '../../components/Footer'
 import Navbar from '../../components/Navbar'
 
 const Dashboard = () => {
@@ -5,6 +6,7 @@ const Dashboard = () => {
     <div className='container'>
       <Navbar />
       <div>Admin Dashboard</div>
+      <Footer />
     </div>
   )
 }

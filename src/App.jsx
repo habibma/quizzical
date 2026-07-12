@@ -10,6 +10,7 @@ import { getQuestions, getCategories } from './services/triviaService'
 // pages
 import Dashboard from './pages/Admin/Dashboard'
 import About from './pages/About/About'
+import Footer from './components/Footer'
 
 function App() {
   const [questions, setQuestions] = useState([])
@@ -139,7 +140,7 @@ function App() {
           :
           startPage
         }
-        <footer><small>Coded by <a className='link' href='https://habibmote.com/' target='_blank'>Habib Mote</a></small></footer>
+        <Footer />
       </div>
     )
   }
