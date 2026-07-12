@@ -9,11 +9,11 @@ const NavItem = ({ to, text }) => {
 const Navbar = () => {
   return (
     <nav className="navbar">
-        <NavItem to="/" text="Home" />
-        <span className="nav-separator">|</span>
-        <NavItem to="/about" text="About" />
-        <span className="nav-separator">|</span>
-        <NavItem to="/admin" text="Admin" />
+      <NavItem to="/" text="Home" />
+      <span className="nav-separator">|</span>
+      <NavItem to="/about" text="About" />
+      <span className="nav-separator">|</span>
+      <NavItem to="/admin" text="Admin" />
     </nav>
   )
 }
