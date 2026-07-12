@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom"
 
 const NavItem = ({ to, text }) => {
   return (
-    <a href={to} className="nav-item">{text}</a>
+    <Link to={to} className="nav-item">{text}</Link>
   )
 }
 
