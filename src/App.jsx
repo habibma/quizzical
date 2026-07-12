@@ -21,7 +21,14 @@ function App() {
     setLoading(true)
     setQuizzical(false)
 
-    getQuestions({ amount: 5, category, difficulty: "easy", type: "multiple" }).then(results => {
+    const settings = {
+      amount: 5,
+      category: category,
+      difficulty: "easy",
+      type: "multiple"
+    }
+
+    getQuestions(settings).then(results => {
       const newArray = results.map(question => {
         return {
           ...question,
