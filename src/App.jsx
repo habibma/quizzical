@@ -4,7 +4,9 @@ import './App.css'
 import Questions from './components/Questions'
 import Input from './components/Input'
 import Button from "./components/Button"
+import Header from './components/Header'
 import { getQuestions, getCategories } from './services/triviaService'
+import Navbar from './components/Navbar'
 
 function App() {
   const [questions, setQuestions] = useState([])
@@ -127,10 +129,7 @@ function App() {
 
   return (
     <div className='container'>
-      <header className='header'>
-        <h1>Quizzical</h1>
-        <Button className='theme-btn' onClick={() => setTheme(theme === "light" ? "dark" : "light")} text={theme === "light" ? "Dark Mode" : "Light Mode"} />
-      </header>
+      <Header theme={theme} setTheme={setTheme} />
       {questions.length > 0 ?
         questionPage
         :

@@ -1,0 +1,36 @@
+Phase 1 – Basic Admin Panel
+
+These are great first features:
+
+✅ Add/remove categories
+✅ Enable/disable categories (instead of deleting them)
+✅ Set the default number of questions
+✅ Set the quiz difficulty
+✅ Set the question type (Multiple Choice / True-False)
+Phase 2 – Question Management
+
+Once you stop relying entirely on Open Trivia DB, you can let admins manage their own content:
+
+Add questions
+Edit questions
+Delete questions
+Import/export questions
+Tag questions by subject and difficulty
+Phase 3 – Analytics
+
+Give the admin insight into quiz performance:
+
+Number of quizzes taken
+Average score
+Most difficult questions
+Category popularity
+Completion rate
+Phase 4 – Multi-user
+
+Eventually:
+
+Admin
+Teacher
+Student
+
+Each role would have different permissions.

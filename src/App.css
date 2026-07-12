@@ -105,28 +105,6 @@ p.info {
   cursor: auto;
 }
 
-/* header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.theme-btn {
-  padding: 10px;
-  border-radius: var(--border-radius);
-  border: none;
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  cursor: pointer;
-  justify-self: flex-end;
-
-  &:hover {
-    background-color: var(--hover-color);
-    transition: background-color 0.3s ease;
-  }
-}
-
 /* footer */
 footer {
   display: flex;
@@ -156,6 +134,11 @@ footer {
   font-size: 12px;
   font-weight: medium;
   font-family: "Poppins", sans-serif;
+
+  &:hover {
+    background-color: var(--hover-color);
+    transition: background-color 0.3s ease;
+  }
 }
 
 .questions-page button {
@@ -164,6 +147,7 @@ footer {
 
 .question-face {
   font-size: 16px;
+  margin-bottom: 10px;
   font-weight: bold;
 }
 
