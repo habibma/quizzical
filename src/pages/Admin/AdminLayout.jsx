@@ -8,14 +8,20 @@ import Header from "./components/Header";
 const AdminLayout = ({ theme, toggleTheme, pageTitle }) => {
 
     const [collapsed, setCollapsed] = useState(false);
+    const [opened, setOpened] = useState(false);
 
     const handleToggleSidebar = () => {
         setCollapsed(!collapsed);
     }
+
+    const handleToggleSidebarOpen = () => {
+        setOpened(!opened);
+    }
+
     return (
         <div className="admin-layout">
-            <Header theme={theme} toggleTheme={toggleTheme} pageTitle={pageTitle} />
-            <Sidebar collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} />
+            <Sidebar className="admin-sidebar" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} />
+            <Header className="admin-header" pageTitle={pageTitle} opened={opened} handleToggleSidebarOpen={handleToggleSidebarOpen} />
             <main className="admin-main">
                 <Outlet />
             </main>

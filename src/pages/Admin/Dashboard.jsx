@@ -4,7 +4,6 @@ import Navbar from '../../components/Navbar'
 const Dashboard = () => {
   return (
     <div className='container'>
-      <Navbar />
       <main className='dashboard'>
         <h1>Admin Dashboard</h1>
         <p>Welcome to the admin dashboard. Here you can manage the quiz questions and categories.</p>
@@ -17,7 +16,6 @@ const Dashboard = () => {
           <li>Recent activities</li>
         </ul>
       </main>
-      <Footer />
     </div>
   )
 }

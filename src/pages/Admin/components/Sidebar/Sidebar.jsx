@@ -1,11 +1,12 @@
 import SidebarItem from "./SidebarItem";
 import { sidebarItems } from "./sidebarItems";
+import Button from "../../../../components/Button";
 
 import './Sidebar.css';
 
-const Sidebar = ( { collapsed, handleToggleSidebar } ) => {
+const Sidebar = ( { collapsed, handleToggleSidebar, opened } ) => {
   return (
-    <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+    <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${opened ? 'opened' : ''}`}>
       <h2>Admin Panel</h2>
       <nav className="admin-nav">
         <ul className="sidebar-menu">
@@ -19,10 +20,8 @@ const Sidebar = ( { collapsed, handleToggleSidebar } ) => {
             />
           ))}
         </ul>
-        <button className="toggle-button" onClick={handleToggleSidebar}>
-          {collapsed ? 'Expand' : 'Collapse'}
-        </button>
       </nav>
+      <Button className="toggle-sidebar-btn" text={collapsed ? '☰' : '☰ Collapse'} onClick={handleToggleSidebar} />
     </aside>
   );
 }
