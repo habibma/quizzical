@@ -2,17 +2,17 @@
 export const sidebarItems = [
   {
     title: 'Dashboard',
-    Path: '/admin',
+    path: '/admin',
     icon: 'fa-solid fa-gauge',
   },
   {
     title: 'Questions',
-    Path: '/admin/questions',
+    path: '/admin/questions',
     icon: 'fa-solid fa-question-circle',
   },
   {
     title: 'Quizzes',
-    Path: '/admin/quizzes',
+    path: '/admin/quizzes',
     icon: 'fa-solid fa-question-circle',
   },
   {
@@ -22,17 +22,17 @@ export const sidebarItems = [
   },
   {
     title: 'Settings',
-    Path: '/admin/settings',
+    path: '/admin/settings',
     icon: 'fa-solid fa-cog',
   },
   {
     title: 'Statistics',
-    Path: '/admin/statistics',
+    path: '/admin/statistics',
     icon: 'fa-solid fa-chart-bar',
   },
   {
     title: 'Themes',
-    Path: '/admin/themes',
+    path: '/admin/themes',
     icon: 'fa-solid fa-palette',
   },
   {

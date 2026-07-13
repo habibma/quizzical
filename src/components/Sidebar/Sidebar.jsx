@@ -14,7 +14,7 @@ const Sidebar = () => {
               key={index}
               icon={item.icon}
               label={item.title}
-              to={item.Path}
+              to={item.path}
             />
           ))}
         </ul>
