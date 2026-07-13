@@ -1,0 +1,15 @@
+.small {
+    font-family: 'poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--text-color);
+}
+
+.link {
+    text-decoration: none;
+    color: var(--link-color);
+}
+
+.link:hover {
+    color: var(--hover-color);
+}
