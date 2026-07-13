@@ -15,6 +15,7 @@ const Sidebar = ( { collapsed, handleToggleSidebar } ) => {
               icon={item.icon}
               label={item.title}
               to={item.path}
+              collapsed={collapsed}
             />
           ))}
         </ul>

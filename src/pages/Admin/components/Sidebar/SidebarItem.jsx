@@ -1,12 +1,12 @@
 import { NavLink } from "react-router-dom";
 
-const SidebarItem = ({ icon: IconComponent, label, to }) => {
+const SidebarItem = ({ icon: IconComponent, label, to, collapsed }) => {
 
     return (
         <li className="sidebar-menu-item">
             <NavLink to={to} className="sidebar-link">
                 <IconComponent className="sidebar-icon" aria-hidden="true" />
-                <span>{label}</span>
+                { !collapsed && <span>{label}</span> }
             </NavLink>
         </li>
     );
