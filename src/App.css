@@ -159,3 +159,12 @@ footer {
 .score-borad span {
   flex-grow: 2;
 }
+
+.link {
+    text-decoration: none;
+    color: var(--link-color);
+}
+
+.link:hover {
+    color: var(--hover-color);
+}

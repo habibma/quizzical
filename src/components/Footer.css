@@ -4,12 +4,3 @@
     font-weight: 400;
     color: var(--text-color);
 }
-
-.link {
-    text-decoration: none;
-    color: var(--link-color);
-}
-
-.link:hover {
-    color: var(--hover-color);
-}
