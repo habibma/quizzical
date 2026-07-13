@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid'
 import { getQuestions, getCategories } from './services/triviaService'
 import './App.css'
 // components
-import Questions from './components/Questions'
+import Questionnaire from './components/Questionnaire'
 import Input from './components/Input'
 import Button from "./components/Button"
 import Header from './components/Header'
@@ -97,7 +97,7 @@ function App() {
   const questionPage = (
     <section className='questions-page'>
       <ul>
-        <Questions
+        <Questionnaire
           questions={questions}
           onChange={handleSelect}
           quizzical={quizzical}

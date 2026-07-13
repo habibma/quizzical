@@ -47,7 +47,7 @@ const Question = ({ id, questionId, option, answer, selectedOption, onChange, qu
     )
 }
 
-const Questions = ({ questions, onChange, quizzical }) => {
+const Questionnaire = ({ questions, onChange, quizzical }) => {
 
     const questionFace = questions.map(question => {
         return (
@@ -84,4 +84,4 @@ const Questions = ({ questions, onChange, quizzical }) => {
     )
 }
 
-export default Questions;
+export default Questionnaire;
