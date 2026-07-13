@@ -14,7 +14,7 @@ import Footer from './components/Footer'
 // admin pages
 import AdminLayout from './pages/Admin/AdminLayout'
 import Dashboard from './pages/Admin/Dashboard'
-//import Questions from './pages/Admin/Questions'
+import Questions from './pages/Admin/Questions'
 import Quizzes from './pages/Admin/Quizzes'
 import Categories from './pages/Admin/Categories'
 import Settings from './pages/Admin/Settings'
@@ -159,7 +159,7 @@ function App() {
       <Route path="/About" element={<About />} />
       <Route path="/admin" element={<AdminLayout />} >
         <Route index element={<Dashboard />} />
-        {/* <Route path="questions" element={<Questions />} /> */}
+        <Route path="questions" element={<Questions />} />
         <Route path="quizzes" element={<Quizzes />} />
         <Route path="categories" element={<Categories />} />
         <Route path="settings" element={<Settings />} />
