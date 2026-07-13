@@ -3,7 +3,7 @@ import Button from "./Button"
 
 import "./Header.css"
 
-const Header = ({ theme, setTheme }) => {
+const Header = ({ theme, toggleTheme }) => {
   return (
     <header className='header'>
         <section className="navbar-container">
@@ -11,7 +11,7 @@ const Header = ({ theme, setTheme }) => {
         </section>
         <section className='theme-btn-container'>
           <h1>Quizzical</h1>
-          <Button className='theme-btn' onClick={() => setTheme(theme === "light" ? "dark" : "light")} text={theme === "light" ? "Dark Mode" : "Light Mode"} />
+          <Button className='theme-btn' onClick={toggleTheme} text={theme === "light" ? "Dark Mode" : "Light Mode"} />
         </section>
       </header>
   )
