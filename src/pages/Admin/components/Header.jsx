@@ -1,6 +1,10 @@
 // admin Header containd a burger menu for mobile veiw, title of the page, theme toggle and user avatar with dropdown menu for profile and logout
 import React from "react";
 
+import './Header.css';
+
+import UserIcon from "../../../assets/icons/UserIcon";
+
 const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleSidebarOpen }) => {
     return (
         <header className="admin-header">
@@ -11,12 +15,11 @@ const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleS
                     <span className="burger-bar"></span>
                 </button>
             </div>
-            <div className="header-center">
-                <h1>{pageTitle}</h1>
-            </div>
             <div className="header-right">
                 <div className="user-avatar">
-                    <img src="https://via.placeholder.com/40" alt="User Avatar" />
+                    <UserIcon />
+                </div>
+                <div className="user-dropdown">
                 </div>
             </div>
         </header>

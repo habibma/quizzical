@@ -5,7 +5,7 @@ import './AdminLayout.css'
 import Sidebar from "./components/Sidebar/Sidebar";
 import Header from "./components/Header";
 
-const AdminLayout = ({ theme, toggleTheme, pageTitle }) => {
+const AdminLayout = ({ theme, toggleTheme }) => {
 
     const [collapsed, setCollapsed] = useState(false);
     const [opened, setOpened] = useState(false);
@@ -21,7 +21,7 @@ const AdminLayout = ({ theme, toggleTheme, pageTitle }) => {
     return (
         <div className="admin-layout">
             <Sidebar className="admin-sidebar" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} />
-            <Header className="admin-header" pageTitle={pageTitle} opened={opened} handleToggleSidebarOpen={handleToggleSidebarOpen} />
+            <Header className="admin-header" opened={opened} handleToggleSidebarOpen={handleToggleSidebarOpen} />
             <main className="admin-main">
                 <Outlet />
             </main>
