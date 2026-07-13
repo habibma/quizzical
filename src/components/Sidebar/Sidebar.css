@@ -30,3 +30,22 @@
         color: var(--hover-color);
     }
 }
+
+.sidebar-link.active {
+    font-weight: bold;
+    color: var(--active-color);
+
+    .sidebar-icon {
+        color: var(--active-color);
+    }
+}
+
+.sidebar-link.active:hover {
+    color: var(--hover-color);
+}
+
+.sidebar-icon {
+    margin-right: 10px;
+    vertical-align: middle;
+    color: var(--icon-color);
+}

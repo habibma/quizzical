@@ -12,10 +12,13 @@
   --surface-color: #F5F7FB;
 
   --hover-color: #3b4a8c;
+  --active-color: #4D5B9E;
 
   --border-radius: 10px;
   --border-color: #293264;
   /* --shadow: 0 4px 4px rgba(0, 0, 0, 0.1) */
+
+  --icon-color: #4D5B9E;
 }
 
 [data-theme="dark"] {
@@ -30,8 +33,11 @@
   --surface-color: #060607;
 
   --hover-color: #BEE7FF;
+  --active-color: #4D5B9E;
 
   --border-radius: 10px;
   --border-color: #E0E0E0;
   /* --shadow: 0 4px 4px rgba(0, 0, 0, 0.1) */
+
+  --icon-color: #8BD3FF;
 }

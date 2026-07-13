@@ -1,43 +1,51 @@
+import DashboardIcon from "../../assets/icons/DashboardIcon"
+import QuestionsIcon from "../../assets/icons/QuestionsIcon"
+import QuizzesIcon from "../../assets/icons/QuizzesIcon"
+import CategoriesIcon from "../../assets/icons/categoriesIcon"
+import SettingsIcon from "../../assets/icons/SettingsIcon"
+import StatisticsIcon from "../../assets/icons/StatisticsIcon"
+import ThemesIcon from "../../assets/icons/ThemesIcon"
+import ApiIcon from "../../assets/icons/ApiIcon"
 
 export const sidebarItems = [
   {
     title: 'Dashboard',
     path: '/admin',
-    icon: 'fa-solid fa-gauge',
+    icon: DashboardIcon,
   },
   {
     title: 'Questions',
     path: '/admin/questions',
-    icon: 'fa-solid fa-question-circle',
+    icon: QuestionsIcon,
   },
   {
     title: 'Quizzes',
     path: '/admin/quizzes',
-    icon: 'fa-solid fa-question-circle',
+    icon: QuizzesIcon,
   },
   {
     title: 'Categories',
     path: '/admin/categories',
-    icon: 'fa-solid fa-list',
+    icon: CategoriesIcon,
   },
   {
     title: 'Settings',
     path: '/admin/settings',
-    icon: 'fa-solid fa-cog',
+    icon: SettingsIcon,
   },
   {
     title: 'Statistics',
     path: '/admin/statistics',
-    icon: 'fa-solid fa-chart-bar',
+    icon: StatisticsIcon,
   },
   {
     title: 'Themes',
     path: '/admin/themes',
-    icon: 'fa-solid fa-palette',
+    icon: ThemesIcon,
   },
   {
     title: 'API',
     path: '/admin/api',
-    icon: 'fa-solid fa-code',
+    icon: ApiIcon,
   }
 ]
