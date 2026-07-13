@@ -8,17 +8,8 @@ import Questionnaire from './components/Questionnaire'
 import Input from './components/Input'
 import Button from "./components/Button"
 import Header from './components/Header'
-// pages
-import About from './pages/About/About'
 import Footer from './components/Footer'
-// admin pages
-import AdminLayout from './pages/Admin/AdminLayout'
-import Dashboard from './pages/Admin/Dashboard'
-import Questions from './pages/Admin/Questions'
-import Quizzes from './pages/Admin/Quizzes'
-import Categories from './pages/Admin/Categories'
-import Settings from './pages/Admin/Settings'
-import Statistics from './pages/Admin/Statistics'
+import AppRoutes from './routes/AppRoutes'
 
 function App() {
   const [questions, setQuestions] = useState([])
@@ -139,21 +130,20 @@ function App() {
     </section>
   )
 
-  const Home = () => {
-    return (
-      <div className='container'>
-        <Header theme={theme} setTheme={setTheme} />
-        {questions.length > 0 ?
-          questionPage
-          :
-          startPage
-        }
-        <Footer />
-      </div>
-    )
-  }
-
-  return <AppRoutes />
+  return <AppRoutes
+    theme={theme}
+    toggleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
+    questions={questions}
+    questionPage={questionPage}
+    startPage={startPage}
+    subjects={subjects}
+    category={category}
+    loading={loading}
+    startQuiz={startQuiz}
+    handleSelect={handleSelect}
+    checkAnswer={checkAnswer}
+    handleCtegoryChange={handleCtegoryChange}
+  />
 }
 
 export default App

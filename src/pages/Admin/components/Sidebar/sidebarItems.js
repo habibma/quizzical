@@ -1,11 +1,11 @@
-import DashboardIcon from "../../assets/icons/DashboardIcon"
-import QuestionsIcon from "../../assets/icons/QuestionsIcon"
-import QuizzesIcon from "../../assets/icons/QuizzesIcon"
-import CategoriesIcon from "../../assets/icons/categoriesIcon"
-import SettingsIcon from "../../assets/icons/SettingsIcon"
-import StatisticsIcon from "../../assets/icons/StatisticsIcon"
-import ThemesIcon from "../../assets/icons/ThemesIcon"
-import ApiIcon from "../../assets/icons/ApiIcon"
+import DashboardIcon from "../../../../assets/icons/DashboardIcon"
+import QuestionsIcon from "../../../../assets/icons/QuestionsIcon"
+import QuizzesIcon from "../../../../assets/icons/QuizzesIcon"
+import CategoriesIcon from "../../../../assets/icons/categoriesIcon"
+import SettingsIcon from "../../../../assets/icons/SettingsIcon"
+import StatisticsIcon from "../../../../assets/icons/StatisticsIcon"
+import ThemesIcon from "../../../../assets/icons/ThemesIcon"
+import ApiIcon from "../../../../assets/icons/ApiIcon"
 
 export const sidebarItems = [
   {

@@ -4,7 +4,6 @@ import Navbar from "../../components/Navbar"
 const About = () => {
     return (
         <div className="container">
-            <Navbar />
             <div className="about-container">
                 <h1>About Quizzical</h1>
                 <p>Quizzical is a fun and interactive quiz application that allows users to test their knowledge on various topics. It provides a user-friendly interface and a wide range of questions to challenge your brain.</p>

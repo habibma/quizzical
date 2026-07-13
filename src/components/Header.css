@@ -42,13 +42,13 @@
   align-items: center;
   width: 100%;
   max-width: 700px;
-  margin: 20px auto;
 }
 
 .theme-btn-container {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  max-width: 700px;
 }
 
 .nav-item {

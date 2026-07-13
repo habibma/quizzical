@@ -54,17 +54,6 @@ input[type="radio"]:disabled + label {
   margin-bottom: 0;
 }
 
-/* general */
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100vh;
-  max-width: 900px;
-  margin: auto;
-  padding: 0 20px;
-}
-
 .link {
   color: var(--link-color);
   text-decoration: none;
@@ -106,7 +95,7 @@ p.info {
 }
 
 /* footer */
-footer {
+.footer {
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
