@@ -4,6 +4,8 @@ import Input from '../../components/Input'
 import Button from "../../components/Button"
 import Footer from '../../components/Footer'
 
+import './Home.css'
+
 const Home = ({ questions, questionPage, category, loading, startQuiz, handleCategoryChange }) => {
     const { categories } = useCategories();
     
