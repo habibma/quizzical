@@ -89,6 +89,13 @@ const Categories = () => {
             </tr>
             ))}
           </tbody>
+          <tfoot className='categories-table-footer'>
+            <tr>
+              <td colSpan="3">
+                <button className="btn btn-success">Save Changes</button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </section>
     </div>
