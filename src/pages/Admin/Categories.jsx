@@ -18,16 +18,41 @@ const Categories = () => {
     }));
   };
 
+  const saveCategoriesToLocalStorage = () => {
+    const categoriesToSave = categories.reduce((acc, category) => {
+      acc[category.id] = category.enabled;
+      return acc;
+    }, {});
+    localStorage.setItem('categoriesToSave', JSON.stringify(categoriesToSave));
+  }
+
   useEffect(() => {
     // Fetch categories from the API
     getCategories().then(categories => {
-      setCategories(categories.map(category => ({
+      const newCategories = categories.map(category => ({
         id: category.id,
         name: category.name,
         enabled: true
-      })))
+      }));
+      setCategories(newCategories);
+
+      // Then load saved preferences from localStorage
+      const storedCategories = localStorage.getItem('categoriesToSave');
+      if (storedCategories) {
+        const stored = JSON.parse(storedCategories);
+        setCategories(prevCategories => prevCategories.map(category => ({
+          ...category,
+          enabled: stored[category.id] !== undefined ? stored[category.id] : category.enabled
+        })));
+      }
     });
   }, []);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      saveCategoriesToLocalStorage();
+    }
+  }, [categories]);
 
   return (
     <div className='container'>
@@ -52,15 +77,15 @@ const Categories = () => {
                   <label className="switch">
                     <input
                       type="checkbox"
-                      defaultChecked={category.enabled}
+                      checked={category.enabled}
                       onChange={() => toggleCategoryEnabled(category.id)}
                     />
                     <span className="slider"></span>
                   </label>
-              </td>
-              <td>
-                <button className="btn btn-primary">Edit</button>
-              </td>
+                </td>
+                <td>
+                  <button className="btn btn-primary">Edit</button>
+                </td>
             </tr>
             ))}
           </tbody>
