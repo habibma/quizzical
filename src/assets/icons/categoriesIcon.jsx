@@ -10,7 +10,7 @@ const CategoriesIcon = ({ className = "" }) => {
             stroke="currentColor"
             strokeWidth={2}
             strokeLinecap={2}
-            stroke-linejoin="round"
+            strokeLinejoin={2}
         >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M14 4h6v6h-6l0 -6" />
