@@ -13,6 +13,16 @@
     color: var(--text-color);
 }
 
+@media (max-width: 768px) {
+    .admin-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: 70px 1fr;
+        grid-template-areas:
+            "header"
+            "main";
+    }
+}
+
 .admin-sidebar {
     grid-area: sidebar;
     background-color: var(--surface-color);

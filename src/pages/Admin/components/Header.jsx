@@ -9,11 +9,11 @@ const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleS
     return (
         <header className="admin-header">
             <div className="header-left">
-                <button className="burger-menu" onClick={handleToggleSidebarOpen}>
+                <div className="burger-menu" onClick={handleToggleSidebarOpen}>
                     <span className="burger-bar"></span>
                     <span className="burger-bar"></span>
                     <span className="burger-bar"></span>
-                </button>
+                </div>
             </div>
             <div className="header-right">
                 <div className="user-avatar">
