@@ -21,7 +21,9 @@ const Sidebar = ( { collapsed, handleToggleSidebar, opened } ) => {
           ))}
         </ul>
       </nav>
-      <Button className="toggle-sidebar-btn" text={collapsed ? '☰' : '☰ Collapse'} onClick={handleToggleSidebar} />
+      <footer className="sidebar-footer">
+        <Button className="toggle-sidebar-btn" text={collapsed ? '☰' : '☰ Collapse'} onClick={handleToggleSidebar} />
+      </footer>
     </aside>
   );
 }

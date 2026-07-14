@@ -1,5 +1,6 @@
 @import './variables.css';
 
+/* css reset */
 * {
   box-sizing: border-box;
 }
@@ -36,4 +37,15 @@ fieldset {
 
 small {
   font-size: 0.8rem;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+table th,
+table td {
+  padding: 0;
+  text-align: left;
 }

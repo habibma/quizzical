@@ -72,28 +72,6 @@ p.info {
   margin-top: 10px;
 }
 
-.btn {
-  width: 150px;
-  padding: 15px;
-  border-radius: var(--border-radius);
-  border: none;
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  margin: 20px auto;
-  cursor: pointer;
-}
-
-.btn:active {
-  box-shadow: inset 2px 2px rgb(92, 92, 92);
-  color: var(--secondary-color);
-  user-select: none;
-}
-
-.btn:disabled {
-  opacity: 0.65;
-  cursor: auto;
-}
-
 /* footer */
 .footer {
   display: flex;
@@ -156,4 +134,9 @@ p.info {
 
 .link:hover {
     color: var(--hover-color);
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
 }
