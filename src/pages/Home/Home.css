@@ -54,6 +54,13 @@ input[type="radio"]:disabled + label {
   margin-bottom: 0;
 }
 
+.start-page .error {
+  color: rgb(249, 55, 55);
+  font-size: 12px;
+  margin-block: 10px;
+  font-weight: light;
+}
+
 /* question page */
 .query {
   margin-bottom: 25px;

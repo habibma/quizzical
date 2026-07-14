@@ -80,32 +80,16 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme])
 
-  const questionPage = (
-    <section className='questions-page'>
-      <ul>
-        <Questionnaire
-          questions={questions}
-          onChange={handleSelect}
-          quizzical={quizzical}
-        />
-      </ul>
-      {quizzical ?
-        <div className='score-borad'><span>You scored {score}/5 correct answers</span><Button onClick={startQuiz} text="Play again" /></div>
-        :
-        <Button onClick={checkAnswer} text="Check answers" />
-      }
-    </section>
-  )
-
   return <AppRoutes
     theme={theme}
-    toggleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
+    setTheme={setTheme}
     questions={questions}
-    questionPage={questionPage}
     category={category}
     loading={loading}
     startQuiz={startQuiz}
     handleSelect={handleSelect}
+    quizzical={quizzical}
+    score={score}
     checkAnswer={checkAnswer}
     handleCategoryChange={handleCategoryChange}
   />

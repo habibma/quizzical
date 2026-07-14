@@ -14,11 +14,11 @@ import Statistics from '../pages/Admin/Statistics'
 import Themes from '../pages/Admin/Themes'
 import Api from '../pages/Admin/Api'
 
-function AppRoutes({ theme, toggleTheme, questions, questionPage, startPage, subjects, category, loading, startQuiz, handleSelect, checkAnswer, handleCategoryChange }) {
+function AppRoutes({ theme, toggleTheme, questions, questionPage, startPage, subjects, category, loading, startQuiz, handleSelect, quizzical, score, checkAnswer, handleCategoryChange }) {
     return (
         <Routes>
             <Route path="/" element={<PublicLayout theme={theme} toggleTheme={toggleTheme} />} >
-                <Route index element={<Home questions={questions} questionPage={questionPage} category={category} loading={loading} startQuiz={startQuiz} handleCategoryChange={handleCategoryChange} />} />
+                <Route index element={<Home questions={questions} questionPage={questionPage} category={category} loading={loading} startQuiz={startQuiz} handleCategoryChange={handleCategoryChange} handleSelect={handleSelect} quizzical={quizzical} score={score} checkAnswer={checkAnswer} />} />
                 <Route path="about" element={<About />} />
             </Route>
             <Route path="/admin" element={<AdminLayout theme={theme} toggleTheme={toggleTheme} />} >

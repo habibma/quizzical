@@ -33,7 +33,7 @@ const Question = ({ id, questionId, option, answer, selectedOption, onChange, qu
             id={id}
             value={option}
             onChange={onChange}
-            checked={selectedOption === option}
+            defaultChecked={selectedOption === option}
             disabled={quizzical}
             />
             <label

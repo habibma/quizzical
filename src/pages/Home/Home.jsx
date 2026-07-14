@@ -4,14 +4,16 @@ import Input from '../../components/Input'
 import Button from "../../components/Button"
 import Footer from '../../components/Footer'
 
+import Quiz from '../Quiz/Quiz.jsx'
+
 import './Home.css'
 
-const Home = ({ questions, questionPage, category, loading, startQuiz, handleCategoryChange }) => {
+const Home = ({ questions, category, loading, startQuiz, handleCategoryChange, handleSelect, quizzical, score, checkAnswer }) => {
     const { categories } = useCategories();
-    
+
     // Filter to only enabled categories
     const enabledCategories = categories.filter(cat => cat.enabled);
-    
+
     // Build category options dynamically from enabled categories
     const categoryOptions = enabledCategories.map(cat => (
         <Input
@@ -26,7 +28,7 @@ const Home = ({ questions, questionPage, category, loading, startQuiz, handleCat
             onChange={handleCategoryChange}
         />
     ));
-    
+
     const startPage = (
         <section className='start-page'>
             <p>Select a subject and click "Start Quiz"</p>
@@ -42,7 +44,14 @@ const Home = ({ questions, questionPage, category, loading, startQuiz, handleCat
     return (
         <div className='container'>
             {questions.length > 0 ?
-                questionPage
+                <Quiz
+                    questions={questions}
+                    handleSelect={handleSelect}
+                    quizzical={quizzical}
+                    score={score}
+                    startQuiz={startQuiz}
+                    checkAnswer={checkAnswer}
+                />
                 :
                 startPage
             }
