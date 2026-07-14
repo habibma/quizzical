@@ -1,58 +1,35 @@
 import React from 'react'
 import { useEffect } from 'react'
-
-import { getCategories } from '../../services/triviaService'
+import { useCategories } from '../../context/CategoryContext.jsx'
 
 import './Categories.css'
 
 const Categories = () => {
 
-  const [categories, setCategories] = React.useState([])
+  const { categories, setCategories } = useCategories();
 
-  const toggleCategoryEnabled = (categoryId) => {
-    setCategories(prevCategories => prevCategories.map(category => {
-      if (category.id === categoryId) {
-        return { ...category, enabled: !category.enabled };
-      }
-      return category;
-    }));
-  };
-
-  const saveCategoriesToLocalStorage = () => {
-    const categoriesToSave = categories.reduce((acc, category) => {
-      acc[category.id] = category.enabled;
-      return acc;
-    }, {});
-    localStorage.setItem('categoriesToSave', JSON.stringify(categoriesToSave));
-  }
-
-  useEffect(() => {
-    // Fetch categories from the API
-    getCategories().then(categories => {
-      const newCategories = categories.map(category => ({
-        id: category.id,
-        name: category.name,
-        enabled: true
-      }));
-      setCategories(newCategories);
-
-      // Then load saved preferences from localStorage
-      const storedCategories = localStorage.getItem('categoriesToSave');
-      if (storedCategories) {
-        const stored = JSON.parse(storedCategories);
-        setCategories(prevCategories => prevCategories.map(category => ({
-          ...category,
-          enabled: stored[category.id] !== undefined ? stored[category.id] : category.enabled
-        })));
-      }
-    });
-  }, []);
-
+  // Save to localStorage whenever categories change
   useEffect(() => {
     if (categories.length > 0) {
-      saveCategoriesToLocalStorage();
+      const categoriesToSave = categories.reduce((acc, category) => {
+        acc[category.id] = category.enabled;
+        return acc;
+      }, {});
+      localStorage.setItem('categoriesToSave', JSON.stringify(categoriesToSave));
     }
   }, [categories]);
+
+  const toggleCategoryEnabled = (categoryId) => {
+    setCategories(prevCategories => {
+      const updated = prevCategories.map(category => {
+        if (category.id === categoryId) {
+          return { ...category, enabled: !category.enabled };
+        }
+        return category;
+      });
+      return updated;
+    });
+  };
 
   return (
     <div className='container'>
@@ -92,7 +69,7 @@ const Categories = () => {
           <tfoot className='categories-table-footer'>
             <tr>
               <td colSpan="3">
-                <button className="btn btn-success">Save Changes</button>
+                <p className="text-muted">Changes are saved automatically</p>
               </td>
             </tr>
           </tfoot>
