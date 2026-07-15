@@ -11,6 +11,7 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 import { defaultSettings } from '../../config/defaultSettings'
 import './Settings.css'
+import { useEffect } from 'react'
 
 const Settings = () => {
 
@@ -44,7 +45,7 @@ const Settings = () => {
               max='50'
               id='numQuestions'
               name='numQuestions'
-              defaultValue='5'
+              defaultValue={settings.numQuestions}
               onChange={handleChange}
             />
           </div>
