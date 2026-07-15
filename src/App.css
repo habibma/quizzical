@@ -1,5 +1,4 @@
 
-
 .link {
   color: var(--link-color);
   text-decoration: none;
@@ -37,4 +36,10 @@ p.info {
 .lead {
     font-size: 1.25rem;
     font-weight: 300;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
