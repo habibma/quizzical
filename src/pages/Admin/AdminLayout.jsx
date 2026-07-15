@@ -21,7 +21,7 @@ const AdminLayout = ({ theme, toggleTheme }) => {
     return (
         <div className="admin-layout">
             <Sidebar className="admin-sidebar" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} />
-            <Header className="admin-header" opened={opened} handleToggleSidebarOpen={handleToggleSidebarOpen} />
+            <Header className="admin-header" opened={opened} handleToggleSidebarOpen={handleToggleSidebarOpen} theme={theme} toggleTheme={toggleTheme} />
             <main className="admin-main">
                 <Outlet />
             </main>
