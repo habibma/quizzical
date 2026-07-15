@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import { nanoid } from 'nanoid'
 import { getQuestions } from './services/triviaService'
 import { useCategories } from './context/CategoryContext.jsx'
+import { useSettings } from './context/SettingsContext.jsx'
 import './App.css'
 // components
 import Questionnaire from './components/Questionnaire'
@@ -18,6 +19,7 @@ function App() {
   const [score, setScore] = useState(0)
   const [category, setCategory] = useState("")
   const { categories } = useCategories();
+  const { settings } = useSettings();
 
   const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const [theme, setTheme] = useState(prefersDarkMode ? "dark" : "light")
@@ -30,14 +32,14 @@ function App() {
     setLoading(true)
     setQuizzical(false)
 
-    const settings = {
-      amount: 5,
-      category: category,
-      difficulty: "easy",
-      type: "multiple"
+    const params = {
+      amount: settings.numQuestions,
+      category,
+      difficulty: settings.difficulty,
+      type: settings.questionType
     }
 
-    getQuestions(settings).then(results => {
+    getQuestions(params).then(results => {
       const newArray = results.map(question => {
         return {
           ...question,
