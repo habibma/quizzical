@@ -22,9 +22,6 @@ const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleS
                 <div className="theme-toggle" onClick={toggleTheme}>
                     {theme === 'light' ? <LightIcon /> : <DarkIcon />}
                 </div>
-                <div className="page-title">
-                    {pageTitle}
-                </div>
                 <UserMenu />
             </div>
         </header>

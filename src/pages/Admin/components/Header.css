@@ -24,6 +24,10 @@
     gap: 10px;
 }
 
+.theme-toggle {
+    cursor: pointer;
+}
+
 .burger-menu {
     width: 25px;
     height: 20px;
