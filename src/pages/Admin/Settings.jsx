@@ -6,7 +6,7 @@
 // ✅ Default question type (Multiple Choice / True-False)
 // ✅ Time limit (later)
 
-import { useState, useEffect } from 'react'
+import { useSettings } from '../../context/SettingsContext'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 import { defaultSettings } from '../../config/defaultSettings'
@@ -14,15 +14,7 @@ import './Settings.css'
 
 const Settings = () => {
 
-  const loadSettings = () => {
-    const savedSettings = localStorage.getItem('quizSettings');
-    if (savedSettings) {
-      return JSON.parse(savedSettings);
-    }
-    return null;
-  };
-
-  const [settings, setSettings] = useState(() => loadSettings() || defaultSettings);
+  const { settings, setSettings } = useSettings();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,10 +27,6 @@ const Settings = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
   }
-
-  useEffect(() => {
-    localStorage.setItem('quizSettings', JSON.stringify(settings));
-  }, [settings]);
 
   return (
     <div className='settings'>
