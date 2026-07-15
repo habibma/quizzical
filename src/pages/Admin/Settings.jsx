@@ -52,6 +52,8 @@ const Settings = () => {
             <label htmlFor='numQuestions'>Number of Questions</label>
             <Input
               type='number'
+              min='1'
+              max='50'
               id='numQuestions'
               name='numQuestions'
               defaultValue='5'
