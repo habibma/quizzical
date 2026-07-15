@@ -4,6 +4,7 @@ import React from "react";
 import './Header.css';
 
 import UserIcon from "../../../assets/icons/UserIcon";
+import UserMenu from "./UserMenu";
 
 const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleSidebarOpen }) => {
     return (
@@ -16,11 +17,7 @@ const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleS
                 </div>
             </div>
             <div className="header-right">
-                <div className="user-avatar">
-                    <UserIcon />
-                </div>
-                <div className="user-dropdown">
-                </div>
+                <UserMenu />
             </div>
         </header>
     );
