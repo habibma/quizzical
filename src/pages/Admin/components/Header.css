@@ -30,9 +30,7 @@
     border: none;
     cursor: pointer;
 
-    position: absolute;
-    top: 20px;
-    left: 20px;
+    position: relative;
 }
 
 .burger-menu .burger-bar {
