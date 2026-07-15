@@ -32,7 +32,7 @@ const Categories = () => {
   };
 
   return (
-    <div className='container'>
+    <div className='categories'>
       <section className='categories-header'>
         <h1>Categories</h1>
         <p className='lead'>View all categories gotten from the api, You can enable or disable a category by toggling the switch next to the category name. You can edit a category name by clicking on the edit button next to the category name.</p>
