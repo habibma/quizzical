@@ -22,6 +22,10 @@ function App() {
   const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const [theme, setTheme] = useState(prefersDarkMode ? "dark" : "light")
 
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === "light" ? "dark" : "light")
+  }
+
   const startQuiz = () => {
     setLoading(true)
     setQuizzical(false)
@@ -82,6 +86,7 @@ function App() {
 
   return <AppRoutes
     theme={theme}
+    toggleTheme={toggleTheme}
     setTheme={setTheme}
     questions={questions}
     category={category}
