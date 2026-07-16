@@ -9,13 +9,15 @@ export function CategoryProvider({ children }) {
     useEffect(() => {
         getCategories().then(data => {
             // Initialize with enabled property as true
-            const categoriesWithEnabled = data.map(category => ({
-                ...category,
-                enabled: true,
+            const categories = data.map(category => ({
+                id: category.id,
+                apiName: category.name,
+                displayName: category.name,
+                enabled: true
             }));
-            
-            setCategories(categoriesWithEnabled);
-            
+
+            setCategories(categories);
+
             // Load saved enabled/disabled state from localStorage
             const storedCategories = localStorage.getItem('categoriesToSave');
             if (storedCategories) {
