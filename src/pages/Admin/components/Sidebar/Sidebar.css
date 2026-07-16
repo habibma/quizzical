@@ -26,7 +26,7 @@
         left: 0;
         width: 200px;
         height: 100vh;
-
+        z-index: 101;
         transform: translateX(-100%);
     }
 
@@ -55,6 +55,14 @@
 
 .sidebar-menu-item {
     margin-bottom: 10px;
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: var(--border-radius);
+        transition: background-color 0.3s;
+    }
 }
 
 .sidebar-link {
@@ -112,3 +120,17 @@
     margin: auto;
     padding: 10px;
 }
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+
+    display: none;
+    @media (max-width: 768px) {
+        display: block;
+    }
+}
+
+

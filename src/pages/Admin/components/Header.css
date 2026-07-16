@@ -6,6 +6,12 @@
     background-color: var(--header-background-color);
     color: var(--header-text-color);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 102;
 }
 
 .header-left {
@@ -33,8 +39,6 @@
     height: 20px;
     border: none;
     cursor: pointer;
-
-    position: relative;
 }
 
 .burger-menu .burger-bar {
@@ -53,9 +57,13 @@
 
 .view-site a {
     text-decoration: none;
-    color: var(--header-text-color);
+    color: var(--text-color);
     font-weight: bold;
     padding: 5px 10px;
     border-radius: 4px;
     transition: background-color 0.3s ease;
+}
+
+.view-site a:hover {
+    color: var(--hover-color);
 }
