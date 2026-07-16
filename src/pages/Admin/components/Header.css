@@ -50,3 +50,12 @@
         display: none;
     }
 }
+
+.view-site a {
+    text-decoration: none;
+    color: var(--header-text-color);
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}

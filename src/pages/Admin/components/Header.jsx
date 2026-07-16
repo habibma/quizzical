@@ -22,6 +22,11 @@ const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleS
                 <div className="theme-toggle" onClick={toggleTheme}>
                     {theme === 'light' ? <LightIcon /> : <DarkIcon />}
                 </div>
+                <div className="view-site">
+                    <a href="/" target="_blank" rel="noopener noreferrer">
+                        View Site
+                    </a>
+                </div>
                 <UserMenu />
             </div>
         </header>
