@@ -13,6 +13,8 @@
 
   --hover-color: #3b4a8c;
   --active-color: #4D5B9E;
+  --disabled-color: #B0B0B0;
+  --focus-color: #4D5B9E;
 
   --border-radius: 10px;
   --border-color: #293264;
@@ -24,8 +26,10 @@
 [data-theme="dark"] {
   --primary-color: #4D5B9E;
   --secondary-color: #F5F7FB;
+
   --danger-color: #F24E1E;
   --success-color: #4BB543;
+
   --text-color: #F5F7FB;
   --link-color: #8BD3FF;
 
