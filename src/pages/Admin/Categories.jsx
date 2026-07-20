@@ -76,7 +76,7 @@ const Categories = () => {
     <div className='modal-body'>
       <header className='modal-header'>
         <h2>Edit Category</h2>
-        <p>Editing category: {selectedCategory.displayName}</p>
+        <p>Editing category: {selectedCategory.apiName}</p>
       </header>
       <form
         className='modal-form'
@@ -163,4 +163,4 @@ export default Categories
 // Choose a color
 // Set display order
 // Number of questions in the category
-// Import/Export categories
+// Import/Export categ
