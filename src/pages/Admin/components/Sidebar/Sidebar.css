@@ -98,6 +98,10 @@
 .toggle-sidebar-btn {
     width: auto;
     padding: 5px 10px;
+    border: none;
+    color: var(--text-color);
+    border-radius: var(--border-radius);
+    background-color: var(--primary-color);
     transition: background-color 0.3s;
 
     margin: 0;
