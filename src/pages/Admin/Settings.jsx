@@ -61,7 +61,7 @@ const Settings = () => {
               onChange={handleChange}
             />
           </div>
-          <div className='form-group'>
+          {/* <div className='form-group'>
             <label htmlFor='shuffleQuestions'>Shuffle Questions</label>
             <input
               type='checkbox'
@@ -80,7 +80,7 @@ const Settings = () => {
               checked={inputs.shuffleAnswers}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
           <div className='form-group flex-column'>
             <label htmlFor='difficulty'>Difficulty</label>
             <select
