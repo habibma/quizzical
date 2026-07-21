@@ -4,15 +4,18 @@ import { defaultSettings } from '../config/defaultSettings';
 const SettingsContext = createContext();
 
 export const SettingsProvider = ({ children }) => {
+
     const loadSettings = () => {
-        const savedSettings = localStorage.getItem('quizSettings');
-        if (savedSettings) {
-            return JSON.parse(savedSettings);
+        try {
+            const savedSettings = localStorage.getItem('quizSettings');
+            return savedSettings ? JSON.parse(savedSettings) : defaultSettings;
+        } catch (error) {
+            console.error('Error loading settings from localStorage:', error);
+            return defaultSettings;
         }
-        return defaultSettings;
     }
 
-    const [settings, setSettings] = useState(() => loadSettings());
+    const [settings, setSettings] = useState(loadSettings());
 
     useEffect(() => {
         localStorage.setItem('quizSettings', JSON.stringify(settings));

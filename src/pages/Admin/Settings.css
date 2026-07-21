@@ -57,3 +57,19 @@
 
   width: 100%;
 }
+
+.form-btn:hover {
+  background-color: #0056b3;
+}
+
+.form-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}

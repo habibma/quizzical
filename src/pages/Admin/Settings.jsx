@@ -11,23 +11,35 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 import { defaultSettings } from '../../config/defaultSettings'
 import './Settings.css'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const Settings = () => {
 
   const { settings, setSettings } = useSettings();
+  const [inputs, setInputs] = useState(defaultSettings);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setSettings(prevSettings => ({
-      ...prevSettings,
+    setInputs(prevInputs => ({
+      ...prevInputs,
       [name]: type === 'checkbox' ? checked : value
     }));
   }
 
+  const handleReset = () => {
+    setSettings(defaultSettings);
+    setInputs(defaultSettings);
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setSettings(inputs);
   }
+
+  useEffect(() => {
+    setInputs(settings);
+  }, [settings]);
+
 
   return (
     <div className='settings'>
@@ -36,7 +48,7 @@ const Settings = () => {
         <p className='lead'>Configure the quiz settings below. You can set the number of questions, shuffle questions and answers, choose the difficulty level, and select the question type.</p>
       </section>
       <section className='settings-form'>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className='form-group flex-column'>
             <label htmlFor='numQuestions'>Number of Questions</label>
             <Input
@@ -45,7 +57,7 @@ const Settings = () => {
               max='50'
               id='numQuestions'
               name='numQuestions'
-              defaultValue={settings.numQuestions}
+              value={inputs.numQuestions}
               onChange={handleChange}
             />
           </div>
@@ -55,7 +67,7 @@ const Settings = () => {
               type='checkbox'
               id='shuffleQuestions'
               name='shuffleQuestions'
-              checked={settings.shuffleQuestions}
+              checked={inputs.shuffleQuestions}
               onChange={handleChange}
             />
           </div>
@@ -65,7 +77,7 @@ const Settings = () => {
               type='checkbox'
               id='shuffleAnswers'
               name='shuffleAnswers'
-              checked={settings.shuffleAnswers}
+              checked={inputs.shuffleAnswers}
               onChange={handleChange}
             />
           </div>
@@ -74,7 +86,7 @@ const Settings = () => {
             <select
               id='difficulty'
               name='difficulty'
-              value={settings.difficulty}
+              value={inputs.difficulty}
               onChange={handleChange}
             >
               <option value='easy'>Easy</option>
@@ -87,14 +99,28 @@ const Settings = () => {
             <select
               id='questionType'
               name='questionType'
-              value={settings.questionType}
+              value={inputs.questionType}
               onChange={handleChange}
             >
               <option value='multiple'>Multiple Choice</option>
               <option value='boolean'>True-False</option>
             </select>
           </div>
-          <Button className='form-btn' type='submit' onClick={handleSubmit} text='Save Settings' />
+          {/* <div className='form-group flex-column'>
+            <label htmlFor='timeLimit'>Time Limit (seconds)</label>
+            <Input
+              type='number'
+              min='0'
+              id='timeLimit'
+              name='timeLimit'
+              defaultValue={settings.timeLimit}
+              onChange={handleChange}
+            />
+          </div> */}
+          <div className='form-actions'>
+            <Button className='form-btn' type='submit' text='Save Settings' />
+            <Button className='form-btn' type='button' onClick={handleReset} text='Reset to Defaults' />
+          </div>
         </form>
       </section>
     </div>
