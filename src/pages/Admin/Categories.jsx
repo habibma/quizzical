@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useState ,useEffect } from 'react'
 import { useCategories } from '../../context/CategoryContext.jsx'
 import Modal from '../../components/Modal.jsx'
 import Button from '../../components/Button.jsx'
@@ -9,11 +9,11 @@ import './Categories.css'
 
 const Categories = () => {
 
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [selectedCategory, setSelectedCategory] = React.useState(null);
-  const [editedName, setEditedName] = React.useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [editedName, setEditedName] = useState('');
 
-  const { categories, setCategories } = useCategories();
+  const { categories, toggleCategory, updateCategoryName } = useCategories();
 
   const openModal = (category) => {
     setSelectedCategory(category);
@@ -28,55 +28,17 @@ const Categories = () => {
   }
 
   const handleSave = () => {
-    if (!selectedCategory) {
-      return;
+    if (selectedCategory && editedName.trim() !== '') {
+      updateCategoryName(selectedCategory.id, editedName);
+      closeModal();
     }
-
-    const newName = editedName.trim();
-    if (!newName) {
-      return;
-    }
-
-    setCategories(prevCategories => {
-      const updated = prevCategories.map(category => {
-        if (category.id === selectedCategory.id) {
-          return { ...category, displayName: newName };
-        }
-        return category;
-      });
-      return updated;
-    });
-    closeModal();
-  };
-
-  // Save to localStorage whenever categories change
-  useEffect(() => {
-    if (categories.length > 0) {
-      const categoriesToSave = categories.reduce((acc, category) => {
-        acc[category.id] = category.enabled;
-        return acc;
-      }, {});
-      localStorage.setItem('categoriesToSave', JSON.stringify(categoriesToSave));
-    }
-  }, [categories]);
-
-  const toggleCategoryEnabled = (categoryId) => {
-    setCategories(prevCategories => {
-      const updated = prevCategories.map(category => {
-        if (category.id === categoryId) {
-          return { ...category, enabled: !category.enabled };
-        }
-        return category;
-      });
-      return updated;
-    });
   };
 
   const modalContent = selectedCategory && (
     <div className='modal-body'>
       <header className='modal-header'>
         <h2>Edit Category</h2>
-        <p>Editing category: {selectedCategory.apiName}</p>
+        <p>Editing category: {selectedCategory.apiNames}</p>
       </header>
       <form
         className='modal-form'
@@ -125,7 +87,7 @@ const Categories = () => {
                     <input
                       type="checkbox"
                       checked={category.enabled}
-                      onChange={() => toggleCategoryEnabled(category.id)}
+                      onChange={() => toggleCategory(category.id)}
                     />
                     <span className="slider"></span>
                   </label>
@@ -155,12 +117,10 @@ const Categories = () => {
 export default Categories
 
 
-// View all categories gotten from the api
-// enable or disable a category
-// Edit a category name
+// TODO: Add features to the categories page
 // Future features
 // Choose an icon
 // Choose a color
 // Set display order
 // Number of questions in the category
-// Import/Export categ
+// Import/Export categories
