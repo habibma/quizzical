@@ -29,6 +29,8 @@
 }
 
 .admin-header {
+    background-color: var(--header-background-color);
+    color: var(--header-text-color);
     grid-area: header;
     display: flex;
     justify-content: space-between;
