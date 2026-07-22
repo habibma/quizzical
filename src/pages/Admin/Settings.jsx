@@ -50,7 +50,6 @@ const Settings = () => {
       <section className='settings-form'>
         <form onSubmit={handleSubmit}>
           <div className='form-group flex-column'>
-            <label htmlFor='numQuestions'>Number of Questions</label>
             <Input
               type='number'
               min='1'
@@ -59,6 +58,7 @@ const Settings = () => {
               name='numQuestions'
               value={inputs.numQuestions}
               onChange={handleChange}
+              label="Number of Questions"
             />
           </div>
           {/* <div className='form-group'>
@@ -82,29 +82,33 @@ const Settings = () => {
             />
           </div> */}
           <div className='form-group flex-column'>
-            <label htmlFor='difficulty'>Difficulty</label>
-            <select
+            <Input as='select'
               id='difficulty'
               name='difficulty'
               value={inputs.difficulty}
               onChange={handleChange}
-            >
-              <option value='easy'>Easy</option>
-              <option value='medium'>Medium</option>
-              <option value='hard'>Hard</option>
-            </select>
+              label="Difficulty"
+              options={[
+                { value: 'any', label: 'Any Difficulty' },
+                { value: 'easy', label: 'Easy' },
+                { value: 'medium', label: 'Medium' },
+                { value: 'hard', label: 'Hard' },
+              ]}
+            />
           </div>
           <div className='form-group flex-column'>
-            <label htmlFor='questionType'>Question Type</label>
-            <select
+            <Input
+              as='select'
               id='questionType'
               name='questionType'
               value={inputs.questionType}
               onChange={handleChange}
-            >
-              <option value='multiple'>Multiple Choice</option>
-              <option value='boolean'>True-False</option>
-            </select>
+              label="Question Type"
+              options={[
+                { value: 'multiple', label: 'Multiple Choice' },
+                { value: 'boolean', label: 'True-False' },
+              ]}
+            />
           </div>
           {/* <div className='form-group flex-column'>
             <label htmlFor='timeLimit'>Time Limit (seconds)</label>
