@@ -1,5 +1,8 @@
+import React from 'react';
 
-const Input = ({ type = "text", value, onChange, label, name, id, radioValue, required, ...rest }) => {
+import './Input.css';
+
+const Input = ({ as = "input", options = [], type = "text", value, onChange, label, name, id, radioValue, required, ...rest }) => {
   const inputProps = {
     type,
     id,
@@ -16,10 +19,24 @@ const Input = ({ type = "text", value, onChange, label, name, id, radioValue, re
     inputProps.value = value;
   }
 
+  if (as === "select") {
+    inputProps.children = options.map((option) => (
+      <option key={option.value} value={option.value}>
+        {option.label}
+      </option>
+    ));
+
+    return (
+      <select {...inputProps}>
+        {inputProps.children}
+      </select>
+    );
+  }
+
   return (
     <div>
+      <label className="label" htmlFor={id}>{label}</label>
       <input {...inputProps} />
-      <label htmlFor={id}>{label}</label>
     </div>
   );
 };
