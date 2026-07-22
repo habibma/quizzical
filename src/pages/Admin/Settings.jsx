@@ -48,19 +48,17 @@ const Settings = () => {
         <p className='lead'>Configure the quiz settings below. You can set the number of questions, shuffle questions and answers, choose the difficulty level, and select the question type.</p>
       </section>
       <section className='settings-form'>
-        <form onSubmit={handleSubmit}>
-          <div className='form-group flex-column'>
-            <Input
-              type='number'
-              min='1'
-              max='50'
-              id='numQuestions'
-              name='numQuestions'
-              value={inputs.numQuestions}
-              onChange={handleChange}
-              label="Number of Questions"
-            />
-          </div>
+        <form onSubmit={handleSubmit} className='form'>
+          <Input
+            type='number'
+            min='1'
+            max='50'
+            id='numQuestions'
+            name='numQuestions'
+            value={inputs.numQuestions}
+            onChange={handleChange}
+            label="Number of Questions"
+          />
           {/* <div className='form-group'>
             <label htmlFor='shuffleQuestions'>Shuffle Questions</label>
             <input
@@ -81,35 +79,31 @@ const Settings = () => {
               onChange={handleChange}
             />
           </div> */}
-          <div className='form-group flex-column'>
-            <Input as='select'
-              id='difficulty'
-              name='difficulty'
-              value={inputs.difficulty}
-              onChange={handleChange}
-              label="Difficulty"
-              options={[
-                { value: 'any', label: 'Any Difficulty' },
-                { value: 'easy', label: 'Easy' },
-                { value: 'medium', label: 'Medium' },
-                { value: 'hard', label: 'Hard' },
-              ]}
-            />
-          </div>
-          <div className='form-group flex-column'>
-            <Input
-              as='select'
-              id='questionType'
-              name='questionType'
-              value={inputs.questionType}
-              onChange={handleChange}
-              label="Question Type"
-              options={[
-                { value: 'multiple', label: 'Multiple Choice' },
-                { value: 'boolean', label: 'True-False' },
-              ]}
-            />
-          </div>
+          <Input as='select'
+            id='difficulty'
+            name='difficulty'
+            value={inputs.difficulty}
+            onChange={handleChange}
+            label="Difficulty"
+            options={[
+              { value: 'any', label: 'Any Difficulty' },
+              { value: 'easy', label: 'Easy' },
+              { value: 'medium', label: 'Medium' },
+              { value: 'hard', label: 'Hard' },
+            ]}
+          />
+          <Input
+            as='select'
+            id='questionType'
+            name='questionType'
+            value={inputs.questionType}
+            onChange={handleChange}
+            label="Question Type"
+            options={[
+              { value: 'multiple', label: 'Multiple Choice' },
+              { value: 'boolean', label: 'True-False' },
+            ]}
+          />
           {/* <div className='form-group flex-column'>
             <label htmlFor='timeLimit'>Time Limit (seconds)</label>
             <Input

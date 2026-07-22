@@ -18,33 +18,12 @@
   }
 }
 
-.settings.form {
+.form {
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 400px;
-}
-
-.settings.form label {
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.form-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  input[type="text"],
-  input[type="number"],
-  select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  input[type="checkbox"] {
-    margin-right: 10px;
-  }
+  gap: 15px;
 }
 
 .form-btn {

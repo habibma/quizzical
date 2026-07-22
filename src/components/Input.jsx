@@ -27,7 +27,7 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
     ));
 
     return (
-      <div>
+      <div className="input-container">
         <label className="label" htmlFor={id}>{label}</label>
         <select {...inputProps}>
           {inputProps.children}
@@ -37,7 +37,7 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
   }
 
   return (
-    <div>
+    <div className="input-container">
       <label className="label" htmlFor={id}>{label}</label>
       <input {...inputProps} />
     </div>
