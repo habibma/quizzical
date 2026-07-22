@@ -91,3 +91,27 @@ p.info {
         box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
     }
 }
+
+.btn-danger {
+    width: 150px;
+    background-color: var(--danger-color);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+        opacity: .8;
+    }
+
+    &:disabled {
+        background-color: var(--disabled-color);
+        cursor: not-allowed;
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
+    }
+}
