@@ -1,5 +1,8 @@
 import React from 'react'
 import Input from '../../components/Input'
+import Button from '../../components/Button'
+import VisibleIcon from '../../assets/icons/VisibleIcon'
+import InvisibleIcon from '../../assets/icons/InvisibleIcon'
 
 import './Questions.css'
 
@@ -29,19 +32,38 @@ const Questions = () => {
         <h1>Questions</h1>
         <p className='lead'>Manage your questions here.</p>
       </section>
-      <section className='questions-content flex-row'>
+      <section className='questions-content'>
         <div className='questions-actions'>
           <Input as="select" options={categoryOptions} id="category" name="category" label="Category" />
           <Input as="select" options={difficultyOptions} id="difficulty" name="difficulty" label="Difficulty" />
           <Input as="select" options={typeOptions} id="type" name="type" label="Type" />
         </div>
         <div className='questions-list'>
-          <p>List of questions will be displayed here.</p>
+          <table className='questions-table'>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Actions</th>
+              </tr>
+              <tr>
+                <td>
+                  <p>Question text will be displayed here.</p>
+                </td>
+                <td>
+                  <VisibleIcon />
+                  <InvisibleIcon />
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Question rows will be displayed here */}
+            </tbody>
+          </table>
         </div>
         <div className='questions-modal'>
           <p>Modal for question details will be displayed here.</p>
         </div>
-        <div className='questions-actions-footer'>
+        <div className='actions-footer'>
           <button className='btn-primary'>Add Question</button>
           <button className='btn-secondary'>Edit Question</button>
           <button className='btn-danger'>Delete Question</button>
