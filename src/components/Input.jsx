@@ -36,6 +36,16 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
     );
   }
 
+  // for css purposes
+  if (type === "radio") {
+    return (
+      <div className="input-container">
+        <input {...inputProps} />
+        <label className="label" htmlFor={id}>{label}</label>
+      </div>
+    );
+  }
+
   return (
     <div className="input-container">
       <label className="label" htmlFor={id}>{label}</label>
