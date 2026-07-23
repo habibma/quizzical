@@ -14,6 +14,8 @@ import Statistics from '../pages/Admin/Statistics'
 import Themes from '../pages/Admin/Themes'
 import Api from '../pages/Admin/Api'
 
+import { QuestionsProvider } from '../context/QuestionsContext'
+
 function AppRoutes({ theme, toggleTheme, questions, questionPage, startPage, subjects, category, loading, startQuiz, handleSelect, quizzical, score, checkAnswer, handleCategoryChange }) {
     return (
         <Routes>
@@ -23,7 +25,11 @@ function AppRoutes({ theme, toggleTheme, questions, questionPage, startPage, sub
             </Route>
             <Route path="/admin" element={<AdminLayout theme={theme} toggleTheme={toggleTheme} />} >
                 <Route index element={<Dashboard />} />
-                <Route path="questions" element={<Questions />} />
+                <Route path="questions" element={
+                    <QuestionsProvider>
+                        <Questions />
+                    </QuestionsProvider>
+                } />
                 <Route path="quizzes" element={<Quizzes />} />
                 <Route path="categories" element={<Categories />} />
                 <Route path="settings" element={<Settings />} />

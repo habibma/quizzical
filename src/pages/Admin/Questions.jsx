@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 import VisibleIcon from '../../assets/icons/VisibleIcon'
@@ -6,11 +6,31 @@ import InvisibleIcon from '../../assets/icons/InvisibleIcon'
 
 import './Questions.css'
 
+import { useCategories } from '../../context/CategoryContext'
+import { useQuestions } from '../../context/QuestionsContext'
+
 const Questions = () => {
+
+  const [inputValues, setInputValues] = useState({
+    category: 'any',
+    difficulty: 'any',
+    type: 'any',
+  });
+
+  const { categories } = useCategories();
+  const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion } = useQuestions();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputValues(prevValues => ({ ...prevValues, [name]: value }));
+  };
 
   const categoryOptions = [
     { value: 'any', label: 'Any Category' },
-    { value: '9', label: 'General Knowledge' },
+    ...categories.map(category => ({
+      value: category.id,
+      label: category.displayName,
+    }))
   ];
 
   const difficultyOptions = [
@@ -26,6 +46,11 @@ const Questions = () => {
     { value: 'boolean', label: 'True-False' },
   ];
 
+  const { category, difficulty, type } = inputValues;
+  useEffect(() => {
+    fetchQuestions(inputValues.category, inputValues.type, inputValues.difficulty);
+  }, [category, difficulty, type]);
+
   return (
     <div className='questions'>
       <section className='questions-header'>
@@ -34,9 +59,9 @@ const Questions = () => {
       </section>
       <section className='questions-content'>
         <div className='questions-actions'>
-          <Input as="select" options={categoryOptions} id="category" name="category" label="Category" />
-          <Input as="select" options={difficultyOptions} id="difficulty" name="difficulty" label="Difficulty" />
-          <Input as="select" options={typeOptions} id="type" name="type" label="Type" />
+          <Input as="select" options={categoryOptions} id="category" name="category" label="Category" value={inputValues.category} onChange={handleInputChange} />
+          <Input as="select" options={difficultyOptions} id="difficulty" name="difficulty" label="Difficulty" value={inputValues.difficulty} onChange={handleInputChange} />
+          <Input as="select" options={typeOptions} id="type" name="type" label="Type" value={inputValues.type} onChange={handleInputChange} />
         </div>
         <div className='questions-list'>
           <table className='questions-table'>
@@ -45,18 +70,32 @@ const Questions = () => {
                 <th>Question</th>
                 <th>Actions</th>
               </tr>
-              <tr>
-                <td>
-                  <p>Question text will be displayed here.</p>
-                </td>
-                <td>
-                  <VisibleIcon />
-                  <InvisibleIcon />
-                </td>
-              </tr>
             </thead>
             <tbody>
-              {/* Question rows will be displayed here */}
+              {loading ? (
+                <tr>
+                  <td colSpan="2">Loading...</td>
+                </tr>
+              ) : error ? (
+                <tr>
+                  <td colSpan="2">Error: {error}</td>
+                </tr>
+              ) : questions.length === 0 ? (
+                <tr>
+                  <td colSpan="2">No questions found.</td>
+                </tr>
+              ) :
+                (
+                  questions.map((question, index) => (
+                    <tr key={question.id}>
+                      <td>{question.question}</td>
+                      <td>
+                        <VisibleIcon />
+                        <InvisibleIcon />
+                      </td>
+                    </tr>
+                  ))
+                )}
             </tbody>
           </table>
         </div>
