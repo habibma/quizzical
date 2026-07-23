@@ -98,6 +98,25 @@ const Questions = () => {
                 )}
             </tbody>
           </table>
+          <table className='questions-table'>
+            <thead>
+              <tr>
+                <th>Custom Question</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {customQuestions.map((question) => (
+                <tr key={question.id}>
+                  <td>{question.question}</td>
+                  <td>
+                    <VisibleIcon />
+                    <InvisibleIcon />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         <div className='questions-modal'>
           <p>Modal for question details will be displayed here.</p>
