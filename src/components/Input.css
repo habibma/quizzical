@@ -11,16 +11,7 @@ select {
     border-radius: 4px;
 }
 
-input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
 .input-container {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 400px;
 }

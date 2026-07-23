@@ -6,6 +6,10 @@
     justify-content: center;
     padding: 20px;
     gap: 20px;
+
+    .input-container {
+        flex-grow: 1;
+    }
 }
 
 .questions-header {
