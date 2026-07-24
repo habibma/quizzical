@@ -49,7 +49,7 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
   return (
     <div className="input-container">
       <label className="label" htmlFor={id}>{label}</label>
-      <input {...inputProps} />
+      <input className="input" {...inputProps} />
     </div>
   );
 };
