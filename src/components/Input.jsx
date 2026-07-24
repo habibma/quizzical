@@ -40,7 +40,7 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
   if (type === "radio") {
     return (
       <div className="input-container">
-        <input {...inputProps} />
+        <input className="input" {...inputProps} />
         <label className="label" htmlFor={id}>{label}</label>
       </div>
     );
