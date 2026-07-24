@@ -6,6 +6,32 @@
     justify-content: center;
     padding: 20px;
     gap: 20px;
+
+    .modal-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+
+        .modal-radio-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            border: 1px solid var(--border-color);
+
+            label {
+                font-weight: normal;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                cursor: pointer;
+                user-select: none;
+                padding: 5px 10px;
+                border: 1px solid var(--border-color);
+                font-size: 0.875rem;
+            }
+        }
+    }
 }
 
 .questions-header {
@@ -53,3 +79,4 @@
     display: flex;
     gap: 1rem;
 }
+

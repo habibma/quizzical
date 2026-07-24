@@ -22,3 +22,16 @@ select {
     border-radius: 4px;
     width: 100%;
 }
+
+.input[type="radio"] {
+  display: none;
+}
+
+.input[type="radio"]:checked + label {
+  background-color: var(--success-color);
+  border-color: var(--hover-color);
+}
+
+.input[type="radio"]:disabled + label {
+  opacity: 0.65;
+}

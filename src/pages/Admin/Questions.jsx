@@ -3,6 +3,7 @@ import Input from '../../components/Input'
 import Button from '../../components/Button'
 import VisibleIcon from '../../assets/icons/VisibleIcon'
 import InvisibleIcon from '../../assets/icons/InvisibleIcon'
+import Modal from '../../components/Modal'
 
 import './Questions.css'
 
@@ -16,6 +17,9 @@ const Questions = () => {
     difficulty: 'any',
     type: 'any',
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [questionType, setQuestionType] = useState('multiple');
 
   const { categories } = useCategories();
   const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion } = useQuestions();
@@ -45,6 +49,109 @@ const Questions = () => {
     { value: 'multiple', label: 'Multiple Choice' },
     { value: 'boolean', label: 'True-False' },
   ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  }
+  const closeModal = () => {
+    setIsModalOpen(false);
+  }
+  const handleSaveQuestion = (question) => {
+    if (question.id) {
+      updateQuestion(question);
+    } else {
+      addQuestion(question);
+    }
+  };
+
+  const modalContent = (
+    <div className='modal-body'>
+      <header className='modal-header'>
+        <h2>Question Details</h2>
+      </header>
+      <main className='modal-main'>
+        <form className='modal-form' onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const question = Object.fromEntries(formData);
+          handleSaveQuestion(question);
+        }}>
+          <Input
+            type="text"
+            id="question"
+            name="question"
+            label="Question"
+          />
+          <filedset className='modal-radio-group'>
+            <legend>Question Type</legend>
+            <Input
+              type="radio"
+              id="type-multiple"
+              name="type"
+              label="Multiple Choice"
+              radioValue="multiple"
+              value={questionType}
+              onChange={() => setQuestionType('multiple')}
+            />
+            <Input
+              className='modal-radio'
+              type="radio"
+              id="type-boolean"
+              name="type"
+              label="True-False"
+              radioValue="boolean"
+              value={questionType}
+              onChange={() => setQuestionType('boolean')}
+            />
+          </filedset>
+          {questionType === 'multiple' ? (
+            <div className='modal-multiple-choice'>
+              <Input
+                type="text"
+                id="option1"
+                name="option1"
+                label="Option 1"
+              />
+              <Input
+                type="text"
+                id="option2"
+                name="option2"
+                label="Option 2"
+              />
+              <Input
+                type="text"
+                id="option3"
+                name="option3"
+                label="Option 3"
+              />
+              <Input
+                type="text"
+                id="option4"
+                name="option4"
+                label="Option 4"
+              />
+            </div>
+          ) : questionType === 'boolean' ? (
+            <div className='modal-boolean'>
+              <Input
+                type="text"
+                id="correct-true"
+                name="correct"
+                label="True"
+              />
+              <Input
+                type="text"
+                id="correct-false"
+                name="correct"
+                label="False"
+              />
+            </div>
+          ) : null}
+          <Button className='modal-btn' type="submit" text="Save Question" />
+        </form>
+      </main>
+    </div>
+  );
 
   const { category, difficulty, type } = inputValues;
   useEffect(() => {
@@ -118,13 +225,13 @@ const Questions = () => {
             </tbody>
           </table>
         </div>
-        <div className='questions-modal'>
-          <p>Modal for question details will be displayed here.</p>
-        </div>
+        <Modal isOpen={isModalOpen} onClose={closeModal} title="Question Details">
+          {modalContent}
+        </Modal>
         <div className='actions-footer'>
-          <button className='btn-primary'>Add Question</button>
-          <button className='btn-secondary'>Edit Question</button>
-          <button className='btn-danger'>Delete Question</button>
+          <Button className='btn-primary' text="Add Question" onClick={openModal} />
+          <Button className='btn-secondary' text="Edit Question" onClick={openModal} />
+          <Button className='btn-danger' text="Delete Question" />
         </div>
       </section>
       <section className='questions-footer'>
@@ -150,3 +257,8 @@ export default Questions
 // ✅ Filter by category
 // ✅ Import/Export questions
 // ✅ Bulk actions
+
+
+//TODO: Add features to the questions page
+// make the questions table more interactive
+// make form react controlled
