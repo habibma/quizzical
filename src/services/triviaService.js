@@ -43,7 +43,6 @@ export async function getQuestions(options = {}) {
     options: [...question.incorrect_answers, question.correct_answer]
       .sort(() => Math.random() - 0.5)
       .map(decodeHtml),
-    selectedOption: "",
   }));
 }
 

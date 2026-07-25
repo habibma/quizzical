@@ -1,29 +1,27 @@
 import {decode} from 'html-entities';
 
-const Question = ({ id, questionId, option, answer, selectedOption, onChange, quizzical }) => {
+const Question = ({ id, questionId, option, selectedOption, answer, onChange, isQuizFinished }) => {
+
     let styles;
-    if (quizzical) {
+    if (isQuizFinished) {
         if (option === answer){
             styles = {
                 backgroundColor: "#94D7A2",
-                color: "black",
+                color: "#20349b",
                 opacity: "1",
                 borderColor: "#94D7A2"
             }
         }
-        if (option !== answer && option === selectedOption){
+        if ( option !== answer && option === selectedOption) {
             styles = {
                 backgroundColor: "#F8BCBC",
+                color: "#20349b",
                 borderColor: "#F8BCBC"
             }
         }
-        if (option === answer && option !== selectedOption){
-            styles = {
-                backgroundColor: "#94D7A2",
-                borderColor: "#94D7A2"
-            }
-        }
     }
+
+    console.log({ option, answer, selectedOption, isQuizFinished });
 
     return (
         <div>
@@ -34,7 +32,7 @@ const Question = ({ id, questionId, option, answer, selectedOption, onChange, qu
             value={option}
             onChange={onChange}
             defaultChecked={selectedOption === option}
-            disabled={quizzical}
+            disabled={isQuizFinished}
             />
             <label
                 htmlFor={id}
@@ -47,9 +45,11 @@ const Question = ({ id, questionId, option, answer, selectedOption, onChange, qu
     )
 }
 
-const Questionnaire = ({ questions, onChange, quizzical }) => {
+const Questionnaire = ({ questions, onChange, isQuizFinished, answers }) => {
 
     const questionFace = questions.map(question => {
+
+        const selectedOption = answers.find(answer => answer.questionId === question.id)?.answer;
         return (
             <li key={question.id} id={question.id} className='query'>
                 <h3 className='question-face'>
@@ -64,9 +64,9 @@ const Questionnaire = ({ questions, onChange, quizzical }) => {
                                 questionId={question.id}
                                 option={option}
                                 answer={question.answer}
-                                selectedOption={question.selectedOption}
-                                onChange={onChange}
-                                quizzical={quizzical}
+                                selectedOption={selectedOption}
+                                onChange={() => onChange(question.id, option)}
+                                isQuizFinished={isQuizFinished}
                             />
                         )
                     })}

@@ -100,6 +100,7 @@ const Settings = () => {
             onChange={handleChange}
             label="Question Type"
             options={[
+              { value: 'any', label: 'Any Type' },
               { value: 'multiple', label: 'Multiple Choice' },
               { value: 'boolean', label: 'True-False' },
             ]}

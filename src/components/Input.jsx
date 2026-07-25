@@ -14,7 +14,7 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
 
   if (type === "radio") {
     inputProps.value = radioValue;
-    inputProps.checked = value === radioValue;
+    inputProps.defaultChecked = value === radioValue;
   } else {
     inputProps.value = value;
   }

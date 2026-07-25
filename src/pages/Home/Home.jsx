@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useCategories } from '../../context/Admin/CategoryContext.jsx'
+import { useQuiz } from '../../context/Public/QuizContext.jsx'
+import { useSettings } from '../../context/Admin/SettingsContext.jsx'
 import Input from '../../components/Input'
 import Button from "../../components/Button"
 import Footer from '../../components/Footer'
@@ -8,9 +11,17 @@ import Quiz from '../Quiz/Quiz.jsx'
 
 import './Home.css'
 
-const Home = ({ questions, category, loading, startQuiz, handleCategoryChange, handleSelect, quizzical, score, checkAnswer }) => {
-    const { categories } = useCategories();
+const Home = () => {
 
+    const [category, setCategory] = useState("");
+    const { categories } = useCategories();
+    const { questions, answers, score, loading, error, fetchQuestions, selectAnswer, checkAnswers, resetQuiz } = useQuiz();
+    const { settings } = useSettings();
+    const navigate = useNavigate();
+
+    const handleCategoryChange = (e) => {
+        setCategory(e.target.value);
+    }
     // Filter to only enabled categories
     const enabledCategories = categories.filter(cat => cat.enabled);
 
@@ -29,32 +40,22 @@ const Home = ({ questions, category, loading, startQuiz, handleCategoryChange, h
         />
     ));
 
-    const startPage = (
-        <section className='start-page'>
-            <p>Select a subject and click "Start Quiz"</p>
-            <fieldset className='subjects'>
-                <legend>Subjects</legend>
-                {categoryOptions.length > 0 ? categoryOptions : <p className='info'>Loading subjects...</p>}
-            </fieldset>
-            {category === "" && <p className='error'>Please select a subject to start the quiz!</p>}
-            <Button disabled={category === ""} onClick={startQuiz} text={loading ? "Loading..." : "Start Quiz"} />
-        </section>
-    );
+    const startQuiz = () => {
+        fetchQuestions({ amount: settings.numQuestions, category, difficulty: settings.difficulty, type: settings.questionType });
+        navigate('/quiz');
+    }
 
     return (
         <div className='container'>
-            {questions.length > 0 ?
-                <Quiz
-                    questions={questions}
-                    handleSelect={handleSelect}
-                    quizzical={quizzical}
-                    score={score}
-                    startQuiz={startQuiz}
-                    checkAnswer={checkAnswer}
-                />
-                :
-                startPage
-            }
+            <section className='start-page'>
+                <p>Select a subject and click "Start Quiz"</p>
+                <fieldset className='subjects'>
+                    <legend>Subjects</legend>
+                    {categoryOptions.length > 0 ? categoryOptions : <p className='info'>Loading subjects...</p>}
+                </fieldset>
+                {category === "" && <p className='error'>Please select a subject to start the quiz!</p>}
+                <Button disabled={category === ""} onClick={startQuiz} text={loading ? "Loading..." : "Start Quiz"} />
+            </section>
         </div>
     )
 }

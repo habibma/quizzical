@@ -1,22 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useQuiz } from '../../context/Public/QuizContext.jsx'
 import Questionnaire from '../../components/Questionnaire'
 import Button from "../../components/Button"
 
-function Quiz({ questions, handleSelect, quizzical, score, startQuiz, checkAnswer }) {
+import './Quiz.css'
+
+function Quiz() {
+
+  const { questions, answers, score, loading, error, fetchQuestions, selectAnswer, finishQuiz, resetQuiz, isQuizFinished } = useQuiz();
+  const [quizzical, setQuizzical] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSelect = (questionId, answerId) => {
+    selectAnswer(questionId, answerId);
+  };
+
+  const navigateToResult = () => {
+    navigate('/result');
+  }
+
   return (
-    <section className='questions-page'>
+    <section className='quiz-page'>
       <ul>
         <Questionnaire
           questions={questions}
           onChange={handleSelect}
-          quizzical={quizzical}
+          isQuizFinished={isQuizFinished}
+          answers={answers}
         />
       </ul>
-      {quizzical ?
-        <div className='score-borad'><span>You scored {score}/5 correct answers</span><Button onClick={startQuiz} text="Play again" /></div>
-        :
-        <Button onClick={checkAnswer} text="Check answers" />
-      }
+      <div className='action-buttons'>
+        <Button onClick={finishQuiz} text="Check answers" />
+        <Button onClick={navigateToResult} text="Result" />
+      </div>
     </section>
   )
 }

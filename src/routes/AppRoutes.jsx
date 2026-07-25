@@ -2,6 +2,8 @@ import { Routes, Route } from 'react-router-dom'
 // pages
 import PublicLayout from '../layouts/PublicLayout'
 import Home from '../pages/Home/Home'
+import Quiz from '../pages/Quiz/Quiz'
+import Result from '../pages/Result/Result'
 import About from '../pages/About/About'
 // admin pages
 import AdminLayout from '../pages/Admin/AdminLayout'
@@ -15,12 +17,25 @@ import Themes from '../pages/Admin/Themes'
 import Api from '../pages/Admin/Api'
 
 import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
+import { QuizProvider } from '../context/Public/QuizContext.jsx'
 
-function AppRoutes({ theme, toggleTheme, questions, questionPage, startPage, subjects, category, loading, startQuiz, handleSelect, quizzical, score, checkAnswer, handleCategoryChange }) {
+function AppRoutes({ theme, toggleTheme }) {
     return (
         <Routes>
-            <Route path="/" element={<PublicLayout theme={theme} toggleTheme={toggleTheme} />} >
-                <Route index element={<Home questions={questions} questionPage={questionPage} category={category} loading={loading} startQuiz={startQuiz} handleCategoryChange={handleCategoryChange} handleSelect={handleSelect} quizzical={quizzical} score={score} checkAnswer={checkAnswer} />} />
+            <Route
+                path="/"
+                element={
+                    <QuizProvider>
+                        <PublicLayout
+                            theme={theme}
+                            toggleTheme={toggleTheme}
+                        />
+                    </QuizProvider>
+                }
+            >
+                <Route index element={<Home />} />
+                <Route path="quiz" element={<Quiz />} />
+                <Route path="result" element={<Result />} />
                 <Route path="about" element={<About />} />
             </Route>
             <Route path="/admin" element={<AdminLayout theme={theme} toggleTheme={toggleTheme} />} >
