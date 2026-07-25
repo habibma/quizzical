@@ -1,5 +1,7 @@
 import {decode} from 'html-entities';
 
+import './Questionnaire.css';
+
 const Question = ({ id, questionId, option, selectedOption, answer, onChange, isQuizFinished }) => {
 
     let styles;
@@ -20,8 +22,6 @@ const Question = ({ id, questionId, option, selectedOption, answer, onChange, is
             }
         }
     }
-
-    console.log({ option, answer, selectedOption, isQuizFinished });
 
     return (
         <div>
@@ -51,11 +51,11 @@ const Questionnaire = ({ questions, onChange, isQuizFinished, answers }) => {
 
         const selectedOption = answers.find(answer => answer.questionId === question.id)?.answer;
         return (
-            <li key={question.id} id={question.id} className='query'>
-                <h3 className='question-face'>
+            <li key={question.id} id={question.id} className='question-item'>
+                <h3 className='question-text'>
                 { decode(question.question) }
                 </h3>
-                <form className='options'>
+                <form className='options-form'>
                     {question.options.map((option, index) => {
                         return (
                             <Question

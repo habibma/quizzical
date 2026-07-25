@@ -1,0 +1,35 @@
+
+.question-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+
+  .question-text {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #20349b;
+  }
+}
+
+.options-form {
+  display: flex;
+  gap: 10px;
+
+  .option {
+    cursor: pointer;
+    border: 1px solid #4D5B9E;
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 5px 25px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: "Poppins", sans-serif;
+
+    &:hover {
+        scale: 1.05;
+        transition: background-color 0.3s ease;
+    }
+  }
+}
