@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { defaultSettings } from '../config/defaultSettings';
+import { defaultSettings } from '../../config/defaultSettings';
 
 const SettingsContext = createContext();
 

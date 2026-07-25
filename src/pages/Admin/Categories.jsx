@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState ,useEffect } from 'react'
-import { useCategories } from '../../context/CategoryContext.jsx'
+import { useCategories } from '../../context/Admin/CategoryContext.jsx'
 import Modal from '../../components/Modal.jsx'
 import Button from '../../components/Button.jsx'
 import Input from '../../components/Input.jsx'

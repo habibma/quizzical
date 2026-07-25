@@ -14,7 +14,7 @@ import Statistics from '../pages/Admin/Statistics'
 import Themes from '../pages/Admin/Themes'
 import Api from '../pages/Admin/Api'
 
-import { QuestionsProvider } from '../context/QuestionsContext'
+import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
 
 function AppRoutes({ theme, toggleTheme, questions, questionPage, startPage, subjects, category, loading, startQuiz, handleSelect, quizzical, score, checkAnswer, handleCategoryChange }) {
     return (

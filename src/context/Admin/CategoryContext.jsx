@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCategories } from "../services/triviaService";
+import { getCategories } from "../../services/triviaService.js";
 
 const CategoryContext = createContext();
 

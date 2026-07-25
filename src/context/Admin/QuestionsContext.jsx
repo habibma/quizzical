@@ -1,7 +1,7 @@
 // This context is used to manage question in Admin page
 
 import { useState, useContext, createContext } from 'react';
-import { getQuestions } from '../services/triviaService';
+import { getQuestions } from '../../services/triviaService';
 
 
 const QuestionsContext = createContext();

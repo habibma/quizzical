@@ -7,8 +7,8 @@ import Modal from '../../components/Modal'
 
 import './Questions.css'
 
-import { useCategories } from '../../context/CategoryContext'
-import { useQuestions } from '../../context/QuestionsContext'
+import { useCategories } from '../../context/Admin/CategoryContext'
+import { useQuestions } from '../../context/Admin/QuestionsContext'
 
 const Questions = () => {
 
