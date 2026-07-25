@@ -1,3 +1,4 @@
+import { decodeHtml } from "../utiles/decodeHtml.js";
 
 // to fetch trivia questions from the Open Trivia Database API
 export async function getQuestions(options = {}) {
@@ -37,10 +38,11 @@ export async function getQuestions(options = {}) {
 
   return data.results.map((question, index) => ({
     id: `${Date.now()}-${index}`,
-    question: question.question,
-    answer: question.correct_answer,
+    question: decodeHtml(question.question),
+    answer: decodeHtml(question.correct_answer),
     options: [...question.incorrect_answers, question.correct_answer]
-      .sort(() => Math.random() - 0.5),
+      .sort(() => Math.random() - 0.5)
+      .map(decodeHtml),
     selectedOption: "",
   }));
 }
