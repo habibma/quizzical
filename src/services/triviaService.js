@@ -1,21 +1,47 @@
 
 // to fetch trivia questions from the Open Trivia Database API
-export async function getQuestions(options) {
-  const { amount, category, difficulty, type } = options;
-  const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=${type}`;
-  const response = await fetch(url);
+export async function getQuestions(options = {}) {
+  const {
+    amount = 10,
+    category = "any",
+    difficulty = "any",
+    type = "any",
+  } = options;
+
+  const params = new URLSearchParams({
+    amount,
+  });
+
+  if (category !== "any")
+    params.append("category", category);
+
+  if (difficulty !== "any")
+    params.append("difficulty", difficulty);
+
+  if (type !== "any")
+    params.append("type", type);
+
+  const response = await fetch(
+    `https://opentdb.com/api.php?${params}`
+  );
+
   if (!response.ok) {
-	throw new Error(`An error has occurred: ${response.status}`);
+    throw new Error(`HTTP ${response.status}`);
   }
+
   const data = await response.json();
-  return data.results.map((obj) => ({
-	id: obj.id,
-	question: obj.question,
-	answer: obj.correct_answer,
-	options: obj.incorrect_answers
-	  .concat(obj.correct_answer)
-	  .sort(() => 0.5 - Math.random()),
-	selectedOption: "",
+
+  if (data.response_code !== 0) {
+    throw new Error("No questions found.");
+  }
+
+  return data.results.map((question, index) => ({
+    id: `${Date.now()}-${index}`,
+    question: question.question,
+    answer: question.correct_answer,
+    options: [...question.incorrect_answers, question.correct_answer]
+      .sort(() => Math.random() - 0.5),
+    selectedOption: "",
   }));
 }
 
@@ -23,7 +49,7 @@ export async function getQuestions(options) {
 export async function getCategories() {
   const response = await fetch("https://opentdb.com/api_category.php");
   if (!response.ok) {
-	throw new Error(`An error has occurred: ${response.status}`);
+    throw new Error(`An error has occurred: ${response.status}`);
   }
   const data = await response.json();
   return data.trivia_categories;
