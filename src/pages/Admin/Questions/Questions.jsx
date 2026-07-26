@@ -7,6 +7,7 @@ import QuestionModal from './QuestionModal'
 import EditIcon from '../../../assets/icons/EditIcon'
 import DeleteIcon from '../../../assets/icons/DeleteIcon'
 import QuestionFilters from './QuestionFilters'
+import ApiQuestionsTable from './ApiQuestionsTable'
 import './Questions.css'
 
 import { useCategories } from '../../../context/Admin/CategoryContext'
@@ -19,11 +20,9 @@ const Questions = () => {
     difficulty: 'any',
     type: 'any',
   });
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [questionType, setQuestionType] = useState('multiple');
-
+  const [visibilityMap, setVisibilityMap] = useState({});
   const { categories } = useCategories();
   const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchQuestionsCountByCategory, countByCategory } = useQuestions();
 
@@ -38,20 +37,17 @@ const Questions = () => {
       label: category.displayName,
     }))
   ];
-
   const difficultyOptions = [
     { value: 'any', label: 'Any Difficulty' },
     { value: 'easy', label: 'Easy' },
     { value: 'medium', label: 'Medium' },
     { value: 'hard', label: 'Hard' },
   ];
-
   const typeOptions = [
     { value: 'any', label: 'Any Type' },
     { value: 'multiple', label: 'Multiple Choice' },
     { value: 'boolean', label: 'True-False' },
   ];
-
   const filterConfig = [
     {
       name: "category",
@@ -87,6 +83,17 @@ const Questions = () => {
     }
     closeModal();
   };
+
+  const toggleVisibility = (questionId) => {
+    setVisibilityMap(prevMap => ({
+      ...prevMap,
+      [questionId]: !prevMap[questionId]
+    }));
+  }
+
+  const isVisible = (questionId) => {
+    return visibilityMap[questionId] || false;
+  }
 
   const { category, difficulty, type } = filters;
   useEffect(() => {
@@ -133,46 +140,14 @@ const Questions = () => {
           onChange={handleFilterChange}
         />
         <div className='questions-list'>
-          <table className='questions-table'>
-            <thead>
-              <tr>
-                <th>Question</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="2">Loading...</td>
-                </tr>
-              ) : error ? (
-                <tr>
-                  <td colSpan="2">Error: {error}</td>
-                </tr>
-              ) : questions.length === 0 ? (
-                <tr>
-                  <td colSpan="2">No questions found.</td>
-                </tr>
-              ) :
-                (
-                  questions.map((question, index) => (
-                    <tr key={question.id}>
-                      <td>{question.question}</td>
-                      <td className='actions'>
-                        <VisibleIcon />
-                        <InvisibleIcon />
-                      </td>
-                    </tr>
-                  ))
-                )}
-            </tbody>
-            <tfoot className='questions-insight'>
-              <tr>
-                <td colSpan="1">Question Count Insight</td>
-                <td colSpan="3">{questionInsightBox()}</td>
-              </tr>
-            </tfoot>
-          </table>
+          <ApiQuestionsTable
+            questions={questions}
+            onToggleVisibility={toggleVisibility}
+            isVisible={isVisible}
+            loading={loading}
+            error={error}
+            questionInsightBox={questionInsightBox}
+          />
           <table className='questions-table'>
             <thead>
               <tr>
@@ -213,11 +188,7 @@ const Questions = () => {
 
 export default Questions
 
-// First version (API-based)
-// ✅ Select category
-// ✅ Select difficulty
-// ✅ Select type
-// ✅ Fetch questions from API
+// TODO: Add features to the questions page
 // ✅ View question details in a modal
 // Future version (your own backend)
 // ✅ Add question
