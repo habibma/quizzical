@@ -13,7 +13,7 @@ import { useQuestions } from '../../../context/Admin/QuestionsContext'
 
 const Questions = () => {
 
-  const [inputValues, setInputValues] = useState({
+  const [filters, setFilters] = useState({
     category: 'any',
     difficulty: 'any',
     type: 'any',
@@ -28,7 +28,7 @@ const Questions = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setInputValues(prevValues => ({ ...prevValues, [name]: value }));
+    setFilters(prevValues => ({ ...prevValues, [name]: value }));
   };
 
   const categoryOptions = [
@@ -67,9 +67,9 @@ const Questions = () => {
     closeModal();
   };
 
-  const { category, difficulty, type } = inputValues;
+  const { category, difficulty, type } = filters;
   useEffect(() => {
-    fetchQuestions(inputValues.category, inputValues.type, inputValues.difficulty);
+    fetchQuestions(category, type, difficulty);
   }, [category, difficulty, type]);
 
   useEffect(() => {
@@ -107,9 +107,9 @@ const Questions = () => {
       </section>
       <section className='questions-content'>
         <div className='questions-actions'>
-          <Input as="select" options={categoryOptions} id="category" name="category" label="Category" value={inputValues.category} onChange={handleInputChange} />
-          <Input as="select" options={difficultyOptions} id="difficulty" name="difficulty" label="Difficulty" value={inputValues.difficulty} onChange={handleInputChange} />
-          <Input as="select" options={typeOptions} id="type" name="type" label="Type" value={inputValues.type} onChange={handleInputChange} />
+          <Input as="select" options={categoryOptions} id="category" name="category" label="Category" value={filters.category} onChange={handleInputChange} />
+          <Input as="select" options={difficultyOptions} id="difficulty" name="difficulty" label="Difficulty" value={filters.difficulty} onChange={handleInputChange} />
+          <Input as="select" options={typeOptions} id="type" name="type" label="Type" value={filters.type} onChange={handleInputChange} />
         </div>
         <div className='questions-list'>
           <table className='questions-table'>
