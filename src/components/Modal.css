@@ -30,4 +30,8 @@
     width: 400px;
     max-width: 90%;
     text-align: center;
+    overflow-y: auto;
+    max-height: 80%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
 }
