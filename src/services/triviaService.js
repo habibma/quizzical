@@ -55,3 +55,12 @@ export async function getCategories() {
   const data = await response.json();
   return data.trivia_categories;
 }
+
+export async function getCategoryQuestionsCount(categoryId) {
+  const response = await fetch(`https://opentdb.com/api_count.php?category=${categoryId}`);
+  if (!response.ok) {
+    throw new Error(`An error has occurred: ${response.status}`);
+  }
+  const data = await response.json();
+  return data.category_question_count;
+}

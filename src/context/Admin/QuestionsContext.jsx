@@ -2,6 +2,7 @@
 
 import { useState, useContext, createContext } from 'react';
 import { getQuestions } from '../../services/triviaService';
+import { getCategoryQuestionsCount } from '../../services/triviaService';
 
 
 const QuestionsContext = createContext();
@@ -12,14 +13,7 @@ export const QuestionsProvider = ({ children }) => {
     const [customQuestions, setCustomQuestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
-    const deleteQuestion = (id) => {
-        setCustomQuestions(customQuestions.filter(q => q.id !== id));
-    };
-
-    const updateQuestion = (updatedQuestion) => {
-        setCustomQuestions(customQuestions.map(q => q.id === updatedQuestion.id ? updatedQuestion : q));
-    };
+    const [countByCategory, setCountByCategory] = useState({});
 
     const fetchQuestions = async (cate, type, diff) => {
         const options = {
@@ -40,8 +34,28 @@ export const QuestionsProvider = ({ children }) => {
         }
     };
 
+    const fetchQuestionsCountByCategory = async (categoryId) => {
+        setError(null);
+        if (countByCategory[categoryId]) {
+            return countByCategory[categoryId];
+        }
+        try {
+            const count = await getCategoryQuestionsCount(categoryId);
+            setCountByCategory(prev => ({ ...prev, [categoryId]: count }));
+            return count;
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     const addQuestion = (question) => {
         setCustomQuestions([...customQuestions, question]);
+    };
+    const deleteQuestion = (id) => {
+        setCustomQuestions(customQuestions.filter(q => q.id !== id));
+    };
+    const updateQuestion = (updatedQuestion) => {
+        setCustomQuestions(customQuestions.map(q => q.id === updatedQuestion.id ? updatedQuestion : q));
     };
 
     return (
@@ -55,6 +69,8 @@ export const QuestionsProvider = ({ children }) => {
                 addQuestion,
                 updateQuestion,
                 deleteQuestion,
+                fetchQuestionsCountByCategory,
+                countByCategory,
             }}
         >
             {children}

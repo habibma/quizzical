@@ -8,7 +8,7 @@ import About from '../pages/About/About'
 // admin pages
 import AdminLayout from '../pages/Admin/AdminLayout'
 import Dashboard from '../pages/Admin/Dashboard'
-import Questions from '../pages/Admin/Questions'
+import Questions from '../pages/Admin/Questions/Questions'
 import Quizzes from '../pages/Admin/Quizzes'
 import Categories from '../pages/Admin/Categories'
 import Settings from '../pages/Admin/Settings'
