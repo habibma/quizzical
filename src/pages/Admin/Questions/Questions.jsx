@@ -6,6 +6,7 @@ import InvisibleIcon from '../../../assets/icons/InvisibleIcon'
 import QuestionModal from './QuestionModal'
 import EditIcon from '../../../assets/icons/EditIcon'
 import DeleteIcon from '../../../assets/icons/DeleteIcon'
+import QuestionFilters from './QuestionFilters'
 import './Questions.css'
 
 import { useCategories } from '../../../context/Admin/CategoryContext'
@@ -26,8 +27,7 @@ const Questions = () => {
   const { categories } = useCategories();
   const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchQuestionsCountByCategory, countByCategory } = useQuestions();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleFilterChange = (name, value) => {
     setFilters(prevValues => ({ ...prevValues, [name]: value }));
   };
 
@@ -50,6 +50,27 @@ const Questions = () => {
     { value: 'any', label: 'Any Type' },
     { value: 'multiple', label: 'Multiple Choice' },
     { value: 'boolean', label: 'True-False' },
+  ];
+
+  const filterConfig = [
+    {
+      name: "category",
+      label: "Category",
+      type: "select",
+      options: categoryOptions,
+    },
+    {
+      name: "difficulty",
+      label: "Difficulty",
+      type: "select",
+      options: difficultyOptions,
+    },
+    {
+      name: "type",
+      label: "Type",
+      type: "select",
+      options: typeOptions,
+    },
   ];
 
   const openModal = () => {
@@ -106,11 +127,11 @@ const Questions = () => {
         <p className='lead'>Manage your questions here.</p>
       </section>
       <section className='questions-content'>
-        <div className='questions-actions'>
-          <Input as="select" options={categoryOptions} id="category" name="category" label="Category" value={filters.category} onChange={handleInputChange} />
-          <Input as="select" options={difficultyOptions} id="difficulty" name="difficulty" label="Difficulty" value={filters.difficulty} onChange={handleInputChange} />
-          <Input as="select" options={typeOptions} id="type" name="type" label="Type" value={filters.type} onChange={handleInputChange} />
-        </div>
+        <QuestionFilters
+          config={filterConfig}
+          values={filters}
+          onChange={handleFilterChange}
+        />
         <div className='questions-list'>
           <table className='questions-table'>
             <thead>

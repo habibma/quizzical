@@ -60,6 +60,13 @@
     }
 }
 
+.question-filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
 .questions-actions {
     display: flex;
     gap: 1rem;
