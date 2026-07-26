@@ -33,10 +33,13 @@
         overflow: hidden;
         margin-bottom: 20px;
 
+        tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+
         th, td {
             padding: 10px;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
         }
 
         th {
@@ -46,6 +49,13 @@
 
         tr:hover {
             opacity: 0.8;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
         }
     }
 }
@@ -63,6 +73,19 @@
     &:hover {
         opacity: 1;
         color: var(--primary-color);
+        user-select: none;
+    }
+}
+
+.action-btn {
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        opacity: 0.8;
         user-select: none;
     }
 }

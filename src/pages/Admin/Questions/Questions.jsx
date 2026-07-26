@@ -4,6 +4,8 @@ import Button from '../../../components/Button'
 import VisibleIcon from '../../../assets/icons/VisibleIcon'
 import InvisibleIcon from '../../../assets/icons/InvisibleIcon'
 import QuestionModal from './QuestionModal'
+import EditIcon from '../../../assets/icons/EditIcon'
+import DeleteIcon from '../../../assets/icons/DeleteIcon'
 import './Questions.css'
 
 import { useCategories } from '../../../context/Admin/CategoryContext'
@@ -135,7 +137,7 @@ const Questions = () => {
                   questions.map((question, index) => (
                     <tr key={question.id}>
                       <td>{question.question}</td>
-                      <td>
+                      <td className='actions'>
                         <VisibleIcon />
                         <InvisibleIcon />
                       </td>
@@ -161,9 +163,9 @@ const Questions = () => {
               {customQuestions.map((question) => (
                 <tr key={question.id}>
                   <td>{question.question}</td>
-                  <td>
-                    <VisibleIcon />
-                    <InvisibleIcon />
+                  <td className='actions'>
+                    <Button className='btn-secondary action-btn' text={<EditIcon />} onClick={openModal} />
+                    <Button className='btn-danger action-btn' text={<DeleteIcon />} onClick={() => deleteQuestion(question.id)} />
                   </td>
                 </tr>
               ))}
@@ -179,8 +181,6 @@ const Questions = () => {
         )}
         <div className='actions-footer'>
           <Button className='btn-primary' text="Add Question" onClick={openModal} />
-          <Button className='btn-secondary' text="Edit Question" onClick={openModal} />
-          <Button className='btn-danger' text="Delete Question" />
         </div>
       </section>
       <section className='questions-footer'>
