@@ -49,13 +49,13 @@ export const QuestionsProvider = ({ children }) => {
     };
 
     const addQuestion = (question) => {
-        setCustomQuestions([...customQuestions, question]);
+        setCustomQuestions(prevQuestions => [...prevQuestions, question]);
     };
     const deleteQuestion = (id) => {
-        setCustomQuestions(customQuestions.filter(q => q.id !== id));
+        setCustomQuestions(prevQuestions => prevQuestions.filter(q => q.id !== id));
     };
     const updateQuestion = (updatedQuestion) => {
-        setCustomQuestions(customQuestions.map(q => q.id === updatedQuestion.id ? updatedQuestion : q));
+        setCustomQuestions(prevQuestions => prevQuestions.map(q => q.id === updatedQuestion.id ? updatedQuestion : q));
     };
 
     return (

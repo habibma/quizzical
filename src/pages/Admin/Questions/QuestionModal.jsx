@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from '../../../components/Modal'
 import Input from '../../../components/Input'
 import Button from '../../../components/Button'
@@ -7,10 +7,51 @@ import './QuestionModal.css'
 
 const QuestionModal = ({ handleSaveQuestion, isOpen, onClose }) => {
 
-    const [questionType, setQuestionType] = useState('multiple');
+    const initialQuestionData = {
+        id: null,
+        question: '',
+        type: 'multiple',
+        options: ['', '', '', ''],
+        correctOption: null,
+    };
+    const [questionData, setQuestionData] = useState(initialQuestionData);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setQuestionData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    const handleOptionChange = (index, value) => {
+        const newOptions = [...questionData.options];
+        newOptions[index] = value;
+        setQuestionData(prevData => ({
+            ...prevData,
+            options: newOptions
+        }));
+    };
+
+    const handleCorrectOptionChange = (index) => {
+        setQuestionData(prevData => ({
+            ...prevData,
+            correctOption: index
+        }));
+    }
 
     const toggleQuestionType = (e) => {
-        setQuestionType(e.target.value);
+        setQuestionData(prevData => ({
+            ...prevData,
+            type: e.target.value
+        }));
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleSaveQuestion(questionData);
+        setQuestionData(initialQuestionData);
+        onClose();
     }
 
     return (
@@ -19,17 +60,14 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose }) => {
                 <h2>Question Details</h2>
             </header>
             <main className='modal-main'>
-                <form className='modal-form' onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.target);
-                    const question = Object.fromEntries(formData);
-                    handleSaveQuestion(question);
-                }}>
+                <form className='modal-form' onSubmit={handleSubmit}>
                     <Input
                         type="text"
                         id="question"
                         name="question"
                         label="Question"
+                        value={questionData.question}
+                        onChange={handleInputChange}
                     />
                     <fieldset className='modal-radio-group'>
                         <legend>Question Type</legend>
@@ -39,7 +77,7 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose }) => {
                             name="type"
                             label="Multiple Choice"
                             radioValue="multiple"
-                            value={questionType}
+                            value={questionData.type}
                             onChange={toggleQuestionType}
                         />
                         <Input
@@ -49,68 +87,34 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose }) => {
                             name="type"
                             label="True-False"
                             radioValue="boolean"
-                            value={questionType}
+                            value={questionData.type}
                             onChange={toggleQuestionType}
                         />
                     </fieldset>
-                    {questionType === 'multiple' ? (
+                    {questionData.type === 'multiple' ? (
                         <div className='modal-multiple-choice'>
                             <div className='modal-multiple-choice-option'>
-                                <Input
-                                    type="text"
-                                    id="option1"
-                                    name="option1"
-                                    label="Option 1"
-                                />
-                                <Input
-                                    className='modal-radio'
-                                    type="radio"
-                                    id="correct1"
-                                    name="correct"
-                                    label="Correct"
-                                />
-                            </div>
-                            <div className='modal-multiple-choice-option'>
-                                <Input
-                                    type="text"
-                                    id="option2"
-                                    name="option2"
-                                    label="Option 2"
-                                />
-                                <Input
-                                    type="radio"
-                                    id="correct2"
-                                    name="correct"
-                                    label="Correct"
-                                />
-                            </div>
-                            <div className='modal-multiple-choice-option'>
-                                <Input
-                                    type="text"
-                                    id="option3"
-                                    name="option3"
-                                    label="Option 3"
-                                />
-                                <Input
-                                    type="radio"
-                                    id="correct3"
-                                    name="correct"
-                                    label="Correct"
-                                />
-                            </div>
-                            <div className='modal-multiple-choice-option'>
-                                <Input
-                                    type="text"
-                                    id="option4"
-                                    name="option4"
-                                    label="Option 4"
-                                />
-                                <Input
-                                    type="radio"
-                                    id="correct4"
-                                    name="correct"
-                                    label="Correct"
-                                />
+                                {questionData.options.map((option, index) => (
+                                    <div key={index} className='modal-option'>
+                                        <Input
+                                            type="text"
+                                            id={`option-${index}`}
+                                            name={`option-${index}`}
+                                            label={`Option ${index + 1}`}
+                                            value={option}
+                                            onChange={(e) => handleOptionChange(index, e.target.value)}
+                                        />
+                                        <Input
+                                            type="radio"
+                                            id={`correct-option-${index}`}
+                                            name="correctOption"
+                                            label="Correct"
+                                            radioValue={index}
+                                            value={questionData.correctOption}
+                                            onChange={() => handleCorrectOptionChange(index)}
+                                        />
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     ) : null}

@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import Input from '../../../components/Input'
-import Button from '../../../components/Button'
-import VisibleIcon from '../../../assets/icons/VisibleIcon'
-import InvisibleIcon from '../../../assets/icons/InvisibleIcon'
-import QuestionModal from './QuestionModal'
-import EditIcon from '../../../assets/icons/EditIcon'
-import DeleteIcon from '../../../assets/icons/DeleteIcon'
-import QuestionFilters from './QuestionFilters'
-import ApiQuestionsTable from './ApiQuestionsTable'
+import React, { useState, useEffect } from 'react';
+import Input from '../../../components/Input';
+import Button from '../../../components/Button';
+import VisibleIcon from '../../../assets/icons/VisibleIcon';
+import InvisibleIcon from '../../../assets/icons/InvisibleIcon';
+import QuestionModal from './QuestionModal';
+import EditIcon from '../../../assets/icons/EditIcon';
+import DeleteIcon from '../../../assets/icons/DeleteIcon';
+import QuestionFilters from './QuestionFilters';
+import ApiQuestionsTable from './ApiQuestionsTable';
+import CustomQuestionsTable from './CustomQuestionsTable';
 import './Questions.css'
 
-import { useCategories } from '../../../context/Admin/CategoryContext'
-import { useQuestions } from '../../../context/Admin/QuestionsContext'
+import { useCategories } from '../../../context/Admin/CategoryContext';
+import { useQuestions } from '../../../context/Admin/QuestionsContext';
 
 const Questions = () => {
 
@@ -21,8 +22,8 @@ const Questions = () => {
     type: 'any',
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [questionType, setQuestionType] = useState('multiple');
   const [visibilityMap, setVisibilityMap] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
   const { categories } = useCategories();
   const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchQuestionsCountByCategory, countByCategory } = useQuestions();
 
@@ -75,12 +76,17 @@ const Questions = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   }
+
+  const hadleAddQuestion = () => {
+    setIsEditing(false);
+    openModal();
+  }
+  const handleEditQuestion = (question) => {
+    setIsEditing(true);
+    openModal();
+  }
   const handleSaveQuestion = (question) => {
-    if (question.id) {
-      updateQuestion(question);
-    } else {
-      addQuestion(question);
-    }
+    addQuestion(question); // TODO: Implement logic to determine if it's an edit or a new question
     closeModal();
   };
 
@@ -148,25 +154,11 @@ const Questions = () => {
             error={error}
             questionInsightBox={questionInsightBox}
           />
-          <table className='questions-table'>
-            <thead>
-              <tr>
-                <th>Custom Question</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customQuestions.map((question) => (
-                <tr key={question.id}>
-                  <td>{question.question}</td>
-                  <td className='actions'>
-                    <Button className='btn-secondary action-btn' text={<EditIcon />} onClick={openModal} />
-                    <Button className='btn-danger action-btn' text={<DeleteIcon />} onClick={() => deleteQuestion(question.id)} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <CustomQuestionsTable
+            customQuestions={customQuestions}
+            openModal={openModal}
+            deleteQuestion={deleteQuestion}
+          />
         </div>
         {isModalOpen && (
           <QuestionModal
