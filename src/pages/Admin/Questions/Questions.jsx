@@ -9,6 +9,8 @@ import DeleteIcon from '../../../assets/icons/DeleteIcon';
 import QuestionFilters from './QuestionFilters';
 import ApiQuestionsTable from './ApiQuestionsTable';
 import CustomQuestionsTable from './CustomQuestionsTable';
+import QuestionInsight from './QuestionInsight';
+import { createFilterConfig } from './filterConfig';
 import './Questions.css'
 
 import { useCategories } from '../../../context/Admin/CategoryContext';
@@ -39,48 +41,16 @@ const Questions = () => {
       label: category.displayName,
     }))
   ];
-  const difficultyOptions = [
-    { value: 'any', label: 'Any Difficulty' },
-    { value: 'easy', label: 'Easy' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'hard', label: 'Hard' },
-  ];
-  const typeOptions = [
-    { value: 'any', label: 'Any Type' },
-    { value: 'multiple', label: 'Multiple Choice' },
-    { value: 'boolean', label: 'True-False' },
-  ];
-  const filterConfig = [
-    {
-      name: "category",
-      label: "Category",
-      type: "select",
-      options: categoryOptions,
-    },
-    {
-      name: "difficulty",
-      label: "Difficulty",
-      type: "select",
-      options: difficultyOptions,
-    },
-    {
-      name: "type",
-      label: "Type",
-      type: "select",
-      options: typeOptions,
-    },
-  ];
+
+  const filterConfig = createFilterConfig(categoryOptions);
 
   const openModal = () => {
     setIsModalOpen(true);
   }
   const closeModal = () => {
     setIsModalOpen(false);
-  }
-
-  const hadleAddQuestion = () => {
+    setSelectedQuestion(null);
     setIsEditing(false);
-    openModal();
   }
 
   const handleEditQuestion = (question) => {
@@ -124,28 +94,6 @@ const Questions = () => {
     fetchQuestionsCountByCategory(category);
   }, [category]);
 
-  const questionInsightBox = () => {
-    if (category === 'any') {
-      return <p>Please select a category to see the question count.</p>;
-    }
-    const totalQuestions = countByCategory[category]?.total_question_count || 0;
-    const totalEasyQuestions = countByCategory[category]?.total_easy_question_count || 0;
-    const totalMediumQuestions = countByCategory[category]?.total_medium_question_count || 0;
-    const totalHardQuestions = countByCategory[category]?.total_hard_question_count || 0;
-
-    switch (difficulty) {
-      case 'any':
-        return <p>Total Questions: {totalQuestions}</p>;
-      case 'easy':
-        return <p>Total Easy Questions: {totalEasyQuestions}</p>;
-      case 'medium':
-        return <p>Total Medium Questions: {totalMediumQuestions}</p>;
-      case 'hard':
-        return <p>Total Hard Questions: {totalHardQuestions}</p>;
-      default:
-        break;
-    }
-  }
 
   return (
     <div className='questions'>
@@ -166,7 +114,11 @@ const Questions = () => {
             isVisible={isVisible}
             loading={loading}
             error={error}
-            questionInsightBox={questionInsightBox}
+          />
+          <QuestionInsight
+            category={category}
+            difficulty={difficulty}
+            countByCategory={countByCategory}
           />
           <CustomQuestionsTable
             customQuestions={customQuestions}

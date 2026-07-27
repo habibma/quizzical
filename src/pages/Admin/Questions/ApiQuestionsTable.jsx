@@ -1,6 +1,7 @@
 import VisibleIcon from '../../../assets/icons/VisibleIcon'
 import InvisibleIcon from '../../../assets/icons/InvisibleIcon';
 import Button from '../../../components/Button';
+import QuestionInsightBox from './QuestionInsightBox';
 
 const ApiQuestionsTable = ({ questions, onToggleVisibility, isVisible, loading, error, questionInsightBox }) => {
 
@@ -49,12 +50,6 @@ const ApiQuestionsTable = ({ questions, onToggleVisibility, isVisible, loading, 
                         ))
                     )}
             </tbody>
-            <tfoot className='questions-insight'>
-                <tr>
-                    <td colSpan="1">Question Count Insight</td>
-                    <td colSpan="3">{questionInsightBox()}</td>
-                </tr>
-            </tfoot>
         </table>
     );
 }
