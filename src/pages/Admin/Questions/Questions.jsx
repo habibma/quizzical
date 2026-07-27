@@ -23,6 +23,7 @@ const Questions = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibilityMap, setVisibilityMap] = useState({});
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const { categories } = useCategories();
   const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchQuestionsCountByCategory, countByCategory } = useQuestions();
@@ -81,12 +82,25 @@ const Questions = () => {
     setIsEditing(false);
     openModal();
   }
+
   const handleEditQuestion = (question) => {
+    setSelectedQuestion(question);
     setIsEditing(true);
     openModal();
   }
+
+  const handleAddQuestion = () => {
+    setSelectedQuestion(null);
+    setIsEditing(false);
+    openModal();
+  }
+
   const handleSaveQuestion = (question) => {
-    addQuestion(question); // TODO: Implement logic to determine if it's an edit or a new question
+    if (isEditing) {
+      updateQuestion(question);
+    } else {
+      addQuestion(question);
+    }
     closeModal();
   };
 
@@ -156,7 +170,7 @@ const Questions = () => {
           />
           <CustomQuestionsTable
             customQuestions={customQuestions}
-            openModal={openModal}
+            onEdit={handleEditQuestion}
             deleteQuestion={deleteQuestion}
           />
         </div>
@@ -164,11 +178,13 @@ const Questions = () => {
           <QuestionModal
             isOpen={isModalOpen}
             onClose={closeModal}
+            isEditing={isEditing}
+            question={selectedQuestion}
             handleSaveQuestion={handleSaveQuestion}
           />
         )}
         <div className='actions-footer'>
-          <Button className='btn-primary' text="Add Question" onClick={openModal} />
+          <Button className='btn-primary' text="Add Question" onClick={handleAddQuestion} />
         </div>
       </section>
       <section className='questions-footer'>

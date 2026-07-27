@@ -5,16 +5,17 @@ import Button from '../../../components/Button'
 
 import './QuestionModal.css'
 
-const QuestionModal = ({ handleSaveQuestion, isOpen, onClose }) => {
+const INITIAL_QUESTION_DATA = {
+    id: null,
+    question: '',
+    type: 'multiple',
+    options: ['', '', '', ''],
+    correctOption: null,
+};
 
-    const initialQuestionData = {
-        id: null,
-        question: '',
-        type: 'multiple',
-        options: ['', '', '', ''],
-        correctOption: null,
-    };
-    const [questionData, setQuestionData] = useState(initialQuestionData);
+const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, question }) => {
+
+    const [questionData, setQuestionData] = useState(INITIAL_QUESTION_DATA);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -50,14 +51,28 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         handleSaveQuestion(questionData);
-        setQuestionData(initialQuestionData);
+        setQuestionData(INITIAL_QUESTION_DATA);
         onClose();
     }
 
+    const handleClose = () => {
+        setQuestionData(INITIAL_QUESTION_DATA);
+        onClose();
+    }
+
+    useEffect(() => {
+        if (isEditing && question) {
+            setQuestionData(question);
+        }
+        else {
+            setQuestionData(INITIAL_QUESTION_DATA);
+        }
+    }, [isEditing, question]);
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Question Details">
+        <Modal isOpen={isOpen} onClose={handleClose} title="Question Details">
             <header className='modal-header'>
-                <h2>Question Details</h2>
+                <h2>{isEditing ? 'Edit Question' : 'Add Question'}</h2>
             </header>
             <main className='modal-main'>
                 <form className='modal-form' onSubmit={handleSubmit}>
@@ -118,7 +133,11 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose }) => {
                             </div>
                         </div>
                     ) : null}
-                    <Button className='modal-btn' type="submit" text="Save Question" />
+                    <Button
+                        className='modal-btn'
+                        type="submit"
+                        text={isEditing ? 'Update Question' : 'Add Question'}
+                    />
                 </form>
             </main>
         </Modal>

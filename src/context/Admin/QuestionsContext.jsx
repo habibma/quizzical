@@ -49,7 +49,7 @@ export const QuestionsProvider = ({ children }) => {
     };
 
     const addQuestion = (question) => {
-        setCustomQuestions(prevQuestions => [...prevQuestions, question]);
+        setCustomQuestions(prevQuestions => [...prevQuestions, { ...question, id: Date.now().toString() }]);
     };
     const deleteQuestion = (id) => {
         setCustomQuestions(prevQuestions => prevQuestions.filter(q => q.id !== id));
