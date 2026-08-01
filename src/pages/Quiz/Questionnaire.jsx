@@ -1,6 +1,6 @@
 import { decode } from 'html-entities';
 
-import './Questionnaire.css';
+import './Quiz.css';
 
 const Options = ({ id, questionId, option, selectedOption, answer, onChange, isQuizFinished }) => {
 
