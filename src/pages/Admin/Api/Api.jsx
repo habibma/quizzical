@@ -51,7 +51,7 @@ const INITIAL_API_DATA = {
   endpoints: [],
 };
 
-const ApiModal = ({ isOpen, onClose, apiSource, isEditing }) => {
+const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
   if (!isOpen) return null;
 
   const [apiData, setApiData] = useState(INITIAL_API_DATA);
@@ -64,9 +64,30 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing }) => {
     }));
   };
 
+  const handleAuthChange = (e) => {
+    const { name, value } = e.target;
+    setApiData(prevData => ({
+      ...prevData,
+      authDetails: {
+        ...prevData.authDetails,
+        [name]: value
+      }
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(apiData);
+    setApiData(INITIAL_API_DATA);
+    onClose();
+  }
+
   useEffect(() => {
     if (isEditing && apiSource) {
       setApiData(apiSource);
+    }
+    else {
+      setApiData(INITIAL_API_DATA);
     }
   }, [isEditing, apiSource]);
 
@@ -75,7 +96,7 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing }) => {
       <header className="api-modal-header">
         <h2>{isEditing ? "Edit" : "Add"} API</h2>
       </header>
-      <form className="api-form">
+      <form className="api-form" onSubmit={handleSubmit}>
         <Input
           label="Name"
           id="name"
@@ -118,9 +139,13 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing }) => {
             id="apiKey"
             name="apiKey"
             value={apiData?.authDetails?.apiKey || ''}
-            onChange={handleInputChange}
+            onChange={handleAuthChange}
           />
         )}
+        <div className="api-form-actions">
+          <Button type="submit" className="btn-primary" text={isEditing ? "Update API" : "Add API"} />
+          <Button className="btn-secondary" text="Cancel" onClick={onClose} />
+        </div>
       </form>
     </Modal>
   );
@@ -130,21 +155,50 @@ const Api = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [apiSourcesState, setApiSourcesState] = useState(apiSources);
+  const [selectedApiSource, setSelectedApiSource] = useState(null);
 
   const hanldeEditApi = (apiSource) => {
-    console.log("Editing API:", apiSource);
+    setSelectedApiSource(apiSource);
     setIsEditing(true);
     setIsModalOpen(true);
   }
 
   const handleAddApi = () => {
+    setSelectedApiSource(null);
     setIsEditing(false);
     setIsModalOpen(true);
   }
 
   const handleDeleteApi = (apiSource) => {
-    console.log("Deleting API:", apiSource);
+    const confirmDelete = window.confirm(`Are you sure you want to delete the API: ${apiSource.name}?`);
+    if (confirmDelete) {
+      setApiSourcesState(prev => prev.filter(api => api.id !== apiSource.id));
+    }
   }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setIsEditing(false);
+    setSelectedApiSource(null);
+  }
+
+  const addApiSource = (apiData) => {
+    setApiSourcesState(prev => [...prev, { ...apiData, id: Date.now().toString() }]);
+  }
+
+  const updateApiSource = (apiData) => {
+    setApiSourcesState(prev => prev.map(api => api.id === apiData.id ? apiData : api));
+  }
+
+  const handleSaveApi = (apiData) => {
+    if (isEditing) {
+      updateApiSource(apiData);
+    } else {
+      addApiSource(apiData);
+    }
+    handleCloseModal();
+  };
 
   return (
     <div className="api-container">
@@ -167,7 +221,7 @@ const Api = () => {
             </tr>
           </thead>
           <tbody className="api-table--body">
-            {apiSources.map((api) => (
+            {apiSourcesState.map((api) => (
               <tr key={api.id}>
                 <td>{api.name}</td>
                 <td>{api.baseUrl}</td>
@@ -201,7 +255,13 @@ const Api = () => {
           </tbody>
         </table>
       </section>
-      <ApiModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} apiSource={apiSources[0]} isEditing={isEditing} />
+      <ApiModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        apiSource={selectedApiSource}
+        isEditing={isEditing}
+        onSubmit={handleSaveApi}
+      />
       <section>
         <Button className="btn-primary" text="Add API" onClick={handleAddApi} />
       </section>
@@ -210,6 +270,6 @@ const Api = () => {
       </footer>
     </div>
   );
-}
+};
 
 export default Api
