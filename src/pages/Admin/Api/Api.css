@@ -45,17 +45,12 @@
     text-align: left;
 }
 
-
 /* Api table */
 .api-table--actions {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
-}
-
-.action-btn {
-    padding: 5px;
 }
 
 .add-api-btn {
