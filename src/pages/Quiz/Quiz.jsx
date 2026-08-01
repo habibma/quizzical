@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuiz } from '../../context/Public/QuizContext.jsx'
-import Questionnaire from '../../components/Questionnaire'
+import Questionnaire from './Questionnaire'
 import Button from "../../components/Button"
 
 import './Quiz.css'
@@ -22,14 +22,12 @@ function Quiz() {
 
   return (
     <section className='quiz-page'>
-      <ul>
-        <Questionnaire
-          questions={questions}
-          onChange={handleSelect}
-          isQuizFinished={isQuizFinished}
-          answers={answers}
-        />
-      </ul>
+      <Questionnaire
+        questions={questions}
+        onChange={handleSelect}
+        isQuizFinished={isQuizFinished}
+        answers={answers}
+      />
       <div className='action-buttons'>
         <Button onClick={finishQuiz} text="Check answers" />
         <Button onClick={navigateToResult} text="Result" />
