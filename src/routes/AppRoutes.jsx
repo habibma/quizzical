@@ -14,7 +14,7 @@ import Categories from '../pages/Admin/Categories'
 import Settings from '../pages/Admin/Settings'
 import Statistics from '../pages/Admin/Statistics'
 import Themes from '../pages/Admin/Themes'
-import Api from '../pages/Admin/Api'
+import Api from '../pages/Admin/Api/Api'
 
 import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
 import { QuizProvider } from '../context/Public/QuizContext.jsx'

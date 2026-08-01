@@ -45,7 +45,6 @@ p.info {
 }
 
 .btn-primary {
-    width: 150px;
     background-color: var(--primary-color);
     color: var(--text-color);
     border: none;
@@ -69,7 +68,6 @@ p.info {
 }
 
 .btn-secondary {
-    width: 150px;
     background-color: var(--secondary-color);
     color: #000;
     border: none;
@@ -93,7 +91,6 @@ p.info {
 }
 
 .btn-danger {
-    width: 150px;
     background-color: var(--danger-color);
     color: #fff;
     border: none;
