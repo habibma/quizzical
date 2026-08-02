@@ -91,3 +91,12 @@
 .api-modal-header {
     margin-bottom: 20px;
 }
+
+/* Endpoint row */
+.api-form-endpoint {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid var(--border-color);
+    padding: 10px;
+}
