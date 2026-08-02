@@ -1,7 +1,7 @@
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 
-const EndpointRow = ({ index, endpoint, onChange, onRemove }) => {
+const EndpointRow = ({ index, endpoint, onChange, onRemove, onConnect, isConnected, error }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -39,6 +39,9 @@ const EndpointRow = ({ index, endpoint, onChange, onRemove }) => {
                 onChange={handleInputChange}
             />
             <Button className="btn-danger remove-endpoint" text="Remove" onClick={() => onRemove(index)} />
+            <Button className="btn-success connect-endpoint" text="Test Connection" onClick={() => onConnect(endpoint)} />
+            {error && <p className="connection-error">{error}</p>}
+            {isConnected && <p className="connection-success">Connection successful!</p>}
         </div>
     );
 };

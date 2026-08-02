@@ -22,6 +22,8 @@ const INITIAL_API_DATA = {
 const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
 
     const [apiData, setApiData] = useState(INITIAL_API_DATA);
+    const [isConnected, setIsConnected] = useState(false);
+    const [connectionError, setConnectionError] = useState(null);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -72,6 +74,37 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
         setApiData(INITIAL_API_DATA);
         onClose();
     }
+
+    // connection handlers
+    const handleConnect = async (endpnt) => {
+        setConnectionError(null);
+        setIsConnected(false);
+        try {
+            if (!apiData.baseUrl.trim()) {
+                throw new Error("Base URL is empty");
+            }
+            const headers = {};
+            if (apiData.authentication === "bearer") {
+                headers.Authorization = `Bearer ${apiData.authDetails.token}`;
+            }
+            if (apiData.authentication === "apiKey") {
+                headers["X-API-Key"] = apiData.authDetails.apiKey;
+            }
+            const url = new URL(endpnt?.path || "", apiData.baseUrl).toString();
+            const response = await fetch(url, {
+                method: endpnt?.method || 'GET',
+                headers: headers,
+            });
+            if (response.ok) {
+                setIsConnected(true);
+                setConnectionError(null);
+            } else {
+                throw new Error(`Connection failed with status: ${response.status}`);
+            }
+        } catch (error) {
+            setConnectionError(error.message || "An error occurred while trying to connect");
+        }
+    };
 
     useEffect(() => {
         if (isEditing && apiSource) {
@@ -168,6 +201,9 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
                             endpoint={endpoint}
                             onChange={handleEndpointChange}
                             onRemove={removeEndpoint}
+                            onConnect={handleConnect}
+                            isConnected={isConnected}
+                            error={connectionError}
                         />
                     ))}
                     <Button type="button" className="btn-primary" text="Add Endpoint" onClick={addEndpoint} />
