@@ -18,6 +18,13 @@ const EndpointRow = ({ index, endpoint, onChange, onRemove, onConnect, isConnect
                 onChange={handleInputChange}
             />
             <Input
+                as ="select"
+                options={[
+                    { value: "GET", label: "GET" },
+                    { value: "POST", label: "POST" },
+                    { value: "PUT", label: "PUT" },
+                    { value: "DELETE", label: "DELETE" }
+                ]}
                 label={`Endpoint ${index + 1} Method`}
                 id={`endpoint-${index}-method`}
                 name="method"
