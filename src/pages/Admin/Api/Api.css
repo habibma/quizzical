@@ -56,3 +56,38 @@
 .add-api-btn {
     width: 150px;
 }
+
+/* Api modal */
+.api-modal {
+    width: 100%;
+    max-width: 800px;
+}
+
+.api-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    fieldset {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border: 1px solid var(--border-color);
+        padding: 10px;
+    }
+    .api-form-checkboxes {
+        flex-direction: row;
+        gap: 20px;
+        align-items: center;
+
+        .input-container {
+            display: flex;
+            flex-direction: row;
+        }
+    }
+
+}
+
+.api-modal-header {
+    margin-bottom: 20px;
+}

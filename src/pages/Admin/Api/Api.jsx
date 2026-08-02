@@ -4,6 +4,7 @@ import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import EditIcon from "../../../assets/icons/EditIcon";
 import DeleteIcon from "../../../assets/icons/DeleteIcon";
+import ApiModal from "./ApiModal";
 import './Api.css'
 
 const apiSources = [
@@ -14,7 +15,7 @@ const apiSources = [
     enabled: true,
     isDefault: true,
     version: "v1",
-    authentication: "none", // none | apiKey | bearer | basic
+    authentication: "none", // none | apiKey | bearer
     authDetails: {
       apiKey: null,
     },
@@ -36,120 +37,6 @@ const apiSources = [
     ],
   },
 ];
-
-const INITIAL_API_DATA = {
-  id: null,
-  name: '',
-  baseUrl: '',
-  enabled: true,
-  isDefault: false,
-  version: '',
-  authentication: 'none',
-  authDetails: {
-    apiKey: null,
-  },
-  endpoints: [],
-};
-
-const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
-  if (!isOpen) return null;
-
-  const [apiData, setApiData] = useState(INITIAL_API_DATA);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setApiData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-
-  const handleAuthChange = (e) => {
-    const { name, value } = e.target;
-    setApiData(prevData => ({
-      ...prevData,
-      authDetails: {
-        ...prevData.authDetails,
-        [name]: value
-      }
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(apiData);
-    setApiData(INITIAL_API_DATA);
-    onClose();
-  }
-
-  useEffect(() => {
-    if (isEditing && apiSource) {
-      setApiData(apiSource);
-    }
-    else {
-      setApiData(INITIAL_API_DATA);
-    }
-  }, [isEditing, apiSource]);
-
-  return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <header className="api-modal-header">
-        <h2>{isEditing ? "Edit" : "Add"} API</h2>
-      </header>
-      <form className="api-form" onSubmit={handleSubmit}>
-        <Input
-          label="Name"
-          id="name"
-          name="name"
-          value={apiData?.name || ''}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Base URL"
-          id="baseUrl"
-          name="baseUrl"
-          value={apiData?.baseUrl || ''}
-          onChange={handleInputChange}
-        />
-        <Input
-          label="Version"
-          id="version"
-          name="version"
-          value={apiData?.version || ''}
-          onChange={handleInputChange}
-        />
-        <Input
-          as="select"
-          label="Authentication"
-          id="authentication"
-          name="authentication"
-          value={apiData?.authentication || 'none'}
-          options={[
-            { value: "none", label: "None" },
-            { value: "apiKey", label: "API Key" },
-            { value: "bearer", label: "Bearer Token" },
-            // { value: "basic", label: "Basic Auth" },
-            // { value: "oauth2", label: "OAuth 2.0" },
-          ]}
-          onChange={handleInputChange}
-        />
-        {apiData.authentication === "apiKey" && (
-          <Input
-            label="API Key"
-            id="apiKey"
-            name="apiKey"
-            value={apiData?.authDetails?.apiKey || ''}
-            onChange={handleAuthChange}
-          />
-        )}
-        <div className="api-form-actions">
-          <Button type="submit" className="btn-primary" text={isEditing ? "Update API" : "Add API"} />
-          <Button className="btn-secondary" text="Cancel" onClick={onClose} />
-        </div>
-      </form>
-    </Modal>
-  );
-};
 
 const Api = () => {
 
