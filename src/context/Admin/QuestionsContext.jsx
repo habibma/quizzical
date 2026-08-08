@@ -3,11 +3,15 @@
 import { useState, useContext, createContext } from 'react';
 import { getQuestions } from '../../services/triviaService';
 import { getCategoryQuestionsCount } from '../../services/triviaService';
+import { useApi } from './ApiContext';
 
 
 const QuestionsContext = createContext();
 
 export const QuestionsProvider = ({ children }) => {
+    const { getDefaultApi } = useApi();
+
+    const defaultApi = getDefaultApi();
 
     const [questions, setQuestions] = useState([]);
     const [customQuestions, setCustomQuestions] = useState([]);
@@ -25,7 +29,7 @@ export const QuestionsProvider = ({ children }) => {
         setLoading(true);
         setError(null);
         try {
-            const fetchedQuestions = await getQuestions(options);
+            const fetchedQuestions = await getQuestions(defaultApi, options);
             setQuestions(fetchedQuestions);
         } catch (err) {
             setError(err.message);
@@ -40,7 +44,7 @@ export const QuestionsProvider = ({ children }) => {
             return countByCategory[categoryId];
         }
         try {
-            const count = await getCategoryQuestionsCount(categoryId);
+            const count = await getCategoryQuestionsCount(defaultApi, categoryId);
             setCountByCategory(prev => ({ ...prev, [categoryId]: count }));
             return count;
         } catch (err) {

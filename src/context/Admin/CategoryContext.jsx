@@ -1,48 +1,67 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getCategories } from "../../services/triviaService.js";
+import { useApi } from "./ApiContext.jsx";
 
 const CategoryContext = createContext();
 
+const STORAGE_KEY = "categories";
+const SOURCE_KEY = "categoriesSourceApiId";
+
+const normalizeCategory = (category) => ({
+    id: category.id,
+    apiName: category.apiName ?? category.name,
+    displayName: category.displayName ?? category.name,
+    enabled: category.enabled ?? true,
+});
+
 export function CategoryProvider({ children }) {
 
-    const loadCategories = () => {
-        try {
-            const stored = localStorage.getItem("categories");
-            return stored ? JSON.parse(stored) : [];
-        } catch {
-            return [];
-        }
-    };
+    const { getDefaultApi } = useApi();
 
-    const [categories, setCategories] = useState(loadCategories);
+    const defaultApi = getDefaultApi();
 
-    // Fetch categories only if nothing is stored
+    const [categories, setCategories] = useState([]);
+
     useEffect(() => {
-        if (categories.length > 0) return;
+        if (!defaultApi) return;
 
-        getCategories()
+        try {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            const storedSourceApiId = localStorage.getItem(SOURCE_KEY);
+
+            if (stored && String(defaultApi.id) === storedSourceApiId) {
+                setCategories(JSON.parse(stored).map(normalizeCategory));
+                return;
+            }
+        } catch {
+            // fall back
+        }
+
+        getCategories(defaultApi)
             .then(data => {
                 setCategories(
-                    data.map(category => ({
+                    data.map(category => normalizeCategory({
                         id: category.id,
-                        apiName: category.name,
-                        displayName: category.name,
+                        name: category.name,
                         enabled: true,
                     }))
                 );
             })
             .catch(err => console.error(err));
-    }, []);
+    }, [defaultApi]);
 
     // Persist every change
     useEffect(() => {
         if (categories.length === 0) return;
 
         localStorage.setItem(
-            "categories",
+            STORAGE_KEY,
             JSON.stringify(categories)
         );
-    }, [categories]);
+        if (defaultApi) {
+            localStorage.setItem(SOURCE_KEY, String(defaultApi.id));
+        }
+    }, [categories, defaultApi]);
 
     const toggleCategory = (id) => {
         setCategories(prev =>
@@ -70,6 +89,7 @@ export function CategoryProvider({ children }) {
                 categories,
                 toggleCategory,
                 renameCategory,
+                updateCategoryName: renameCategory,
             }}
         >
             {children}

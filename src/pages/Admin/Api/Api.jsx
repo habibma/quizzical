@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useApi } from "../../../context/Admin/ApiContext.jsx";
 import Modal from "../../../components/Modal";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
@@ -42,14 +43,8 @@ const Api = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [apiSourcesState, setApiSourcesState] = useState(apiSources);
   const [selectedApiSource, setSelectedApiSource] = useState(null);
-
-  const hanldeEditApi = (apiSource) => {
-    setSelectedApiSource(apiSource);
-    setIsEditing(true);
-    setIsModalOpen(true);
-  }
+  const { apis, addApi, updateApi, removeApi } = useApi();
 
   const handleAddApi = () => {
     setSelectedApiSource(null);
@@ -57,34 +52,37 @@ const Api = () => {
     setIsModalOpen(true);
   }
 
-  const handleDeleteApi = (apiSource) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete the API: ${apiSource.name}?`);
-    if (confirmDelete) {
-      setApiSourcesState(prev => prev.filter(api => api.id !== apiSource.id));
-    }
+  const hanldeEditApi = (api) => {
+    setSelectedApiSource(api);
+    setIsEditing(true);
+    setIsModalOpen(true);
   }
+
+  const handleDeleteApi = (api) => {
+    if (window.confirm(`Are you sure you want to delete the API: ${api.name}?`)) {
+      removeApi(api.id);
+    }
+  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setIsEditing(false);
     setSelectedApiSource(null);
+    setIsEditing(false);
   }
 
-  const addApiSource = (apiData) => {
-    setApiSourcesState(prev => [...prev, { ...apiData, id: Date.now().toString() }]);
-  }
-
-  const updateApiSource = (apiData) => {
-    setApiSourcesState(prev => prev.map(api => api.id === apiData.id ? apiData : api));
-  }
-
-  const handleSaveApi = (apiData) => {
+  const handleSaveApi = (api) => {
     if (isEditing) {
-      updateApiSource(apiData);
+      // Update existing API
+      updateApi(api.id, api);
     } else {
-      addApiSource(apiData);
+      // Add new API
+      addApi(api);
     }
     handleCloseModal();
+  };
+
+  const addTriviaApiSource = () => {
+    addApi({ ...apiSources[0], id: Date.now().toString() });
   };
 
   return (
@@ -108,7 +106,7 @@ const Api = () => {
             </tr>
           </thead>
           <tbody className="api-table--body">
-            {apiSourcesState.map((api) => (
+            {apis.map((api) => (
               <tr key={api.id}>
                 <td>{api.name}</td>
                 <td>{api.baseUrl}</td>
@@ -149,7 +147,8 @@ const Api = () => {
         isEditing={isEditing}
         onSubmit={handleSaveApi}
       />
-      <section>
+      <section className="api-actions">
+        <Button className="btn-primary" text="Add Trivia API" onClick={addTriviaApiSource} />
         <Button className="btn-primary" text="Add API" onClick={handleAddApi} />
       </section>
       <footer className="api-footer">

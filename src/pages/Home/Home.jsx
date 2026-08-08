@@ -23,7 +23,7 @@ const Home = () => {
         setCategory(e.target.value);
     }
     // Filter to only enabled categories
-    const enabledCategories = categories.filter(cat => cat.enabled);
+    const enabledCategories = categories.filter(cat => cat.enabled !== false);
 
     // Build category options dynamically from enabled categories
     const categoryOptions = enabledCategories.map(cat => (

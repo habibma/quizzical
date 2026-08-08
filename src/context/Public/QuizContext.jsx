@@ -1,5 +1,6 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import { getQuestions } from '../../services/triviaService'
+import { useApi } from '../Admin/ApiContext'
 
 const QuizContext = createContext()
 
@@ -11,11 +12,20 @@ export const QuizProvider = ({ children }) => {
     const [error, setError] = useState(null)
     const [isQuizFinished, setIsQuizFinished] = useState(false)
 
+    const { getDefaultApi } = useApi();
+
     const fetchQuestions = async ({ amount, category, difficulty, type }) => {
         setLoading(true)
         setError(null)
+
+        const api = getDefaultApi();
+        if (!api) {
+            setError("No default API is set. Please set a default API in the Admin panel.");
+            setLoading(false);
+            return;
+        }
         try {
-            const fetchedQuestions = await getQuestions({ amount, category, difficulty, type })
+            const fetchedQuestions = await getQuestions(api, { amount, category, difficulty, type })
             setQuestions(fetchedQuestions)
             setAnswers([])
             setScore(0)

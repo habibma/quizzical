@@ -22,6 +22,12 @@
     overflow-x: auto;
 }
 
+.api-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
 .api-table {
     width: 100%;
     border-collapse: collapse;
