@@ -15,6 +15,7 @@ import Settings from '../pages/Admin/Settings'
 import Statistics from '../pages/Admin/Statistics'
 import Themes from '../pages/Admin/Themes'
 import Api from '../pages/Admin/Api/Api'
+import Repositories from '../pages/Admin/Repositories/Repos'
 
 import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
 import { QuizProvider } from '../context/Public/QuizContext.jsx'
@@ -51,6 +52,7 @@ function AppRoutes({ theme, toggleTheme }) {
                 <Route path="themes" element={<Themes />} />
                 <Route path="api" element={<Api />} />
                 <Route path="statistics" element={<Statistics />} />
+                <Route path="repository" element={<Repositories />} />
             </Route>
         </Routes>
     )

@@ -6,6 +6,7 @@ import SettingsIcon from "../../../../assets/icons/SettingsIcon"
 import StatisticsIcon from "../../../../assets/icons/StatisticsIcon"
 import ThemesIcon from "../../../../assets/icons/ThemesIcon"
 import ApiIcon from "../../../../assets/icons/ApiIcon"
+import RepoIcon from "../../../../assets/icons/RepoIcon"
 
 export const sidebarItems = [
   {
@@ -47,5 +48,10 @@ export const sidebarItems = [
     title: 'API',
     path: '/admin/api',
     icon: ApiIcon,
-  }
+  },
+  {
+    title: 'Repositories',
+    path: '/admin/repository',
+    icon: RepoIcon,
+  },
 ]
