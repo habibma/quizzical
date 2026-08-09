@@ -9,7 +9,6 @@ import './Quiz.css'
 function Quiz() {
 
   const { questions, answers, score, loading, error, fetchQuestions, selectAnswer, finishQuiz, resetQuiz, isQuizFinished } = useQuiz();
-  const [quizzical, setQuizzical] = useState(false);
   const navigate = useNavigate();
 
   const handleSelect = (questionId, answerId) => {
