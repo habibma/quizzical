@@ -11,7 +11,8 @@ const listOfRepositories = [
     numberOfCategories: 5,
     difficulty: ["Easy", "Medium", "Hard"],
     isActive: true,
-    link: "https://github.com/user/repo1"
+    link: "https://github.com/user/repo1",
+    price: 0
   },
   {
     title: "Repository 2",
@@ -21,7 +22,8 @@ const listOfRepositories = [
     numberOfCategories: 7,
     difficulty: ["Easy", "Medium"],
     isActive: false,
-    link: "https://github.com/user/repo2"
+    link: "https://github.com/user/repo2",
+    price: 9.99
   }
 ];
 
@@ -43,7 +45,10 @@ const CardActions = ({ onDelete, onActiveToggle, isActive }) => {
   )
 }
 
-const Card = ({ title, description, version, numberOfQuestions, numberOfCategories, difficulty, isActive, link, onDelete, onActiveToggle }) => {
+const Card = ({ ...props }) => {
+
+  const { title, description, version, numberOfQuestions, numberOfCategories, difficulty, isActive, link, price, onDelete, onActiveToggle } = props;
+
   return (
     <div className="card">
       <div className="card-header">
@@ -59,6 +64,7 @@ const Card = ({ title, description, version, numberOfQuestions, numberOfCategori
         <a href={link} target="_blank" rel="noopener noreferrer">
           View repository
         </a>
+        <p>Price: {isActive ? "Free" : `$${price.toFixed(2)}`}</p>
       </div>
       <CardActions onDelete={onDelete} onActiveToggle={onActiveToggle} isActive={isActive} />
     </div>
@@ -67,7 +73,7 @@ const Card = ({ title, description, version, numberOfQuestions, numberOfCategori
 
 const RepositoriesList = () => {
 
-  const [ repositories, setRepositories ] = useState(listOfRepositories);
+  const [repositories, setRepositories] = useState(listOfRepositories);
 
   const handleActiveToggle = (index) => {
     const updatedRepositories = [...repositories];
@@ -82,22 +88,23 @@ const RepositoriesList = () => {
 
   return (
     <div className="repositories-list">
-        {repositories.map((repo, index) => (
-          <Card
-            key={index}
-            title={repo.title}
-            description={repo.description}
-            version={repo.version}
-            numberOfQuestions={repo.numberOfQuestions}
-            numberOfCategories={repo.numberOfCategories}
-            difficulty={repo.difficulty}
-            isActive={repo.isActive}
-            link={repo.link}
-            onDelete={() => handleDelete(index)}
-            isActive={repo.isActive}
-            onActiveToggle={() => handleActiveToggle(index)}
-          />
-        ))}
+      {repositories.map((repo, index) => (
+        <Card
+          key={index}
+          title={repo.title}
+          description={repo.description}
+          version={repo.version}
+          numberOfQuestions={repo.numberOfQuestions}
+          numberOfCategories={repo.numberOfCategories}
+          difficulty={repo.difficulty}
+          isActive={repo.isActive}
+          link={repo.link}
+          price={repo.price}
+          onDelete={() => handleDelete(index)}
+          isActive={repo.isActive}
+          onActiveToggle={() => handleActiveToggle(index)}
+        />
+      ))}
     </div>
   )
 }
