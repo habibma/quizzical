@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react'
-import { getQuestions } from '../../services/triviaService'
+import { getQuestions } from '../../services/openTDBService.js'
 import { useApi } from '../Admin/ApiContext'
 
 const QuizContext = createContext()
@@ -53,7 +53,6 @@ export const QuizProvider = ({ children }) => {
             const userAnswer = answers.find(a => a.questionId === question.id)
             return userAnswer?.answer === question.answer ? acc + 1 : acc
         }, 0)
-        console.log('Score:', newScore)
         setScore(newScore)
     }
 

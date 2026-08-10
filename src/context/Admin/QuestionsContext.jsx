@@ -1,8 +1,7 @@
 // This context is used to manage question in Admin page
 
 import { useState, useContext, createContext } from 'react';
-import { getQuestions } from '../../services/triviaService';
-import { getCategoryQuestionsCount } from '../../services/triviaService';
+import { getQuestions, getCategoryQuestionsCount } from '../../services/openTDBService.js';
 import { useApi } from './ApiContext';
 
 

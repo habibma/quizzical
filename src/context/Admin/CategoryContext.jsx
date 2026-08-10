@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCategories } from "../../services/triviaService.js";
+import { getCategories } from "../../services/openTDBService.js";
 import { useApi } from "./ApiContext.jsx";
 
 const CategoryContext = createContext();
