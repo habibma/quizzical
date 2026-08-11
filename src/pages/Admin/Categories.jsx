@@ -1,11 +1,27 @@
 import React from 'react'
 import { useState ,useEffect } from 'react'
 import { useCategories } from '../../context/Admin/CategoryContext.jsx'
+import { useRepo } from '../../context/Admin/ReposContext.jsx'
 import Modal from '../../components/Modal.jsx'
 import Button from '../../components/Button.jsx'
 import Input from '../../components/Input.jsx'
 
 import './Categories.css'
+
+const CategoriesFilters = ({ apiNames, onFilterChange }) => {
+  return (
+    <div className='categories--table-filter'>
+      <Input
+        as="select"
+        id ="apiFilter"
+        name="apiFilter"
+        options={apiNames?.map(apiName => ({ value: apiName, label: apiName }))}
+        placeholder="Filter by API"
+        onChange={onFilterChange}
+      />
+    </div>
+  )
+}
 
 const Categories = () => {
 
@@ -14,6 +30,8 @@ const Categories = () => {
   const [editedName, setEditedName] = useState('');
 
   const { categories, toggleCategory, updateCategoryName } = useCategories();
+
+  const { apiNames } = useRepo();
 
   const openModal = (category) => {
     setSelectedCategory(category);
@@ -32,6 +50,14 @@ const Categories = () => {
       updateCategoryName(selectedCategory.id, editedName);
       closeModal();
     }
+  };
+
+  const [ filteredCategories, setFilteredCategories] = useState(categories);
+
+  const handleFilterChange = (e) => {
+    const selectedApi = e.target.value;
+    // for now
+    console.log("Selected API:", selectedApi);
   };
 
   const modalContent = selectedCategory && (
@@ -70,6 +96,7 @@ const Categories = () => {
         <p className='lead'>View all categories gotten from the api, You can enable or disable a category by toggling the switch next to the category name. You can edit a category name by clicking on the edit button next to the category name.</p>
       </section>
       <section className='categories-table-container'>
+        <CategoriesFilters apiNames={apiNames} onFilterChange={handleFilterChange} />
         <table className='categories-table'>
           <thead className='categories-table-header'>
             <tr>

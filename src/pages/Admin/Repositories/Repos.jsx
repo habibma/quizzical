@@ -11,8 +11,6 @@ const Repositories = () => {
 
   const { repositories } = useRepo();
 
-  console.log("Repositories:", repositories);
-
   return (
     <div className="repositories">
         <section className="repositories-header">

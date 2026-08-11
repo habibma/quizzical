@@ -80,3 +80,10 @@
         gap: 10px;
     }
 }
+
+/* filters */
+.categories--table-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}

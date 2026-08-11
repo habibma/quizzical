@@ -24,9 +24,12 @@ export const ReposProvider = ({ children }) => {
 
     const repositories = apis.filter(api => api.enabled).map(transformApiToRepository);
 
+    const apiNames = apis.map(api => api.name);
+    console.log(" API Names:", apiNames);
+
     const value = {
         repositories,
-
+        apiNames
     };
 
     return (

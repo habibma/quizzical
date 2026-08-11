@@ -57,11 +57,6 @@ const Card = ({ ...props }) => {
 
 const RepositoriesList = ( { repositories } ) => {
 
-  const handleActiveToggle = (index) => {
-    const updatedRepositories = [...repositories];
-    updatedRepositories[index].isActive = !updatedRepositories[index].isActive;
-    setRepositories(updatedRepositories);
-  }
 
   return (
     <div className="repositories-list">
@@ -77,7 +72,7 @@ const RepositoriesList = ( { repositories } ) => {
           isActive={repo.isActive}
           link={repo.link}
           price={repo.price}
-          onActiveToggle={() => handleActiveToggle(index)}
+          onActiveToggle={() => console.log(`Toggled active state for ${repo.title}`)}
         />
       ))}
     </div>
