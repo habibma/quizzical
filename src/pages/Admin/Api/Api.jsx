@@ -36,7 +36,39 @@ const apiSources = [
         description: "Retrieve trivia questions",
       },
     ],
+    difficulty: ["easy", "medium", "hard"],
+    price: 0,
   },
+  {
+    id: 2,
+    name: "The Trivia API",
+    baseUrl: "https://the-trivia-api.com",
+    enabled: true,
+    isDefault: false,
+    version: "v1",
+    authentication: "none",
+    authDetails: {
+    apiKey: null,
+    },
+    endpoints: [
+      {
+        id: 1,
+        name: "Get Categories",
+        method: "GET",
+        path: "/api/categories",
+        description: "Retrieve all available categories",
+      },
+      {
+        id: 2,
+        name: "Get Questions",
+        method: "GET",
+        path: "/api/questions",
+        description: "Retrieve trivia questions",
+      },
+    ],
+    difficulty: ["easy", "medium", "hard"],
+    price: 9.99,
+  }
 ];
 
 const Api = () => {
@@ -81,9 +113,14 @@ const Api = () => {
     handleCloseModal();
   };
 
-  const addTriviaApiSource = () => {
+  const addOpenTDBApiSource = () => {
     addApi({ ...apiSources[0], id: Date.now().toString() });
   };
+
+  const addTriviaApiSource = () => {
+    addApi({ ...apiSources[1], id: Date.now().toString() });
+  }
+
 
   return (
     <div className="api-container">
@@ -148,6 +185,7 @@ const Api = () => {
         onSubmit={handleSaveApi}
       />
       <section className="api-actions">
+        <Button className="btn-primary" text="Add OpenTDB API" onClick={addOpenTDBApiSource} />
         <Button className="btn-primary" text="Add Trivia API" onClick={addTriviaApiSource} />
         <Button className="btn-primary" text="Add API" onClick={handleAddApi} />
       </section>

@@ -19,6 +19,7 @@ import Repositories from '../pages/Admin/Repositories/Repos'
 
 import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
 import { QuizProvider } from '../context/Public/QuizContext.jsx'
+import { ReposProvider } from '../context/Admin/ReposContext.jsx'
 
 function AppRoutes({ theme, toggleTheme }) {
     return (
@@ -52,7 +53,11 @@ function AppRoutes({ theme, toggleTheme }) {
                 <Route path="themes" element={<Themes />} />
                 <Route path="api" element={<Api />} />
                 <Route path="statistics" element={<Statistics />} />
-                <Route path="repository" element={<Repositories />} />
+                <Route path="repository" element={
+                    <ReposProvider>
+                        <Repositories />
+                    </ReposProvider>
+                } />
             </Route>
         </Routes>
     )
