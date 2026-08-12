@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useQuiz } from '../../context/Public/QuizContext.jsx'
+import { useQuiz } from '../../../context/Public/QuizContext.jsx'
 import Questionnaire from './Questionnaire'
-import Button from "../../components/Button"
+import Button from "../../../components/Button"
 
 import './Quiz.css'
 

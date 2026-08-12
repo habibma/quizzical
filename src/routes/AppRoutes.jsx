@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
-// pages
+// public pages
 import PublicLayout from '../layouts/PublicLayout'
-import Home from '../pages/Home/Home'
-import Quiz from '../pages/Quiz/Quiz'
-import Result from '../pages/Result/Result'
-import About from '../pages/About/About'
+import Home from '../pages/Public/Home/Home'
+import Quiz from '../pages/Public/Quiz/Quiz'
+import Result from '../pages/Public/Result/Result'
+import About from '../pages/Public/About/About'
 // admin pages
 import AdminLayout from '../pages/Admin/AdminLayout'
 import Dashboard from '../pages/Admin/Dashboard'
@@ -16,7 +16,7 @@ import Statistics from '../pages/Admin/Statistics'
 import Themes from '../pages/Admin/Themes'
 import Api from '../pages/Admin/Api/Api'
 import Repositories from '../pages/Admin/Repositories/Repos'
-
+// context providers
 import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
 import { QuizProvider } from '../context/Public/QuizContext.jsx'
 
