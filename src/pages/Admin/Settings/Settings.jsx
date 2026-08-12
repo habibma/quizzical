@@ -6,10 +6,10 @@
 // ✅ Default question type (Multiple Choice / True-False)
 // ✅ Time limit (later)
 
-import { useSettings } from '../../context/Admin/SettingsContext'
-import Input from '../../components/Input'
-import Button from '../../components/Button'
-import { defaultSettings } from '../../config/defaultSettings'
+import { useSettings } from '../../../context/Admin/SettingsContext'
+import Input from '../../../components/Input'
+import Button from '../../../components/Button'
+import { defaultSettings } from '../../../config/defaultSettings'
 import './Settings.css'
 import { useEffect, useState } from 'react'
 
