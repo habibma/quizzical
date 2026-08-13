@@ -133,11 +133,8 @@ const Api = () => {
           <thead className="api-table--header">
             <tr>
               <th>Name</th>
-              <th>Base URL</th>
               <th>Enabled</th>
               <th>Default</th>
-              <th>Version</th>
-              <th>Authentication</th>
               <th>Endpoints</th>
               <th>Actions</th>
             </tr>
@@ -146,11 +143,8 @@ const Api = () => {
             {apis.map((api) => (
               <tr key={api.id}>
                 <td>{api.name}</td>
-                <td>{api.baseUrl}</td>
                 <td>{api.enabled ? "Yes" : "No"}</td>
                 <td>{api.isDefault ? "Yes" : "No"}</td>
-                <td>{api.version}</td>
-                <td>{api.authentication}</td>
                 <td>
                   <ul>
                     {api.endpoints.map((endpoint) => (

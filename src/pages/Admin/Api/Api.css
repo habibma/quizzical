@@ -120,3 +120,16 @@
     margin-top: 10px;
     font-weight: light;
 }
+
+/* capabilities */
+.api-form-capabilities {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid var(--border-color);
+    padding: 10px;
+
+    & > div {
+        border: 1px solid var(--border-color);
+    }
+}

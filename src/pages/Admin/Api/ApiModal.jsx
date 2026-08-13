@@ -124,7 +124,7 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
             </header>
             <form className="api-form" onSubmit={handleSubmit}>
                 <fieldset className="api-form-general">
-                    <legend>General Information</legend>
+                    <legend>Identity</legend>
                     <Input
                         label="Name"
                         id="name"
@@ -132,6 +132,23 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
                         value={apiData?.name || ''}
                         onChange={handleInputChange}
                     />
+                    <Input
+                        label="Description"
+                        id="description"
+                        name="description"
+                        value={apiData?.description || ''}
+                        onChange={handleInputChange}
+                    />
+                    <Input
+                        label="provider"
+                        id="provider"
+                        name="provider"
+                        value={apiData?.provider || ''}
+                        onChange={handleInputChange}
+                    />
+                </fieldset>
+                <fieldset className="api-form-connection">
+                    <legend>Connection</legend>
                     <Input
                         label="Base URL"
                         id="baseUrl"
@@ -144,24 +161,6 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
                         id="version"
                         name="version"
                         value={apiData?.version || ''}
-                        onChange={handleInputChange}
-                    />
-                </fieldset>
-                <fieldset className="api-form-checkboxes">
-                    <Input
-                        type="checkbox"
-                        label="Enabled"
-                        id="enabled"
-                        name="enabled"
-                        checked={apiData?.enabled || false}
-                        onChange={handleInputChange}
-                    />
-                    <Input
-                        type="checkbox"
-                        label="Default"
-                        id="isDefault"
-                        name="isDefault"
-                        checked={apiData?.isDefault || false}
                         onChange={handleInputChange}
                     />
                 </fieldset>
@@ -191,6 +190,72 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
                             onChange={handleAuthChange}
                         />
                     )}
+                </fieldset>
+                <fieldset className="api-form-capabilities">
+                    <legend>Question capabilities</legend>
+                    <div>
+                        <Input
+                            type="checkbox"
+                            label="Supports multiple choice questions"
+                            id="supportsMultipleChoice"
+                            name="supportsMultipleChoice"
+                            checked={apiData?.supportsMultipleChoice || false}
+                            onChange={handleInputChange}
+                        />
+                        <Input
+                            type="checkbox"
+                            label="Supports true/false questions"
+                            id="supportsTrueFalse"
+                            name="supportsTrueFalse"
+                            checked={apiData?.supportsTrueFalse || false}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div>
+                        <Input
+                            type="checkbox"
+                            label="easy difficulty"
+                            id="easyDifficulty"
+                            name="easyDifficulty"
+                            checked={apiData?.easyDifficulty || false}
+                            onChange={handleInputChange}
+                        />
+                        <Input
+                            type="checkbox"
+                            label="medium difficulty"
+                            id="mediumDifficulty"
+                            name="mediumDifficulty"
+                            checked={apiData?.mediumDifficulty || false}
+                            onChange={handleInputChange}
+                        />
+                        <Input
+                            type="checkbox"
+                            label="hard difficulty"
+                            id="hardDifficulty"
+                            name="hardDifficulty"
+                            checked={apiData?.hardDifficulty || false}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                </fieldset>
+                <fieldset className="api-form-checkboxes">
+                    <legend>Settings</legend>
+                    <Input
+                        type="checkbox"
+                        label="Enabled"
+                        id="enabled"
+                        name="enabled"
+                        checked={apiData?.enabled || false}
+                        onChange={handleInputChange}
+                    />
+                    <Input
+                        type="checkbox"
+                        label="Default"
+                        id="isDefault"
+                        name="isDefault"
+                        checked={apiData?.isDefault || false}
+                        onChange={handleInputChange}
+                    />
                 </fieldset>
                 <fieldset className="api-form-endpoints">
                     <legend>Endpoints</legend>

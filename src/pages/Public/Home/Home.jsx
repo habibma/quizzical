@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useCategories } from '../../context/Admin/CategoryContext.jsx'
-import { useQuiz } from '../../context/Public/QuizContext.jsx'
-import { useSettings } from '../../context/Admin/SettingsContext.jsx'
-import Input from '../../components/Input'
-import Button from "../../components/Button"
-import Footer from '../../components/Footer'
+import { useCategories } from '../../../context/Admin/CategoryContext.jsx'
+import { useQuiz } from '../../../context/Public/QuizContext.jsx'
+import { useSettings } from '../../../context/Admin/SettingsContext.jsx'
+import Input from '../../../components/Input'
+import Button from "../../../components/Button"
+import Footer from '../../../components/Footer'
 
 import Quiz from '../Quiz/Quiz.jsx'
 
