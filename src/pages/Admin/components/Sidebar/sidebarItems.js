@@ -35,6 +35,16 @@ export const sidebarItems = [
     icon: SettingsIcon,
   },
   {
+    title: 'Repositories',
+    path: '/admin/repository',
+    icon: RepoIcon,
+  },
+  {
+    title: 'API',
+    path: '/admin/api',
+    icon: ApiIcon,
+  },
+  {
     title: 'Statistics',
     path: '/admin/statistics',
     icon: StatisticsIcon,
@@ -43,15 +53,5 @@ export const sidebarItems = [
     title: 'Themes',
     path: '/admin/themes',
     icon: ThemesIcon,
-  },
-  {
-    title: 'API',
-    path: '/admin/api',
-    icon: ApiIcon,
-  },
-  {
-    title: 'Repositories',
-    path: '/admin/repository',
-    icon: RepoIcon,
   },
 ]
