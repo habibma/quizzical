@@ -2,31 +2,13 @@ import React from 'react'
 import { useState ,useEffect } from 'react'
 import { useCategories } from '../../../context/Admin/CategoryContext.jsx'
 import { useRepo } from '../../../context/Admin/ReposContext.jsx'
-import Modal from '../../../components/Modal.jsx'
-import Button from '../../../components/Button.jsx'
-import Input from '../../../components/Input.jsx'
+import Modal from '../../../components/Modal'
+import Button from '../../../components/Button'
+import Input from '../../../components/Input'
+import CategoriesFilters from './CategoriesFilters'
+import CategoriesModal from './CategoriesModal'
 
 import './Categories.css'
-
-const CategoriesFilters = ({ repositories, selectedRepoId, onFilterChange }) => {
-
-  const options = [
-    { value: '', label: 'select repository' },
-    ...repositories.map(repo => ({ value: repo.id, label: repo.title }))
-  ]
-
-  return (
-    <div className='categories--table-filter'>
-      <Input
-        as="select"
-        value={selectedRepoId || ''}
-        onChange={onFilterChange}
-        options={options}
-      />
-
-    </div>
-  )
-}
 
 const Categories = () => {
 
@@ -50,46 +32,16 @@ const Categories = () => {
     setIsModalOpen(false);
   }
 
-  const handleSave = () => {
-    if (selectedCategory && editedName.trim() !== '') {
-      updateCategoryName(selectedCategory.id, editedName);
-      closeModal();
-    }
-  };
+  const handleSave = (id, newName) => {
+    updateCategoryName(id, newName);
+    closeModal();
+  }
 
   const handleFilterChange = (e) => {
     const repoId = e.target.value;
     selectRepository(repoId);
   }
 
-  const modalContent = selectedCategory && (
-    <div className='modal-body'>
-      <header className='modal-header'>
-        <h2>Edit Category</h2>
-        <p>Editing category: {selectedCategory.apiNames}</p>
-      </header>
-      <form
-        className='modal-form'
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSave();
-        }}>
-        <Input
-          className='modal-input'
-          type="text"
-          id="categoryName"
-          name="categoryName"
-          value={editedName}
-          onChange={(e) => setEditedName(e.target.value)}
-          required
-        />
-        <div className='modal-actions'>
-          <Button className="btn-primary" type="submit" text="Save" />
-          <Button className="btn-secondary" type="button" text="Cancel" onClick={closeModal} />
-        </div>
-      </form>
-    </div>
-  );
 
   return (
     <div className='categories'>
@@ -98,7 +50,11 @@ const Categories = () => {
         <p className='lead'>View all categories gotten from the api, You can enable or disable a category by toggling the switch next to the category name. You can edit a category name by clicking on the edit button next to the category name.</p>
       </section>
       <section className='categories-table-container'>
-        <CategoriesFilters repositories={activeRepositories} selectedRepoId={selectedRepoId} onFilterChange={handleFilterChange} />
+        <CategoriesFilters
+          repositories={activeRepositories}
+          selectedRepoId={selectedRepoId}
+          onFilterChange={handleFilterChange}
+        />
         <table className='categories-table'>
           <thead className='categories-table-header'>
             <tr>
@@ -135,9 +91,12 @@ const Categories = () => {
             </tr>
           </tfoot>
         </table>
-        <Modal isOpen={isModalOpen} onClose={closeModal} onSave={handleSave}>
-          {modalContent}
-        </Modal>
+        <CategoriesModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          category={selectedCategory}
+          onSave={handleSave}
+        />
       </section>
     </div>
   )
