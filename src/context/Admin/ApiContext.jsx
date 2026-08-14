@@ -88,12 +88,6 @@ export function ApiProvider({ children }) {
         });
     }
 
-    const getDefaultApi = () => {
-        return apis.find(api => api.isDefault && api.enabled)
-            || apis.find(api => api.enabled)
-            || null;
-    }
-
     useEffect(() => {
         localStorage.setItem("apis", JSON.stringify(apis));
     }, [apis]);
@@ -104,7 +98,6 @@ export function ApiProvider({ children }) {
             addApi,
             updateApi,
             removeApi,
-            getDefaultApi
         }}>
             {children}
         </ApiContext.Provider>

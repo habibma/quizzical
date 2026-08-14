@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useApi } from './ApiContext.jsx';
 
 const ReposContext = createContext();
@@ -6,6 +6,7 @@ const ReposContext = createContext();
 // helper function to transform API data into repository format
 const transformApiToRepository = (api) => {
     return {
+        id: api.id,
         title: api.name,
         description: `API Version: ${api.version}`,
         version: api.version,
@@ -20,16 +21,38 @@ const transformApiToRepository = (api) => {
 
 export const ReposProvider = ({ children }) => {
 
+    const [repositories, setRepositories] = useState([]);
     const { apis } = useApi();
 
-    const repositories = apis.filter(api => api.enabled).map(transformApiToRepository);
 
     const apiNames = apis.map(api => api.name);
-    console.log(" API Names:", apiNames);
+
+    const toggleRepository = (id) => {
+        setRepositories(prevRepos => {
+            const updatedRepos = prevRepos.map(repo => {
+                if (repo.id === id) {
+                    return { ...repo, isActive: !repo.isActive };
+                }
+                return repo;
+            });
+            return updatedRepos;
+        });
+    };
+
+    useEffect(() => {
+        if (!apis) return;
+
+        const newRepositories = apis.filter(api => api.enabled).map(transformApiToRepository);
+        setRepositories(newRepositories);
+    }, [apis]);
+
+    const activeRepositories = repositories.filter(repo => repo.isActive).map(repo => { return { id: repo.id, title: repo.title }; });
+    console.log("Active Repositories:", activeRepositories); // Debugging line
 
     const value = {
         repositories,
-        apiNames
+        activeRepositories,
+        toggleRepository,
     };
 
     return (

@@ -9,7 +9,7 @@ const RepositoriesList = lazy(() => import("./RepositoriesList"));
 
 const Repositories = () => {
 
-  const { repositories } = useRepo();
+  const { repositories, toggleRepository } = useRepo();
 
   return (
     <div className="repositories">
@@ -18,7 +18,7 @@ const Repositories = () => {
             <p className="lead">Add or buy repositories!</p>
         </section>
         <section className="repositories-content">
-            <RepositoriesList repositories={repositories} />
+            <RepositoriesList repositories={repositories} toggleRepository={toggleRepository} />
         </section>
     </div>
   )

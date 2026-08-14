@@ -8,17 +8,22 @@ import Input from '../../../components/Input.jsx'
 
 import './Categories.css'
 
-const CategoriesFilters = ({ apiNames, onFilterChange }) => {
+const CategoriesFilters = ({ repositories, selectedRepoId, onFilterChange }) => {
+
+  const options = [
+    { value: '', label: 'select repository' },
+    ...repositories.map(repo => ({ value: repo.id, label: repo.title }))
+  ]
+
   return (
     <div className='categories--table-filter'>
       <Input
         as="select"
-        id ="apiFilter"
-        name="apiFilter"
-        options={apiNames?.map(apiName => ({ value: apiName, label: apiName }))}
-        placeholder="Filter by API"
+        value={selectedRepoId || ''}
         onChange={onFilterChange}
+        options={options}
       />
+
     </div>
   )
 }
@@ -29,9 +34,9 @@ const Categories = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [editedName, setEditedName] = useState('');
 
-  const { categories, toggleCategory, updateCategoryName } = useCategories();
+  const { categories, toggleCategory, updateCategoryName, selectedRepoId, selectRepository } = useCategories();
 
-  const { apiNames } = useRepo();
+  const { activeRepositories } = useRepo();
 
   const openModal = (category) => {
     setSelectedCategory(category);
@@ -52,13 +57,10 @@ const Categories = () => {
     }
   };
 
-  const [ filteredCategories, setFilteredCategories] = useState(categories);
-
   const handleFilterChange = (e) => {
-    const selectedApi = e.target.value;
-    // for now
-    console.log("Selected API:", selectedApi);
-  };
+    const repoId = e.target.value;
+    selectRepository(repoId);
+  }
 
   const modalContent = selectedCategory && (
     <div className='modal-body'>
@@ -96,7 +98,7 @@ const Categories = () => {
         <p className='lead'>View all categories gotten from the api, You can enable or disable a category by toggling the switch next to the category name. You can edit a category name by clicking on the edit button next to the category name.</p>
       </section>
       <section className='categories-table-container'>
-        <CategoriesFilters apiNames={apiNames} onFilterChange={handleFilterChange} />
+        <CategoriesFilters repositories={activeRepositories} selectedRepoId={selectedRepoId} onFilterChange={handleFilterChange} />
         <table className='categories-table'>
           <thead className='categories-table-header'>
             <tr>

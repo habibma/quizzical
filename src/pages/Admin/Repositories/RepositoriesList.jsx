@@ -55,7 +55,7 @@ const Card = ({ ...props }) => {
   )
 }
 
-const RepositoriesList = ( { repositories } ) => {
+const RepositoriesList = ( { repositories, toggleRepository } ) => {
 
 
   return (
@@ -72,7 +72,7 @@ const RepositoriesList = ( { repositories } ) => {
           isActive={repo.isActive}
           link={repo.link}
           price={repo.price}
-          onActiveToggle={() => console.log(`Toggled active state for ${repo.title}`)}
+          onActiveToggle={() => toggleRepository(repo.id)}
         />
       ))}
     </div>

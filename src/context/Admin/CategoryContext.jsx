@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getCategories } from "../../services/openTDBService.js";
-import { useApi } from "./ApiContext.jsx";
+import { useRepo } from "./ReposContext.jsx";
 
 const CategoryContext = createContext();
 
@@ -16,28 +16,28 @@ const normalizeCategory = (category) => ({
 
 export function CategoryProvider({ children }) {
 
-    const { getDefaultApi } = useApi();
-
-    const defaultApi = getDefaultApi();
-
+    const [selectedRepoId, selectRepository] = useState('');
     const [categories, setCategories] = useState([]);
 
+    const { ActiveRepositories } = useRepo();
+
+
     useEffect(() => {
-        if (!defaultApi) return;
+        if (!selectedRepoId) return;
 
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
             const storedSourceApiId = localStorage.getItem(SOURCE_KEY);
 
-            if (stored && String(defaultApi.id) === storedSourceApiId) {
+            if (stored && String(selectedRepoId) === storedSourceApiId) {
                 setCategories(JSON.parse(stored).map(normalizeCategory));
                 return;
             }
         } catch {
             // fall back
         }
-
-        getCategories(defaultApi)
+        const repo = ActiveRepositories.find(api => api.id === selectedRepoId);
+        getCategories(repo) /// <-----
             .then(data => {
                 setCategories(
                     data.map(category => normalizeCategory({
@@ -48,7 +48,7 @@ export function CategoryProvider({ children }) {
                 );
             })
             .catch(err => console.error(err));
-    }, [defaultApi]);
+    }, [selectedRepoId, ActiveRepositories]);
 
     // Persist every change
     useEffect(() => {
@@ -58,10 +58,10 @@ export function CategoryProvider({ children }) {
             STORAGE_KEY,
             JSON.stringify(categories)
         );
-        if (defaultApi) {
-            localStorage.setItem(SOURCE_KEY, String(defaultApi.id));
+        if ( selectedRepoId) {
+            localStorage.setItem(SOURCE_KEY, String(selectedRepoId));
         }
-    }, [categories, defaultApi]);
+    }, [categories]);
 
     const toggleCategory = (id) => {
         setCategories(prev =>
@@ -90,6 +90,8 @@ export function CategoryProvider({ children }) {
                 toggleCategory,
                 renameCategory,
                 updateCategoryName: renameCategory,
+                selectedRepoId,
+                selectRepository,
             }}
         >
             {children}
