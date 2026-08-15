@@ -14,10 +14,16 @@ const normalizeCategory = (category) => ({
     enabled: category.enabled ?? true,
 });
 
+const loadCategoriesFromStorage = () => {
+    const storedCategories = localStorage.getItem(STORAGE_KEY);
+    const parsedCategories = storedCategories ? JSON.parse(storedCategories) : [];
+    return parsedCategories.map(normalizeCategory);
+};
+
 export function CategoryProvider({ children }) {
 
     const [selectedRepoId, setSelectedRepoId] = useState('');
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState(loadCategoriesFromStorage());
 
     const { activeRepositories } = useRepo();
 
@@ -31,13 +37,14 @@ export function CategoryProvider({ children }) {
         const fetchedCategories = await getCategories(repository);
         const normalizedCategories = fetchedCategories.map(normalizeCategory);
         setCategories(normalizedCategories);
-
     }
 
 
     // Persist every change
     useEffect(() => {
         if (categories.length === 0) return;
+
+        console.log("Persisting categories to localStorage:", categories);
 
         localStorage.setItem(
             STORAGE_KEY,
