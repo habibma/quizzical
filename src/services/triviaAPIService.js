@@ -57,6 +57,7 @@ export async function getQuestions(repository, options = {}) {
     url.searchParams.set("difficulties", difficulty);
   }
 
+  console.log("Constructed URL for fetching questions:", url.toString());
   const data = await request(url.toString(), {
     method: endpoint.method
   });

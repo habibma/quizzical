@@ -1,16 +1,15 @@
 // This context is used to manage question in Admin page
 
 import { useState, useContext, createContext } from 'react';
-import { getQuestions, getCategoryQuestionsCount } from '../../services/openTDBService.js';
+import { getCategoryQuestionsCount } from '../../services/openTDBService.js';
+import { getQuestions } from '../../services/questionService.js';
 import { useApi } from './ApiContext';
 
 
 const QuestionsContext = createContext();
 
 export const QuestionsProvider = ({ children }) => {
-    const { getDefaultApi } = useApi();
 
-    const defaultApi = getDefaultApi();
 
     const [questions, setQuestions] = useState([]);
     const [customQuestions, setCustomQuestions] = useState([]);
@@ -18,7 +17,11 @@ export const QuestionsProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [countByCategory, setCountByCategory] = useState({});
 
-    const fetchQuestions = async (cate, type, diff) => {
+    const { getApiById } = useApi();
+
+
+    const fetchQuestions = async (api, cate, type, diff) => {
+        const defaultApi = getApiById(api);
         const options = {
             amount: 10, // fetch 10 questions at a time for now, can be changed later when pagination is implemented
             category: cate,
@@ -37,6 +40,7 @@ export const QuestionsProvider = ({ children }) => {
         }
     };
 
+    /*
     const fetchQuestionsCountByCategory = async (categoryId) => {
         setError(null);
         if (countByCategory[categoryId]) {
@@ -50,6 +54,7 @@ export const QuestionsProvider = ({ children }) => {
             setError(err.message);
         }
     };
+    */
 
     const addQuestion = (question) => {
         setCustomQuestions(prevQuestions => [...prevQuestions, { ...question, id: Date.now().toString() }]);
@@ -72,7 +77,7 @@ export const QuestionsProvider = ({ children }) => {
                 addQuestion,
                 updateQuestion,
                 deleteQuestion,
-                fetchQuestionsCountByCategory,
+                //fetchQuestionsCountByCategory,
                 countByCategory,
             }}
         >

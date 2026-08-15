@@ -1,6 +1,12 @@
 // filterConfig.js
 
-export const createFilterConfig = (categoryOptions) => [
+export const createFilterConfig = (categoryOptions, repositoryOptions) => [
+  {
+    name: "repository",
+    label: "Repository",
+    type: "select",
+    options: repositoryOptions,
+  },
   {
     name: "category",
     label: "Category",

@@ -15,20 +15,24 @@ import './Questions.css'
 
 import { useCategories } from '../../../context/Admin/CategoryContext';
 import { useQuestions } from '../../../context/Admin/QuestionsContext';
+import { useRepo } from '../../../context/Admin/ReposContext';
 
 const Questions = () => {
 
   const [filters, setFilters] = useState({
+    repository: 'any',
     category: 'any',
     difficulty: 'any',
     type: 'any',
   });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibilityMap, setVisibilityMap] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const { categories } = useCategories();
   const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchQuestionsCountByCategory, countByCategory } = useQuestions();
+  const { activeRepositories } = useRepo();
 
   const handleFilterChange = (name, value) => {
     setFilters(prevValues => ({ ...prevValues, [name]: value }));
@@ -42,7 +46,15 @@ const Questions = () => {
     }))
   ];
 
-  const filterConfig = createFilterConfig(categoryOptions);
+  const repositoryOptions = [
+    { value: 'any', label: 'Any Repository' },
+    ...activeRepositories.map(repo => ({
+      value: repo.id,
+      label: repo.title,
+    }))
+  ];
+
+  const filterConfig = createFilterConfig(categoryOptions, repositoryOptions);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -85,13 +97,13 @@ const Questions = () => {
     return visibilityMap[questionId] || false;
   }
 
-  const { category, difficulty, type } = filters;
+  const { repository, category, difficulty, type } = filters;
   useEffect(() => {
-    fetchQuestions(category, type, difficulty);
-  }, [category, difficulty, type]);
+    fetchQuestions(repository, category, type, difficulty);
+  }, [repository, category, difficulty, type]);
 
   useEffect(() => {
-    fetchQuestionsCountByCategory(category);
+    // fetchQuestionsCountByCategory(category);
   }, [category]);
 
 
