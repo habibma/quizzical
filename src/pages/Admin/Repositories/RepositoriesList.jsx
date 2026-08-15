@@ -31,6 +31,7 @@ const Card = ({ ...props }) => {
     link,
     price,
     onActiveToggle,
+    capabilities
   } = props;
 
   return (
@@ -40,15 +41,20 @@ const Card = ({ ...props }) => {
       </div>
       <div className="card-body">
         <p className="card-description">{description}</p>
-        <p>Version: {version}</p>
-        <p>Number of Questions: {numberOfQuestions}</p>
-        <p>Number of Categories: {numberOfCategories}</p>
-        <p>Difficulty: {difficulty.join(", ")}</p>
+        <div className="card-rep-content">
+          <h4>Available Content:</h4>
+          <ul className="card-content-list">
+          {capabilities.map((endpoint, index) => (
+            <li key={index}>
+              <strong>{endpoint.name}:</strong> {endpoint.description}
+            </li>
+          ))}
+          </ul>
+        </div>
         <p>Active: {isActive ? "Yes" : "No"}</p>
         <a href={link} target="_blank" rel="noopener noreferrer">
           View repository
         </a>
-        <p>Price: {price === 0 ? "Free" : `$${price.toFixed(2)}`}</p>
       </div>
       <CardActions onActiveToggle={onActiveToggle} isActive={isActive} />
     </div>
@@ -73,6 +79,7 @@ const RepositoriesList = ( { repositories, toggleRepository } ) => {
           link={repo.link}
           price={repo.price}
           onActiveToggle={() => toggleRepository(repo.id)}
+          capabilities={repo.capabilities}
         />
       ))}
     </div>

@@ -7,15 +7,24 @@ const ReposContext = createContext();
 const transformApiToRepository = (api) => {
     return {
         id: api.id,
+        apiId: api.id,
+
         title: api.name,
-        description: `API Version: ${api.version}`,
+        description: api.description ?? `API Version: ${api.version}`,
         version: api.version,
-        numberOfQuestions: api.endpoints.find(endpoint => endpoint.name === "Get Questions") ? "Available" : "Not Available",
-        numberOfCategories: api.endpoints.find(endpoint => endpoint.name === "Get Categories") ? "Available" : "Not Available",
-        difficulty: api.difficulty ?? "Unknown",
+
+        baseUrl: api.baseUrl,
+
         isActive: api.enabled,
-        link: api.baseUrl,
-        price: api.price ?? 0,
+
+        capabilities: api.endpoints.map(endpoint => ({
+            name: endpoint.name,
+            description: endpoint.description,
+            endpoint: endpoint.path,
+            method: endpoint.method,
+        })),
+
+        adaptor: api.adaptor ?? null,
     };
 };
 
@@ -46,8 +55,8 @@ export const ReposProvider = ({ children }) => {
         setRepositories(newRepositories);
     }, [apis]);
 
-    const activeRepositories = repositories.filter(repo => repo.isActive).map(repo => { return { id: repo.id, title: repo.title }; });
-    console.log("Active Repositories:", activeRepositories); // Debugging line
+    const activeRepositories = repositories.filter(repo => repo.isActive);
+
 
     const value = {
         repositories,

@@ -59,6 +59,21 @@
     gap: 1rem;
 }
 
+.api-endpoints-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+
+    li {
+        margin-bottom: 5px;
+
+        &::before {
+            content: "• ";
+            color: var(--primary-color);
+        }
+    }
+}
+
 .add-api-btn {
     width: 150px;
 }

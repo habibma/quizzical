@@ -33,6 +33,7 @@
     }
 }
 
+/* Card styles */
 .card {
     border: 1px solid var(--border-color);
     border-radius: 4px;
@@ -68,6 +69,21 @@
 
             &:hover {
                 text-decoration: underline;
+            }
+        }
+    }
+
+    .card-content-list {
+        list-style-type: disc;
+        padding-left: 5px;
+
+        li {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+
+            &::before {
+                content: "• ";
+                color: var(--primary-color);
             }
         }
     }

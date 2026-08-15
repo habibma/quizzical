@@ -23,26 +23,27 @@ const apiSources = [
     endpoints: [
       {
         id: 1,
-        name: "Get Categories",
+        name: "Categories",
         method: "GET",
         path: "/api_category.php",
-        description: "Retrieve all available categories",
+        description: "all available categories",
       },
       {
         id: 2,
-        name: "Get Questions",
+        name: "Questions",
         method: "GET",
         path: "/api.php",
-        description: "Retrieve trivia questions",
+        description: "trivia questions",
       },
     ],
     difficulty: ["easy", "medium", "hard"],
     price: 0,
+    adaptor: "opentdb",
   },
   {
     id: 2,
     name: "The Trivia API",
-    baseUrl: "https://the-trivia-api.com",
+    baseUrl: "https://the-trivia-api.com/v2",
     enabled: true,
     isDefault: false,
     version: "v1",
@@ -53,22 +54,23 @@ const apiSources = [
     endpoints: [
       {
         id: 1,
-        name: "Get Categories",
+        name: "Categories",
         method: "GET",
-        path: "/api/categories",
-        description: "Retrieve all available categories",
+        path: "/categories",
+        description: "all available categories",
       },
       {
         id: 2,
-        name: "Get Questions",
+        name: "Questions",
         method: "GET",
         path: "/api/questions",
-        description: "Retrieve trivia questions",
+        description: "trivia questions",
       },
     ],
     difficulty: ["easy", "medium", "hard"],
     price: 9.99,
-  }
+    adaptor: "trivia-api",
+  },
 ];
 
 const Api = () => {
@@ -133,6 +135,7 @@ const Api = () => {
           <thead className="api-table--header">
             <tr>
               <th>Name</th>
+              <th>Adaptor</th>
               <th>Enabled</th>
               <th>Default</th>
               <th>Endpoints</th>
@@ -143,10 +146,11 @@ const Api = () => {
             {apis.map((api) => (
               <tr key={api.id}>
                 <td>{api.name}</td>
+                <td>{api.adaptor}</td>
                 <td>{api.enabled ? "Yes" : "No"}</td>
                 <td>{api.isDefault ? "Yes" : "No"}</td>
                 <td>
-                  <ul>
+                  <ul className="api-endpoints-list">
                     {api.endpoints.map((endpoint) => (
                       <li key={endpoint.id}>
                         {endpoint.name} ({endpoint.method})

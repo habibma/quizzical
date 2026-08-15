@@ -10,3 +10,10 @@ export function adaptTriviaApiQuestions(data) {
         ]
     }));
 }
+
+export function adaptTriviaApiCategories(data) {
+    return Object.entries(data).map(([key, value]) => ({
+        id: Date.now().toString() + Math.random().toString(36).substring(2, 15),
+        name: key,
+    }));
+}

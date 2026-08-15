@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCategories } from "../../services/openTDBService.js";
+import { getCategories } from "../../services/categoryService.js";
 import { useRepo } from "./ReposContext.jsx";
 
 const CategoryContext = createContext();
@@ -16,39 +16,24 @@ const normalizeCategory = (category) => ({
 
 export function CategoryProvider({ children }) {
 
-    const [selectedRepoId, selectRepository] = useState('');
+    const [selectedRepoId, setSelectedRepoId] = useState('');
     const [categories, setCategories] = useState([]);
 
-    const { ActiveRepositories } = useRepo();
+    const { activeRepositories } = useRepo();
 
+    const selectRepository = async (repoId) => {
+        setSelectedRepoId(repoId);
 
-    useEffect(() => {
-        if (!selectedRepoId) return;
+        const repository = activeRepositories.find(repo => repo.id === repoId);
 
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            const storedSourceApiId = localStorage.getItem(SOURCE_KEY);
+        if (!repository) return;
 
-            if (stored && String(selectedRepoId) === storedSourceApiId) {
-                setCategories(JSON.parse(stored).map(normalizeCategory));
-                return;
-            }
-        } catch {
-            // fall back
-        }
-        const repo = ActiveRepositories.find(api => api.id === selectedRepoId);
-        getCategories(repo) /// <-----
-            .then(data => {
-                setCategories(
-                    data.map(category => normalizeCategory({
-                        id: category.id,
-                        name: category.name,
-                        enabled: true,
-                    }))
-                );
-            })
-            .catch(err => console.error(err));
-    }, [selectedRepoId, ActiveRepositories]);
+        const fetchedCategories = await getCategories(repository);
+        const normalizedCategories = fetchedCategories.map(normalizeCategory);
+        setCategories(normalizedCategories);
+
+    }
+
 
     // Persist every change
     useEffect(() => {
@@ -58,7 +43,7 @@ export function CategoryProvider({ children }) {
             STORAGE_KEY,
             JSON.stringify(categories)
         );
-        if ( selectedRepoId) {
+        if (selectedRepoId) {
             localStorage.setItem(SOURCE_KEY, String(selectedRepoId));
         }
     }, [categories]);

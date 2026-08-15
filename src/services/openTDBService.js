@@ -1,5 +1,5 @@
 import { request } from "./apiService.js";
-import { normalizeQuestions } from "./adaptors/openTriviaAdapter.js";
+import { adaptOpenTriviaQuestions } from "./adaptors/openTriviaAdapter.js";
 
 const resolveEndpoint = (apiConfig, candidates) => {
   if (!apiConfig?.endpoints?.length) {
@@ -22,7 +22,7 @@ const resolveEndpoint = (apiConfig, candidates) => {
 export async function getQuestions(apiConfig, options = {}) {
   const endpoint = resolveEndpoint(apiConfig, ["questions", "get questions", "api.php"]);
 
-  if (!endpoint) {
+  if (!endpoint || !endpoint.path) {
     throw new Error("No questions endpoint is configured for this API.");
   }
 
@@ -51,25 +51,21 @@ export async function getQuestions(apiConfig, options = {}) {
 
   const data = await request(uri, { method: endpoint.method });
 
-  console.log("Fetched questions:", data.results); // Log the fetched questions for debugging
-  return normalizeQuestions(data.results);
+  return adaptOpenTriviaQuestions(data.results);
 }
 
 // to fetch trivia categories from the Open Trivia Database API
 export async function getCategories(apiConfig) {
+
   if (!apiConfig) {
     throw new Error("No default API is configured.");
   }
 
-  const endpoint = resolveEndpoint(apiConfig, ["categories", "get categories", "api_category.php"]);
+  const apiBaseUrl = apiConfig.baseUrl;
+  const endpointPath = apiConfig.endpoint.startsWith("/") ? apiConfig.endpoint : `/${apiConfig.endpoint}`;
+  const uri = `${apiBaseUrl}${endpointPath}`;
 
-  if (!endpoint) {
-    throw new Error("No categories endpoint is configured for this API.");
-  }
-
-  const uri = apiConfig.baseUrl + endpoint.path;
-
-  const data = await request(uri, { method: endpoint.method });
+  const data = await request(uri, { method: apiConfig.method });
 
   return data.trivia_categories;
 }
@@ -81,13 +77,15 @@ export async function getCategoryQuestionsCount(apiConfig, categoryId) {
 
   const endpoint = resolveEndpoint(apiConfig, ["categoryquestionscount", "category questions count", "count"]);
 
-  if (!endpoint) {
+  if (!endpoint || !endpoint.path) {
     throw new Error("No category count endpoint is configured for this API.");
   }
 
-  const uri = `${apiConfig.baseUrl + endpoint.path}?category=${categoryId}`;
+  const apiBaseUrl = apiConfig.baseUrl;
+  const endpointPath = endpoint.path.startsWith("/") ? endpoint.path : `/${endpoint.path}`;
+  const uri = `${apiBaseUrl}${endpointPath}?category=${categoryId}`;
 
-  const data = await request(uri, { method: endpoint.method });
+  const data = await request(uri, { method: apiConfig.method });
 
   return data.category_question_count;
 }

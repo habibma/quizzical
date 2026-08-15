@@ -273,6 +273,17 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
                     ))}
                     <Button type="button" className="btn-primary" text="Add Endpoint" onClick={addEndpoint} />
                 </fieldset>
+                <fieldset className="api-form--adaptor-name">
+                    <legend>Adaptor Name</legend>
+                    {/* this name is used to identify the API adaptor. it should be unique. TODO: Add validation and error handling and info for users */}
+                    <Input
+                        type="text"
+                        id="adaptor"
+                        name="adaptor"
+                        value={apiData?.adaptor || ""}
+                        onChange={handleInputChange}
+                    />
+                </fieldset>
                 <div className="api-form-actions">
                     <Button type="submit" className="btn-primary" text={isEditing ? "Update API" : "Add API"} />
                     <Button className="btn-secondary" text="Cancel" onClick={onClose} />
