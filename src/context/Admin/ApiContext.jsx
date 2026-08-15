@@ -88,6 +88,10 @@ export function ApiProvider({ children }) {
         });
     }
 
+    const getApiById = (id) => {
+        return apis.find(api => api.id === id) || null;
+    }
+
     useEffect(() => {
         localStorage.setItem("apis", JSON.stringify(apis));
     }, [apis]);
@@ -98,6 +102,7 @@ export function ApiProvider({ children }) {
             addApi,
             updateApi,
             removeApi,
+            getApiById,
         }}>
             {children}
         </ApiContext.Provider>

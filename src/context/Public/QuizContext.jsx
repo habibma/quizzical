@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react'
-import { getQuestions } from '../../services/openTDBService.js'
+import { getQuestions } from '../../services/questionService.js'
 import { useApi } from '../Admin/ApiContext'
 
 const QuizContext = createContext()
@@ -12,20 +12,18 @@ export const QuizProvider = ({ children }) => {
     const [error, setError] = useState(null)
     const [isQuizFinished, setIsQuizFinished] = useState(false)
 
-    const { getDefaultApi } = useApi();
+    const { getApiById } = useApi()
+
+    const selectedRepoId = localStorage.getItem('categoriesSourceApiId') || null;
 
     const fetchQuestions = async ({ amount, category, difficulty, type }) => {
         setLoading(true)
         setError(null)
 
-        const api = getDefaultApi();
-        if (!api) {
-            setError("No default API is set. Please set a default API in the Admin panel.");
-            setLoading(false);
-            return;
-        }
+        const api = getApiById(selectedRepoId)
         try {
             const fetchedQuestions = await getQuestions(api, { amount, category, difficulty, type })
+            console.log("Fetched questions:", fetchedQuestions)
             setQuestions(fetchedQuestions)
             setAnswers([])
             setScore(0)

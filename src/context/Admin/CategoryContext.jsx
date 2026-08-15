@@ -44,8 +44,6 @@ export function CategoryProvider({ children }) {
     useEffect(() => {
         if (categories.length === 0) return;
 
-        console.log("Persisting categories to localStorage:", categories);
-
         localStorage.setItem(
             STORAGE_KEY,
             JSON.stringify(categories)
@@ -53,7 +51,7 @@ export function CategoryProvider({ children }) {
         if (selectedRepoId) {
             localStorage.setItem(SOURCE_KEY, String(selectedRepoId));
         }
-    }, [categories]);
+    }, [categories, selectedRepoId]);
 
     const toggleCategory = (id) => {
         setCategories(prev =>
