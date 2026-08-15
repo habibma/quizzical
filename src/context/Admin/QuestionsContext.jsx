@@ -17,21 +17,13 @@ export const QuestionsProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [countByCategory, setCountByCategory] = useState({});
 
-    const { getApiById } = useApi();
 
-
-    const fetchQuestions = async (api, cate, type, diff) => {
-        const defaultApi = getApiById(api);
-        const options = {
-            amount: 10, // fetch 10 questions at a time for now, can be changed later when pagination is implemented
-            category: cate,
-            difficulty: diff,
-            type: type,
-        };
+    const fetchQuestions = async (repository, params) => {
         setLoading(true);
         setError(null);
+
         try {
-            const fetchedQuestions = await getQuestions(defaultApi, options);
+            const fetchedQuestions = await getQuestions(repository, params);
             setQuestions(fetchedQuestions);
         } catch (err) {
             setError(err.message);

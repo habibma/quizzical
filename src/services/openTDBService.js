@@ -1,32 +1,39 @@
 import { request } from "./apiService.js";
 import { adaptOpenTriviaQuestions } from "./adaptors/openTriviaAdapter.js";
 
-const resolveEndpoint = (apiConfig, candidates) => {
-  if (!apiConfig?.endpoints?.length) {
+export function resolveEndpoint(repository, candidates) {
+
+  if (!repository?.capabilities?.length) {
+    console.error("No capabilities found for the repository:", repository);
     return null;
   }
 
   const normalizedCandidates = candidates.map(candidate => candidate.toLowerCase());
 
-  return apiConfig.endpoints.find(endpoint => {
+  const endpoint = repository.capabilities.find(endpoint => {
     const name = (endpoint.name || "").toLowerCase();
     const path = (endpoint.path || "").toLowerCase();
 
     return normalizedCandidates.some(candidate =>
       name.includes(candidate) || path.includes(candidate)
     );
-  }) || apiConfig.endpoints[0];
-};
+  });
+
+  return endpoint;
+}
 
 // to fetch trivia questions from the Open Trivia Database API
-export async function getQuestions(apiConfig, options = {}) {
-  const endpoint = resolveEndpoint(apiConfig, ["questions", "get questions", "api.php"]);
+export async function getQuestions(repository, options = {}) {
+  console.log("Fetching questions from repository:", repository);
+  const endpoint = resolveEndpoint(repository, ["questions", "get questions", "fetch questions"]);
 
-  if (!endpoint || !endpoint.path) {
+  console.log("Resolved endpoint for fetching questions:", endpoint);
+
+  if (!endpoint) {
     throw new Error("No questions endpoint is configured for this API.");
   }
 
-  const url = new URL(apiConfig.baseUrl + endpoint.path);
+  const url = new URL(repository.baseUrl + endpoint.path);
   const searchParams = new URLSearchParams();
   const {
     amount = 10,
@@ -34,6 +41,7 @@ export async function getQuestions(apiConfig, options = {}) {
     difficulty = "any",
     type = "any"
   } = options;
+
   if (amount) {
     searchParams.append("amount", amount);
   }

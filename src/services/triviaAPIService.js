@@ -2,22 +2,26 @@ import { request } from "./apiService.js";
 import { adaptTriviaApiCategories } from "./adaptors/theTriviaAdapter.js";
 import { adaptTriviaApiQuestions } from "./adaptors/theTriviaAdapter.js";
 
-const resolveEndpoint = (apiConfig, candidates) => {
-  if (!apiConfig?.endpoints?.length) {
+export function resolveEndpoint(repository, candidates) {
+
+  if (!repository?.capabilities?.length) {
+    console.error("No capabilities found for the repository:", repository);
     return null;
   }
 
   const normalizedCandidates = candidates.map(candidate => candidate.toLowerCase());
 
-  return apiConfig.endpoints.find(endpoint => {
+  const endpoint = repository.capabilities.find(endpoint => {
     const name = (endpoint.name || "").toLowerCase();
     const path = (endpoint.path || "").toLowerCase();
 
     return normalizedCandidates.some(candidate =>
       name.includes(candidate) || path.includes(candidate)
     );
-  }) || apiConfig.endpoints[0];
-};
+  });
+
+  return endpoint;
+}
 
 export async function getCategories(apiConfig) {
   if (!apiConfig) {
@@ -34,7 +38,6 @@ export async function getCategories(apiConfig) {
 }
 
 export async function getQuestions(repository, options = {}) {
-  console.log("Fetching questions from repository:", repository);
   const endpoint = resolveEndpoint(repository, ["questions", "get questions", "fetch questions"]);
 
   const url = new URL(

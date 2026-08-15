@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Input from '../../../components/Input';
 import Button from '../../../components/Button';
-import VisibleIcon from '../../../assets/icons/VisibleIcon';
-import InvisibleIcon from '../../../assets/icons/InvisibleIcon';
 import QuestionModal from './QuestionModal';
-import EditIcon from '../../../assets/icons/EditIcon';
-import DeleteIcon from '../../../assets/icons/DeleteIcon';
 import QuestionFilters from './QuestionFilters';
 import ApiQuestionsTable from './ApiQuestionsTable';
 import CustomQuestionsTable from './CustomQuestionsTable';
@@ -29,7 +24,6 @@ const Questions = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibilityMap, setVisibilityMap] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const { categories } = useCategories();
   const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchQuestionsCountByCategory, countByCategory } = useQuestions();
   const { activeRepositories } = useRepo();
@@ -62,23 +56,20 @@ const Questions = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedQuestion(null);
-    setIsEditing(false);
   }
 
   const handleEditQuestion = (question) => {
     setSelectedQuestion(question);
-    setIsEditing(true);
     openModal();
   }
 
   const handleAddQuestion = () => {
     setSelectedQuestion(null);
-    setIsEditing(false);
     openModal();
   }
 
   const handleSaveQuestion = (question) => {
-    if (isEditing) {
+    if (selectedQuestion) {
       updateQuestion(question);
     } else {
       addQuestion(question);
@@ -99,8 +90,18 @@ const Questions = () => {
 
   const { repository, category, difficulty, type } = filters;
   useEffect(() => {
-    fetchQuestions(repository, category, type, difficulty);
-  }, [repository, category, difficulty, type]);
+    if (repository === 'any')
+      return;
+
+    const selectedRepo = activeRepositories.find(repo => repo.id === repository);
+    console.log("Selected Repository:", selectedRepo);
+    if (!selectedRepo) {
+      console.error(`Repository with ID ${repository} not found.`);
+      return;
+    }
+
+    fetchQuestions(selectedRepo, { amount: 10, category, difficulty, type });
+  }, [repository, category, difficulty, type, activeRepositories]);
 
   useEffect(() => {
     // fetchQuestionsCountByCategory(category);
@@ -127,11 +128,11 @@ const Questions = () => {
             loading={loading}
             error={error}
           />
-          <QuestionInsight
+          {/* <QuestionInsight
             category={category}
             difficulty={difficulty}
             countByCategory={countByCategory}
-          />
+          /> */}
           <CustomQuestionsTable
             customQuestions={customQuestions}
             onEdit={handleEditQuestion}
@@ -142,7 +143,7 @@ const Questions = () => {
           <QuestionModal
             isOpen={isModalOpen}
             onClose={closeModal}
-            isEditing={isEditing}
+            isEditing={!!selectedQuestion}
             question={selectedQuestion}
             handleSaveQuestion={handleSaveQuestion}
           />

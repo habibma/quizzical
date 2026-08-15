@@ -18,9 +18,10 @@ const transformApiToRepository = (api) => {
         isActive: api.enabled,
 
         capabilities: api.endpoints.map(endpoint => ({
+            id: endpoint.id,
             name: endpoint.name,
             description: endpoint.description,
-            endpoint: endpoint.path,
+            path: endpoint.path,
             method: endpoint.method,
         })),
 
