@@ -24,10 +24,7 @@ export function resolveEndpoint(repository, candidates) {
 
 // to fetch trivia questions from the Open Trivia Database API
 export async function getQuestions(repository, options = {}) {
-  console.log("Fetching questions from repository:", repository);
   const endpoint = resolveEndpoint(repository, ["questions", "get questions", "fetch questions"]);
-
-  console.log("Resolved endpoint for fetching questions:", endpoint);
 
   if (!endpoint) {
     throw new Error("No questions endpoint is configured for this API.");
@@ -69,7 +66,6 @@ export async function getCategories(apiConfig) {
     throw new Error("No default API is configured.");
   }
 
-  console.log("apiConfig is: ", apiConfig);
   const apiBaseUrl = apiConfig.baseUrl;
   const endpointPath = apiConfig.endpoint.startsWith("/") ? apiConfig.endpoint : `/${apiConfig.endpoint}`;
   const uri = `${apiBaseUrl}${endpointPath}`;
