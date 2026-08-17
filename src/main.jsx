@@ -5,6 +5,7 @@ import { CategoryProvider } from './context/Admin/CategoryContext.jsx'
 import { SettingsProvider } from './context/Admin/SettingsContext.jsx'
 import { ApiProvider } from './context/Admin/ApiContext.jsx'
 import { ReposProvider } from './context/Admin/ReposContext.jsx'
+import { QuizProvider } from './context/Admin/QuizContext.jsx'
 import App from './App.jsx'
 import './styles/index.css'
 
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <ReposProvider>
           <SettingsProvider>
             <CategoryProvider>
-              <App />
+              <QuizProvider>
+                <App />
+              </QuizProvider>
             </CategoryProvider>
           </SettingsProvider>
         </ReposProvider>
