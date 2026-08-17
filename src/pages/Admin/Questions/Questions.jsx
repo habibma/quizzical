@@ -20,23 +20,25 @@ const Questions = () => {
     difficulty: 'any',
     type: 'any',
   });
-
+  const [filterCategories, setFilterCategories] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibilityMap, setVisibilityMap] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const { categories } = useCategories();
   const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchCategories } = useQuestions();
   const { activeRepositories } = useRepo();
 
   const handleFilterChange = (name, value) => {
-    setFilters(prevValues => ({ ...prevValues, [name]: value }));
+    setFilters(prevValues => ({
+      ...prevValues, [name]: value,
+      ...(name == 'repository' && { category: 'any' })
+     }));
   };
 
   const categoryOptions = [
     { value: 'any', label: 'Any Category' },
-    ...categories.map(category => ({
+    ...filterCategories.map(category => ({
       value: category.id,
-      label: category.displayName,
+      label: category.name,
     }))
   ];
 
@@ -102,11 +104,24 @@ const Questions = () => {
   }, [repository, category, difficulty, type, activeRepositories]);
 
   useEffect(() => {
-    const selectedRepo = activeRepositories.find(repo => repo.id === repository);
-    if (selectedRepo) {
-      fetchCategories(selectedRepo);
+    if (repository === 'any')
+    {
+      setFilterCategories([])
+      return ;
     }
-  }, [repository]);
+
+    const selectedRepo = activeRepositories.find(repo => repo.id === repository);
+
+    if (!selectedRepo) return ;
+
+    const loadCategories = async () => {
+      const categories = await fetchCategories(selectedRepo);
+      console.log(categories);
+      setFilterCategories(categories);
+    }
+
+    loadCategories();
+  }, [repository, activeRepositories]);
 
 
   return (
