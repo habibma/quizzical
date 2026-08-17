@@ -1,8 +1,8 @@
 // This context is used to manage question in Admin page
 
 import { useState, useContext, createContext } from 'react';
-import { getCategoryQuestionsCount } from '../../services/openTDBService.js';
 import { getQuestions } from '../../services/questionService.js';
+import { getCategories } from '../../services/categoryService.js';
 import { useApi } from './ApiContext';
 
 
@@ -27,6 +27,21 @@ export const QuestionsProvider = ({ children }) => {
             setQuestions(fetchedQuestions);
         } catch (err) {
             setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchCategories = async (repository) => { //// <<<-----
+        setLoading(true);
+        setError(null);
+
+        try {
+            const categories = await getCategories(repository);
+            return categories;
+        } catch (err) {
+            setError(err.message);
+            return [];
         } finally {
             setLoading(false);
         }
@@ -69,8 +84,7 @@ export const QuestionsProvider = ({ children }) => {
                 addQuestion,
                 updateQuestion,
                 deleteQuestion,
-                //fetchQuestionsCountByCategory,
-                countByCategory,
+                fetchCategories,
             }}
         >
             {children}

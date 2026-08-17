@@ -69,6 +69,7 @@ export async function getCategories(apiConfig) {
     throw new Error("No default API is configured.");
   }
 
+  console.log("apiConfig is: ", apiConfig);
   const apiBaseUrl = apiConfig.baseUrl;
   const endpointPath = apiConfig.endpoint.startsWith("/") ? apiConfig.endpoint : `/${apiConfig.endpoint}`;
   const uri = `${apiBaseUrl}${endpointPath}`;

@@ -25,7 +25,7 @@ const Questions = () => {
   const [visibilityMap, setVisibilityMap] = useState({});
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const { categories } = useCategories();
-  const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchQuestionsCountByCategory, countByCategory } = useQuestions();
+  const { questions, loading, error, customQuestions, fetchQuestions, addQuestion, updateQuestion, deleteQuestion, fetchCategories } = useQuestions();
   const { activeRepositories } = useRepo();
 
   const handleFilterChange = (name, value) => {
@@ -94,9 +94,7 @@ const Questions = () => {
       return;
 
     const selectedRepo = activeRepositories.find(repo => repo.id === repository);
-    console.log("Selected Repository:", selectedRepo);
     if (!selectedRepo) {
-      console.error(`Repository with ID ${repository} not found.`);
       return;
     }
 
@@ -104,8 +102,11 @@ const Questions = () => {
   }, [repository, category, difficulty, type, activeRepositories]);
 
   useEffect(() => {
-    // fetchQuestionsCountByCategory(category);
-  }, [category]);
+    const selectedRepo = activeRepositories.find(repo => repo.id === repository);
+    if (selectedRepo) {
+      fetchCategories(selectedRepo);
+    }
+  }, [repository]);
 
 
   return (

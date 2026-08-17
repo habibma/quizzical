@@ -3,16 +3,18 @@ import { getCategories as getTriviaAPICategories } from './triviaAPIService.js';
 
 export async function getCategories(repository) {
 
-    const capabilities = repository.capabilities.find(cap => cap.name.toLowerCase().includes('categories'));
-    if (!capabilities) {
-        throw new Error("No categories capability is configured for this repository.");
-    }
+    console.log("repository: ", repository);
+    const endpoint = repository.capabilities.find(cap => cap.name.toLowerCase() === "categories");
+
+    console.log(endpoint);
 
     const apiConfig = {
         baseUrl: repository.baseUrl,
-        endpoint: capabilities.endpoint,
-        method: capabilities.method,
+        endpoint: endpoint.path,
+        method: endpoint.method,
     };
+
+    console.log(apiConfig);
 
     switch (repository.adaptor) {
         case 'opentdb':
