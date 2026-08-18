@@ -1,62 +1,68 @@
 import { useState } from 'react'
 import { useQuiz } from '../../../context/Admin/QuizContext'
 
+import QuizCard from './QuizCard'
+import QuizModal from './QuizModal'
+
 import './Quizzes.css'
 
-const QuizCard = ({ quiz, onEdit, onDelete, onDuplicate, onPublish }) => {
-  return (
-    <div className='quiz-card'>
-      <h3 className='quiz-card--header'>{quiz.title}</h3>
-      <p>{quiz.description}</p>
-      <p>Category: {quiz.category}</p>
-      <p>Number of Questions: {quiz.questions.length}</p>
-      <p>Difficulty: {quiz.difficulty}</p>
-      <p>Repository: </p>
-      <ul>
-        {quiz.repositories.map(repo => (
-          <li key={repo.id}>{repo.name}</li>
-        ))}
-      </ul>
-      <p>Created: {quiz.createdAt}</p>
-      <p>Last Updated: {quiz.updatedAt}</p>
-      <p>Time Limit: {quiz.timeLimit} minutes</p>
-      <p>Status: {quiz.isPublished ? 'Published' : 'Draft'}</p>
-      <div className='quiz-card-actions'>
-        <button className='btn-primary' onClick={() => onEdit(quiz.id, quiz)}>
-          Edit
-        </button>
-        <button className='btn-secondary' onClick={() => {}}>
-          Preview
-        </button>
-        <button className='btn-success' onClick={() => onDuplicate(quiz.id)}>
-          Duplicate
-        </button>
-        <button className='btn-warning' onClick={() => onPublish(quiz.id)}>
-          Publish
-        </button>
-        <button className='btn-danger' onClick={() => onDelete(quiz.id)}>
-          Delete
-        </button>
-      </div>
-    </div>
-  )
-}
+
+const createEmptyQuiz = () => ({
+  general: {
+    title: '',
+    description: '',
+  },
+  content: {
+    repositories: [],
+    categories: [],
+    questionCount: 0,
+    questionSelection: 'random',
+  },
+  rules: {
+    timeLimit: 0,
+    attempts: 0,
+    pointsCorrect: 0,
+    pointsWrong: 0,
+    pointsSkipped: 0,
+    passingScore: 0,
+  },
+  rewards: {
+    completionXP: 0,
+    passXP: 0,
+    perfectScoreXP: 0,
+  },
+  access: {
+    status: 'draft',
+    visibility: 'class',
+  },
+});
 
 const Quizzes = () => {
+  const [inputValues, setInputValues] = useState(createEmptyQuiz());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingQuiz, setEditingQuiz] = useState(null);
 
   const { quizzes, loading, error, addQuiz, updateQuiz, deleteQuiz } = useQuiz();
 
+
+  // input change handler for the modal form
+ const handleInputChange = (section, e) => {
+  const { name, value } = e.target;
+
+  setInputValues(prev => ({
+    ...prev,
+    [section]: {
+      ...prev[section],
+      [name]: value,
+    },
+  }));
+};
+
+  // functions to handle quiz actions
   const handleAddQuiz = () => {
     const newQuiz = {
       id: Date.now(),
-      title: 'New Quiz',
-      description: 'A new quiz',
-      category: 'General',
-      questions: [],
-      repositories: [],
-      difficulty: 'Medium',
-      timeLimit: 10,
-      isPublished: false,
+      ...inputValues,
       createdAt: new Date().toDateString(),
       updatedAt: new Date().toDateString(),
     };
@@ -86,6 +92,11 @@ const Quizzes = () => {
         ...quizToDuplicate,
         id: Date.now(),
         title: `${quizToDuplicate.title} (Copy)`,
+        access: {
+          ...(quizToDuplicate.access),
+          status: "draft"
+        },
+        isPublished: false,
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
       };
@@ -105,6 +116,51 @@ const Quizzes = () => {
     }
   };
 
+  // functions to handle modal open/close and save
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingQuiz(null);
+  }
+
+  const handleSaveQuiz = () => {
+    if (editingQuiz) {
+      updateQuiz({
+        ...editingQuiz,
+        ...inputValues,
+        updatedAt: new Date().toDateString(),
+      });
+    } else {
+      addQuiz({
+        id: Date.now(),
+        ...inputValues,
+        createdAt: new Date().toDateString(),
+        updatedAt: new Date().toDateString(),
+      });
+    }
+
+    handleCloseModal();
+  };
+
+  const handleOpenEditModal = (quiz) => {
+    setEditingQuiz(quiz);
+    setIsModalOpen(true);
+  }
+
+  const handleOpenCreateModal = () => {
+    setEditingQuiz(null);
+    setIsModalOpen(true);
+  }
+
+  const modalProps = {
+    isOpen: isModalOpen,
+    onClose: handleCloseModal,
+    quiz: editingQuiz,
+    onSave: handleSaveQuiz,
+    isEditing: !!editingQuiz,
+    inputValues: inputValues,
+    onInputChange: handleInputChange
+  };
+
   return (
     <div className='quizzes'>
       <section className='quizzes-header'>
@@ -113,7 +169,7 @@ const Quizzes = () => {
       </section>
       <section className='quizzes-content'>
         <div className='quizzes-add'>
-          <button className='btn btn-primary' onClick={handleAddQuiz}>
+          <button className='btn btn-primary' onClick={handleOpenCreateModal}>
             Add Quiz +
           </button>
         </div>
@@ -124,12 +180,25 @@ const Quizzes = () => {
           {!loading && !error && quizzes.length > 0 && (
             <div className='quizzes-grid'>
               {quizzes.map(quiz => (
-                <QuizCard key={quiz.id} quiz={quiz} onEdit={handleEditQuiz} onDelete={handleDeleteQuiz} onDuplicate={handleDuplicateQuiz} onPublish={handlePublishQuiz} />
+                <QuizCard
+                  key={quiz.id}
+                  quiz={quiz}
+                  onEdit={handleOpenEditModal}
+                  onDelete={handleDeleteQuiz}
+                  onDuplicate={handleDuplicateQuiz}
+                  onPublish={handlePublishQuiz}
+                />
               ))}
             </div>
           )}
         </div>
+        {isModalOpen && (
+          <QuizModal
+            {...modalProps}
+          />
+        )}
       </section>
+
     </div>
   )
 }
