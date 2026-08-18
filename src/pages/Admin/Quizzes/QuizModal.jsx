@@ -12,7 +12,10 @@ const getFieldOptions = (field, inputValues) => {
 };
 
 const FormField = ({ field, inputValues, onInputChange, section }) => {
-	const value = inputValues[field.name] ?? (field.type === 'multiselect' ? [] : '');
+
+	const value =
+		inputValues[section]?.[field.name] ??
+		(field.type === 'multiselect' ? [] : '');
 	const options = getFieldOptions(field, inputValues);
 
 	return (

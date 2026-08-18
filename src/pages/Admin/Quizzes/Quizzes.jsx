@@ -38,6 +38,7 @@ const createEmptyQuiz = () => ({
 });
 
 const Quizzes = () => {
+
   const [inputValues, setInputValues] = useState(createEmptyQuiz());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingQuiz, setEditingQuiz] = useState(null);
@@ -46,17 +47,17 @@ const Quizzes = () => {
 
 
   // input change handler for the modal form
- const handleInputChange = (section, e) => {
-  const { name, value } = e.target;
+  const handleInputChange = (section, e) => {
+    const { name, value } = e.target;
 
-  setInputValues(prev => ({
-    ...prev,
-    [section]: {
-      ...prev[section],
-      [name]: value,
-    },
-  }));
-};
+    setInputValues(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [name]: value,
+      },
+    }));
+  };
 
   // functions to handle quiz actions
   const handleAddQuiz = () => {
@@ -69,37 +70,32 @@ const Quizzes = () => {
     addQuiz(newQuiz);
   };
 
-  const handleEditQuiz = (quizId, updatedQuiz) => {
-    const quizToUpdate = quizzes.find(quiz => quiz.id === quizId);
-    if (quizToUpdate) {
-      const updatedQuizData = {
-        ...quizToUpdate,
-        ...updatedQuiz,
-        updatedAt: new Date().toDateString(),
-      };
-      updateQuiz(updatedQuizData);
-    }
-  }
-
   const handleDeleteQuiz = (quizId) => {
     deleteQuiz(quizId);
   }
 
   const handleDuplicateQuiz = (quizId) => {
     const quizToDuplicate = quizzes.find(quiz => quiz.id === quizId);
+
     if (quizToDuplicate) {
       const newQuiz = {
         ...quizToDuplicate,
         id: Date.now(),
-        title: `${quizToDuplicate.title} (Copy)`,
-        access: {
-          ...(quizToDuplicate.access),
-          status: "draft"
+
+        general: {
+          ...quizToDuplicate.general,
+          title: `${quizToDuplicate.general.title} (Copy)`,
         },
-        isPublished: false,
+
+        access: {
+          ...quizToDuplicate.access,
+          status: 'draft',
+        },
+
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
       };
+
       addQuiz(newQuiz);
     }
   };
@@ -122,6 +118,18 @@ const Quizzes = () => {
     setEditingQuiz(null);
   }
 
+  const handleOpenEditModal = (quiz) => {
+    setEditingQuiz(quiz);
+    setInputValues(quiz);
+    setIsModalOpen(true);
+  }
+
+  const handleOpenCreateModal = () => {
+    setEditingQuiz(null);
+    setInputValues(createEmptyQuiz());
+    setIsModalOpen(true);
+  }
+
   const handleSaveQuiz = () => {
     if (editingQuiz) {
       updateQuiz({
@@ -140,16 +148,6 @@ const Quizzes = () => {
 
     handleCloseModal();
   };
-
-  const handleOpenEditModal = (quiz) => {
-    setEditingQuiz(quiz);
-    setIsModalOpen(true);
-  }
-
-  const handleOpenCreateModal = () => {
-    setEditingQuiz(null);
-    setIsModalOpen(true);
-  }
 
   const modalProps = {
     isOpen: isModalOpen,
