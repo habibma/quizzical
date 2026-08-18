@@ -20,6 +20,16 @@ const modalFields = [
 				optionsKey: 'categories',
 			},
 			{
+				name: 'difficulty',
+				label: 'Difficulty',
+				type: 'select',
+				options: [
+					{ value: 'easy', label: 'Easy' },
+					{ value: 'medium', label: 'Medium' },
+					{ value: 'hard', label: 'Hard' },
+				],
+			},
+			{
 				name: 'questionCount',
 				label: 'Question Count',
 				type: 'number',

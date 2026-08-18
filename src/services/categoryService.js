@@ -3,8 +3,11 @@ import { getCategories as getTriviaAPICategories } from './triviaAPIService.js';
 
 export async function getCategories(repository) {
 
-    const endpoint = repository.capabilities.find(cap => cap.name.toLowerCase() === "categories");
+    const endpoint = repository.capabilities.find(cap => cap.name.toLowerCase().includes('categories'));
 
+    if (!endpoint) {
+        throw new Error(`No categories endpoint found for repository: ${repository.name}`);
+    }
     const apiConfig = {
         baseUrl: repository.baseUrl,
         endpoint: endpoint.path,

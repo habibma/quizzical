@@ -7,7 +7,15 @@ const QuizCard = ({ quiz, onEdit, onDelete, onDuplicate, onPublish }) => {
 			<section className='quiz-card--content'>
 				<p className='quiz-card--description'>{quiz.general.description}</p>
 				<div className='quiz-card--meta'>
-					<p className='quiz-card--meta-item'>Questions: {quiz.content.questionCount}</p>
+					<p className='quiz-card--meta-item'>Repositories: {quiz.content.repositories.join(', ')}</p>
+					<p className='quiz-card--meta-item'>Categories: {quiz.content.categories.join(', ')}</p>
+				</div>
+				<div className='quiz-card--meta'>
+					<p className='quiz-card--meta-item'>Number of Questions: {quiz.content.questionCount}</p>
+					<p className='quiz-card--meta-item'>Question Selection: {quiz.content.questionSelection}</p>
+				</div>
+				<div className='quiz-card--meta'>
+					<p className='quiz-card--meta-item'>Difficulty: {quiz.rules.difficulty}</p>
 					<p className='quiz-card--meta-item'>Time Limit: {quiz.rules.timeLimit} mins</p>
 				</div>
 				<div className='quiz-card--meta'>
@@ -17,9 +25,7 @@ const QuizCard = ({ quiz, onEdit, onDelete, onDuplicate, onPublish }) => {
 				<div className='quiz-card--meta'>
 					<p className='quiz-card--meta-item'>Completion XP: {quiz.rewards.completionXP}</p>
 					<p className='quiz-card--meta-item'>Pass XP: {quiz.rewards.passXP}</p>
-					<div className='quiz-card--meta'>
-						<p className='quiz-card--meta-item'>Perfect Score XP: {quiz.rewards.perfectScoreXP}</p>
-					</div>
+					<p className='quiz-card--meta-item'>Perfect Score XP: {quiz.rewards.perfectScoreXP}</p>
 				</div>
 				<div className='quiz-card--meta'>
 					<p className='quiz-card--meta'>Updated At: {quiz.updatedAt}</p>

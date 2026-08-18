@@ -1,57 +1,57 @@
-import DashboardIcon from "../../../../assets/icons/DashboardIcon"
-import QuestionsIcon from "../../../../assets/icons/QuestionsIcon"
-import QuizzesIcon from "../../../../assets/icons/QuizzesIcon"
-import CategoriesIcon from "../../../../assets/icons/categoriesIcon"
-import SettingsIcon from "../../../../assets/icons/SettingsIcon"
-import StatisticsIcon from "../../../../assets/icons/StatisticsIcon"
-import ThemesIcon from "../../../../assets/icons/ThemesIcon"
-import ApiIcon from "../../../../assets/icons/ApiIcon"
-import RepoIcon from "../../../../assets/icons/RepoIcon"
+import DashboardIcon from "../../../../assets/icons/DashboardIcon";
+import RepoIcon from "../../../../assets/icons/RepoIcon";
+import CategoriesIcon from "../../../../assets/icons/CategoriesIcon";
+import QuestionsIcon from "../../../../assets/icons/QuestionsIcon";
+import QuizzesIcon from "../../../../assets/icons/QuizzesIcon";
+import StatisticsIcon from "../../../../assets/icons/StatisticsIcon";
+import SettingsIcon from "../../../../assets/icons/SettingsIcon";
+import ThemesIcon from "../../../../assets/icons/ThemesIcon";
+import ApiIcon from "../../../../assets/icons/ApiIcon";
 
 export const sidebarItems = [
   {
-    title: 'Dashboard',
-    path: '/admin',
+    title: "Dashboard",
+    path: "/admin",
     icon: DashboardIcon,
   },
   {
-    title: 'Questions',
-    path: '/admin/questions',
-    icon: QuestionsIcon,
-  },
-  {
-    title: 'Quizzes',
-    path: '/admin/quizzes',
-    icon: QuizzesIcon,
-  },
-  {
-    title: 'Categories',
-    path: '/admin/categories',
-    icon: CategoriesIcon,
-  },
-  {
-    title: 'Settings',
-    path: '/admin/settings',
-    icon: SettingsIcon,
-  },
-  {
-    title: 'Repositories',
-    path: '/admin/repository',
+    title: "Repositories",
+    path: "/admin/repositories",
     icon: RepoIcon,
   },
   {
-    title: 'API',
-    path: '/admin/api',
-    icon: ApiIcon,
+    title: "Categories",
+    path: "/admin/categories",
+    icon: CategoriesIcon,
   },
   {
-    title: 'Statistics',
-    path: '/admin/statistics',
+    title: "Questions",
+    path: "/admin/questions",
+    icon: QuestionsIcon,
+  },
+  {
+    title: "Quizzes",
+    path: "/admin/quizzes",
+    icon: QuizzesIcon,
+  },
+  {
+    title: "Statistics",
+    path: "/admin/statistics",
     icon: StatisticsIcon,
   },
   {
-    title: 'Themes',
-    path: '/admin/themes',
+    title: "Settings",
+    path: "/admin/settings",
+    icon: SettingsIcon,
+  },
+  {
+    title: "Themes",
+    path: "/admin/themes",
     icon: ThemesIcon,
   },
-]
+  {
+    title: "API Management",
+    path: "/admin/api",
+    icon: ApiIcon,
+  },
+];

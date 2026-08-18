@@ -52,7 +52,7 @@ function AppRoutes({ theme, toggleTheme }) {
                 <Route path="themes" element={<Themes />} />
                 <Route path="api" element={<Api />} />
                 <Route path="statistics" element={<Statistics />} />
-                <Route path="repository" element={<Repositories />} />
+                <Route path="repositories" element={<Repositories />} />
             </Route>
         </Routes>
     )

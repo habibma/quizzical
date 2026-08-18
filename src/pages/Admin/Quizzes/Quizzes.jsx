@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useQuiz } from '../../../context/Admin/QuizContext'
+import { useRepo } from '../../../context/Admin/ReposContext'
+import { useCategories } from '../../../context/Admin/CategoryContext'
 
 import QuizCard from './QuizCard'
 import QuizModal from './QuizModal'
@@ -45,16 +47,34 @@ const Quizzes = () => {
 
   const { quizzes, loading, error, addQuiz, updateQuiz, deleteQuiz } = useQuiz();
 
+  const { activeRepositories } = useRepo();
+  const { getActiveCategories } = useCategories();
+
+  const activeCategories = getActiveCategories(inputValues.content.repositories);
+
+  const repositoryOptions = activeRepositories.map(repo => ({
+    value: repo.id,
+    label: repo.title,
+  }));
+  const categoryOptions = activeCategories.map(category => ({
+    value: `${category.repositoryId}-${category.id}`,
+    label: category.displayName,
+  }));
+
 
   // input change handler for the modal form
   const handleInputChange = (section, e) => {
-    const { name, value } = e.target;
+    const { name, value, multiple, selectedOptions } = e.target;
+
+    const newValue = multiple
+      ? Array.from(selectedOptions, option => option.value)
+      : value;
 
     setInputValues(prev => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [name]: value,
+        [name]: newValue,
       },
     }));
   };
@@ -156,8 +176,12 @@ const Quizzes = () => {
     onSave: handleSaveQuiz,
     isEditing: !!editingQuiz,
     inputValues: inputValues,
-    onInputChange: handleInputChange
+    onInputChange: handleInputChange,
+    repositoryOptions: repositoryOptions,
+    categoryOptions: categoryOptions,
   };
+
+  console.log('quizzes:', quizzes);
 
   return (
     <div className='quizzes'>
