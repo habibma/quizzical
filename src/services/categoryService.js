@@ -1,4 +1,4 @@
-import { getCategories as getOpenTDBCategories } from './opentdbService.js';
+import { getCategories as getOpenTDBCategories } from './openTDBService.js';
 import { getCategories as getTriviaAPICategories } from './triviaAPIService.js';
 
 export async function getCategories(repository) {
