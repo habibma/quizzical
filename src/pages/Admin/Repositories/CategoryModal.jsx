@@ -22,7 +22,7 @@ const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory }) => {
                 <td>{item.displayName}</td>
                 <td>{item.enabled ? "Enabled" : "Disabled"}</td>
                 <td>
-                  <button onClick={() => onToggleCategory(repoId, item.id)}>
+                  <button className= {item.enabled ? "btn-danger" : "btn-success"} onClick={() => onToggleCategory(repoId, item.id)}>
                     {item.enabled ? "Disable" : "Enable"}
                   </button>
                 </td>
