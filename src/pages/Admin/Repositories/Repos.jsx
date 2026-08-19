@@ -8,7 +8,7 @@ import CategoryModal from './CategoryModal.jsx';
 
 import './Repos.css';
 
-const RepositoriesList = ( { repositories, toggleRepository, onViewCategories } ) => {
+const RepositoriesList = ( { repositories, toggleRepository, onViewCategories, numberOfCategories } ) => {
 
   return (
     <div className="repositories-list">
@@ -18,7 +18,7 @@ const RepositoriesList = ( { repositories, toggleRepository, onViewCategories } 
           title={repo.title}
           description={repo.description}
           numberOfQuestions={repo.numberOfQuestions}
-          numberOfCategories={repo.numberOfCategories}
+          numberOfCategories={numberOfCategories(repo.id)}
           difficulty={repo.difficulty}
           isActive={repo.isActive}
           capabilities={repo.capabilities}
@@ -46,12 +46,16 @@ const Repositories = () => {
     setIsModalOpen(true);
   }
 
-  const selectedCategories = selectedRepository ? categoriesByRepository[selectedRepository] ?? [] : [];
+  const activeCategories = selectedRepository ? categoriesByRepository[selectedRepository] ?? [] : [];
 
   const handleCloseModal = () => {
     setSelectedRepository(null);
     setIsModalOpen(false);
   }
+
+  const numberOfActiveCategories = (repoId) => {
+    return categoriesByRepository[repoId]?.filter(category => category.enabled).length || 0;
+  };
 
   return (
     <div className="repositories">
@@ -65,6 +69,7 @@ const Repositories = () => {
                   repositories={repositories}
                   toggleRepository={toggleRepository}
                   onViewCategories={handleViewCategories}
+                  numberOfCategories={numberOfActiveCategories}
                 />
             ) : (
                 <p>No repositories available.</p>
@@ -74,7 +79,7 @@ const Repositories = () => {
             <CategoryModal
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
-                list={selectedCategories}
+                list={activeCategories}
                 repoId={selectedRepository}
                 onToggleCategory={toggleCategory}
             />
