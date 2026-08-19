@@ -3,7 +3,7 @@ import React from 'react'
 import Button from './Button.jsx'
 import './Modal.css'
 
-function Modal({ isOpen, onClose, children }) {
+function Modal({ isOpen, onClose, children, customClass }) {
 
     if (!isOpen) {
         return null;
@@ -11,7 +11,7 @@ function Modal({ isOpen, onClose, children }) {
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal">
+            <div className={customClass || "modal"}>
                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <div className="modal-content">
                         {children}

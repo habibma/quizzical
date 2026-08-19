@@ -16,7 +16,7 @@ const Categories = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [editedName, setEditedName] = useState('');
 
-  const { categories, toggleCategory, updateCategoryName, selectedRepoId, selectRepository } = useCategories();
+  const { categoriesByRepository, toggleCategory, updateCategoryName, selectedRepoId, selectRepository } = useCategories();
 
   const { activeRepositories } = useRepo();
 
@@ -64,7 +64,7 @@ const Categories = () => {
             </tr>
           </thead>
           <tbody className='categories-table-body'>
-            {categories.map(category => (
+            {categoriesByRepository[selectedRepoId]?.map(category => (
               <tr key={category.id}>
                 <td>{category.displayName}</td>
                 <td>
@@ -72,7 +72,7 @@ const Categories = () => {
                     <input
                       type="checkbox"
                       checked={category.enabled}
-                      onChange={() => toggleCategory(category.id)}
+                      onChange={() => toggleCategory(selectedRepoId, category.id)}
                     />
                     <span className="slider"></span>
                   </label>

@@ -10,8 +10,7 @@ const transformApiToRepository = (api) => {
         apiId: api.id,
 
         title: api.name,
-        description: api.description ?? `API Version: ${api.version}`,
-        version: api.version,
+        description: api.description ?? "No description available.",
 
         baseUrl: api.baseUrl,
 

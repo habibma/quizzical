@@ -27,62 +27,45 @@ const loadCategoriesFromStorage = () => {
 
 export function CategoryProvider({ children }) {
 
-    const [selectedRepoId, setSelectedRepoId] = useState('');
+    const [selectedRepoId, setSelectedRepoId] = useState(null);
     const [categoriesByRepository, setCategoriesByRepository] =
         useState(loadCategoriesFromStorage);
 
     const { activeRepositories } = useRepo();
 
 
-    // Select repository and load its categories
-    const selectRepository = async (repoId) => {
-        setSelectedRepoId(repoId);
+    // Load categories for a repository
+    const getCategoriesForRepository = async (repoId) => {
+        // Return cached categories
+        if (categoriesByRepository[repoId]) {
+            return categoriesByRepository[repoId];
+        }
 
         const repository = activeRepositories.find(
             repo => repo.id === repoId
         );
 
-        if (!repository) return;
+        if (!repository) return [];
 
-        // Already loaded?
-        if (categoriesByRepository[repoId]) {
-            return;
+       try {
+            const apiCategories = await getCategories(repository.apiId);
+            const normalizedCategories = apiCategories.map(normalizeCategory);
+            setCategoriesByRepository(prev => ({
+                ...prev,
+                [repoId]: normalizedCategories,
+            }));
+            return normalizedCategories;
+        } catch (error) {
+            console.error("Error fetching categories for repository:", error);
+            return [];
         }
-
-        const fetchedCategories = await getCategories(repository);
-
-        const normalizedCategories =
-            fetchedCategories.map(normalizeCategory);
-
-        setCategoriesByRepository(prev => ({
-            ...prev,
-            [repoId]: normalizedCategories,
-        }));
     };
 
-
-    // Persist categories
-    useEffect(() => {
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(categoriesByRepository)
-        );
-    }, [categoriesByRepository]);
-
-
-    // Categories for currently selected repository
-    const categories = categoriesByRepository[selectedRepoId] ?? [];
-
-
-    // Only enabled categories
-    const activeCategories = categories.filter(category => category.enabled);
-
-
-    const toggleCategory = (id) => {
+    const toggleCategory = (repoId, categoryId) => {
         setCategoriesByRepository(prev => ({
             ...prev,
-            [selectedRepoId]: (prev[selectedRepoId] ?? []).map(category =>
-                category.id === id
+            [repoId]: (prev[repoId] ?? []).map(category =>
+                category.id === categoryId
                     ? {
                         ...category,
                         enabled: !category.enabled,
@@ -92,7 +75,21 @@ export function CategoryProvider({ children }) {
         }));
     };
 
+    // Persist categories
+    useEffect(() => {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(categoriesByRepository)
+        );
+    }, [categoriesByRepository]);
 
+    // Select repository
+    const selectRepository = (repoId) => {
+        setSelectedRepoId(repoId);
+        getCategoriesForRepository(repoId);
+    };
+
+    // Rename category
     const renameCategory = (id, displayName) => {
         setCategoriesByRepository(prev => ({
             ...prev,
@@ -107,8 +104,7 @@ export function CategoryProvider({ children }) {
         }));
     };
 
-
-    // Get enabled categories for one or more repositories
+    // Get enabled categories from multiple repositories
     const getActiveCategories = (repoIds) => {
         return repoIds.flatMap(repoId =>
             (categoriesByRepository[repoId] ?? [])
@@ -124,9 +120,6 @@ export function CategoryProvider({ children }) {
     return (
         <CategoryContext.Provider
             value={{
-                categories,
-                activeCategories,
-
                 categoriesByRepository,
 
                 selectedRepoId,
@@ -136,6 +129,7 @@ export function CategoryProvider({ children }) {
                 renameCategory,
                 updateCategoryName: renameCategory,
 
+                getCategoriesForRepository,
                 getActiveCategories,
             }}
         >
