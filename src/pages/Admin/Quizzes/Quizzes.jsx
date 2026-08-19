@@ -112,6 +112,7 @@ const Quizzes = () => {
           status: 'draft',
         },
 
+        isPublished: false,
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
       };
