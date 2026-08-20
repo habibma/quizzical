@@ -3,14 +3,14 @@ import { adaptOpenTriviaQuestions } from "./adaptors/openTriviaAdapter.js";
 
 export function resolveEndpoint(repository, candidates) {
 
-  if (!repository?.capabilities?.length) {
-    console.error("No capabilities found for the repository:", repository);
+  if (!repository?.endpoints?.length) {
+    console.error("No endpoints found for the repository:", repository);
     return null;
   }
 
   const normalizedCandidates = candidates.map(candidate => candidate.toLowerCase());
 
-  const endpoint = repository.capabilities.find(endpoint => {
+  const endpoint = repository.endpoints.find(endpoint => {
     const name = (endpoint.name || "").toLowerCase();
     const path = (endpoint.path || "").toLowerCase();
 

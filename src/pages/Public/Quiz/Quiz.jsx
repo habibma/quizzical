@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuiz } from '../../../context/Public/QuizContext.jsx'
 import Questionnaire from './Questionnaire'

@@ -16,6 +16,7 @@ export const QuizProvider = ({ children }) => {
 
     const selectedRepoId = localStorage.getItem('categoriesSourceApiId') || null;
 
+    console.log("Selected Repository ID:", selectedRepoId);
     const fetchQuestions = async ({ amount, category, difficulty, type }) => {
         setLoading(true)
         setError(null)

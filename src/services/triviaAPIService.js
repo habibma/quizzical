@@ -4,14 +4,14 @@ import { adaptTriviaApiQuestions } from "./adaptors/theTriviaAdapter.js";
 
 export function resolveEndpoint(repository, candidates) {
 
-  if (!repository?.capabilities?.length) {
-    console.error("No capabilities found for the repository:", repository);
+  if (!repository?.endpoints?.length) {
+    console.error("No endpoints found for the repository:", repository);
     return null;
   }
 
   const normalizedCandidates = candidates.map(candidate => candidate.toLowerCase());
 
-  const endpoint = repository.capabilities.find(endpoint => {
+  const endpoint = repository.endpoints.find(endpoint => {
     const name = (endpoint.name || "").toLowerCase();
     const path = (endpoint.path || "").toLowerCase();
 
@@ -40,6 +40,7 @@ export async function getCategories(apiConfig) {
 export async function getQuestions(repository, options = {}) {
   const endpoint = resolveEndpoint(repository, ["questions", "get questions", "fetch questions"]);
 
+  console.log("Resolved endpoint for fetching questions:", endpoint);
   const url = new URL(
     repository.baseUrl + endpoint.path
   );

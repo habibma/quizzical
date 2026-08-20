@@ -13,20 +13,20 @@ import './Home.css'
 
 const Home = () => {
 
-    const [category, setCategory] = useState("");
-    const { categories } = useCategories();
+    const { categoriesByRepository } = useCategories();
     const { questions, answers, score, loading, error, fetchQuestions, selectAnswer, checkAnswers, resetQuiz } = useQuiz();
     const { settings } = useSettings();
     const navigate = useNavigate();
+
+    const [category, setCategory] = useState("");
 
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
     }
     // Filter to only enabled categories
-    const enabledCategories = categories.filter(cat => cat.enabled !== false);
-
+    const allEnabledCategories = Object.values(categoriesByRepository).flat().filter(category => category.enabled);
     // Build category options dynamically from enabled categories
-    const categoryOptions = enabledCategories.map(cat => (
+    const categoryOptions = allEnabledCategories.map(cat => (
         <Input
             className='subject'
             key={cat.id}
