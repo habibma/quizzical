@@ -40,7 +40,6 @@ export async function getCategories(apiConfig) {
 export async function getQuestions(repository, options = {}) {
   const endpoint = resolveEndpoint(repository, ["questions", "get questions", "fetch questions"]);
 
-  console.log("Resolved endpoint for fetching questions:", endpoint);
   const url = new URL(
     repository.baseUrl + endpoint.path
   );
