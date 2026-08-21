@@ -3,6 +3,8 @@ import { getCategories as getTriviaAPICategories } from './triviaAPIService.js';
 
 export async function getCategories(repository) {
 
+    console.log('Fetching categories for repository:', repository);
+
     const endpoint = repository.capabilities.find(cap => cap.name.toLowerCase().includes('categories'));
 
     if (!endpoint) {

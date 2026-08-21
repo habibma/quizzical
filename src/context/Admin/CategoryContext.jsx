@@ -48,7 +48,7 @@ export function CategoryProvider({ children }) {
         if (!repository) return [];
 
        try {
-            const apiCategories = await getCategories(repository.apiId);
+            const apiCategories = await getCategories(repository);
             const normalizedCategories = apiCategories.map(normalizeCategory);
             setCategoriesByRepository(prev => ({
                 ...prev,
