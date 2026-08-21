@@ -10,6 +10,18 @@ export const navItems = [
   },
   {
     path: "/admin",
-    title: "Admin"
+    title: "Platform Admin"
+  },
+  {
+    path: "/principal",
+    title: "Principal"
+  },
+  {
+    path: "/teacher",
+    title: "Teacher"
+  },
+  {
+    path: "/student",
+    title: "Student"
   }
 ];

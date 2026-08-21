@@ -16,6 +16,12 @@ import Statistics from '../pages/PlatformAdmin/Statistics/Statistics.jsx'
 import Themes from '../pages/PlatformAdmin/Themes/Themes.jsx'
 import Api from '../pages/PlatformAdmin/Api/Api'
 import Repositories from '../pages/PlatformAdmin/Repositories/Repos'
+// principal pages
+import PrincipalDashboard from '../pages/SchoolAdmin/Dashboard/Dashboard.jsx'
+// teacher pages
+import TeacherDashboard from '../pages/Teacher/Dashboard/Dashboard.jsx'
+// student pages
+import StudentDashboard from '../pages/Student/Dashboard/Dashboard.jsx'
 // context providers
 import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
 import { QuizProvider } from '../context/Public/QuizContext.jsx'
@@ -23,22 +29,22 @@ import { QuizProvider } from '../context/Public/QuizContext.jsx'
 function AppRoutes({ theme, toggleTheme }) {
     return (
         <Routes>
-            <Route
-                path="/"
-                element={
-                    <QuizProvider>
-                        <PublicLayout
-                            theme={theme}
-                            toggleTheme={toggleTheme}
-                        />
-                    </QuizProvider>
-                }
-            >
+            <Route path="/" element={
+                <QuizProvider>
+                    <PublicLayout
+                        theme={theme}
+                        toggleTheme={toggleTheme}
+                    />
+                </QuizProvider>
+            }>
                 <Route index element={<Home />} />
                 <Route path="quiz" element={<Quiz />} />
                 <Route path="result" element={<Result />} />
                 <Route path="about" element={<About />} />
             </Route>
+            <Route path="/principal" element={<PrincipalDashboard />} />
+            <Route path="/teacher" element={<TeacherDashboard />} />
+            <Route path="/student" element={<StudentDashboard />} />
             <Route path="/admin" element={<AdminLayout theme={theme} toggleTheme={toggleTheme} />} >
                 <Route index element={<Dashboard />} />
                 <Route path="questions" element={
