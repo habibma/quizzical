@@ -1,0 +1,89 @@
+.categories {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+
+    .lead {
+        font-size: 1rem;
+    }
+}
+
+.categories-table-container {
+    overflow-x: auto;
+}
+
+.categories-table {
+    width: 100%;
+    border: 1px solid var(--border-color);
+
+    button {
+        padding: 5px 10px;
+        width: auto;
+        border-radius: 4px;
+    }
+}
+
+.categories-table th,
+.categories-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.categories-table th {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+}
+
+.categories-table-body tr:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .modal-header {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .modal-input {
+        padding: 8px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    .modal-form {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+}
+
+/* filters */
+.categories--table-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}

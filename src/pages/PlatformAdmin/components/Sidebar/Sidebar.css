@@ -1,0 +1,139 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 250px;
+    background-color: var(--surface-color);
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease;
+    height: 100vh;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+
+        @media (max-width: 768px) {
+            margin-top: 50px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 100vh;
+        z-index: 101;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.opened {
+        transform: translateX(0);
+    }
+}
+
+.sidebar.collapsed {
+    width: 80px;
+    h2 {
+       display: none;
+    }
+
+    .sidebar-menu {
+        margin-top: 50px;
+    }
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu-item {
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        border-radius: var(--border-radius);
+        transition: background-color 0.3s;
+    }
+}
+
+.sidebar-link {
+    text-decoration: none;
+    color: var(--link-color);
+    transition: color 0.3s;
+
+    &:hover {
+        color: var(--hover-color);
+    }
+}
+
+.sidebar-link.active {
+    font-weight: bold;
+    color: var(--active-color);
+
+    .sidebar-icon {
+        color: var(--active-color);
+    }
+}
+
+.sidebar-link.active:hover {
+    color: var(--hover-color);
+}
+
+.sidebar-icon {
+    margin-right: 10px;
+    vertical-align: middle;
+    color: var(--icon-color);
+}
+
+.toggle-sidebar-btn {
+    width: auto;
+    padding: 5px 10px;
+    border: none;
+    color: var(--text-color);
+    border-radius: var(--border-radius);
+    background-color: var(--primary-color);
+    transition: background-color 0.3s;
+
+    margin: 0;
+
+    &:hover {
+        background-color: var(--hover-color);
+        color: #111;
+    }
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.sidebar-footer .toggle-sidebar-btn {
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    padding: 10px;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+
+    display: none;
+    @media (max-width: 768px) {
+        display: block;
+    }
+}
+
+
