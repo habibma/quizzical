@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import Modal from '../../../components/Modal'
-import Input from '../../../components/Input'
-import Button from '../../../components/Button'
+import Modal from '../../../components/ui/Modal'
+import Input from '../../../components/ui/Input'
+import Button from '../../../components/ui/Button'
 
 import './QuestionModal.css'
 

@@ -1,5 +1,5 @@
-import Modal from '../../../components/Modal';
-import Input from '../../../components/Input';
+import Modal from '../../../components/ui/Modal';
+import Input from '../../../components/ui/Input';
 
 import modalFields from './modalFields';
 

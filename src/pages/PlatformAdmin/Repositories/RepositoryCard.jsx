@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useCategories } from "../../../context/Admin/CategoryContext.jsx";
-import Button from "../../../components/Button";
-import Input from "../../../components/Input";
-import Modal from "../../../components/Modal";
+import Button from "../../../components/ui/Button";
+import Input from "../../../components/ui/Input";
+import Modal from "../../../components/ui/Modal";
 
 const Checkbox = ({ label, checked, onChange }) => {
   return (

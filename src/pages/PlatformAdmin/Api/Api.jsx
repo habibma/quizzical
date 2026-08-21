@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useApi } from "../../../context/Admin/ApiContext.jsx";
-import Modal from "../../../components/Modal";
-import Input from "../../../components/Input";
-import Button from "../../../components/Button";
+import Modal from "../../../components/ui/Modal";
+import Input from "../../../components/ui/Input";
+import Button from "../../../components/ui/Button";
 import EditIcon from "../../../assets/icons/EditIcon";
 import DeleteIcon from "../../../assets/icons/DeleteIcon";
 import ApiModal from "./ApiModal";

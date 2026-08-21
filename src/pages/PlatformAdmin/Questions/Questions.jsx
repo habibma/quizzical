@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Button from '../../../components/Button';
 import QuestionModal from './QuestionModal';
 import QuestionFilters from './QuestionFilters';
 import ApiQuestionsTable from './ApiQuestionsTable';
@@ -11,6 +10,8 @@ import './Questions.css'
 import { useCategories } from '../../../context/Admin/CategoryContext';
 import { useQuestions } from '../../../context/Admin/QuestionsContext';
 import { useRepo } from '../../../context/Admin/ReposContext';
+
+import Button from '../../../components/ui/Button';
 
 const Questions = () => {
 

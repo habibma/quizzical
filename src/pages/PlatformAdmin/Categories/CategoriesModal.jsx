@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Modal from '../../../components/Modal.jsx'
-import Button from '../../../components/Button.jsx'
-import Input from '../../../components/Input.jsx'
+import Modal from '../../../components/ui/Modal';
+import Button from '../../../components/ui/Button';
+import Input from '../../../components/ui/Input';
 
 const CategoriesModal = ({ isOpen, onClose, category, onSave }) => {
     const [editedName, setEditedName] = useState(category?.displayName || '');

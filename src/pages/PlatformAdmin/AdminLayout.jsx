@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { sidebarItems } from "./sidebarItems";
 
 import './AdminLayout.css'
-import Sidebar from "./components/Sidebar/Sidebar";
+import Sidebar from "../../components/navigation/Sidebar/Sidebar";
 import Header from "./components/Header";
 
 const AdminLayout = ({ theme, toggleTheme }) => {
@@ -28,7 +29,7 @@ const AdminLayout = ({ theme, toggleTheme }) => {
 
     return (
         <div className="admin-layout">
-            <Sidebar className="admin-sidebar" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} />
+            <Sidebar className="admin-sidebar" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} items={sidebarItems} />
             {opened && <div className="overlay" onClick={() => setOpened(false)}></div>}
             <Header className="admin-header" opened={opened} handleToggleSidebarOpen={handleToggleSidebarOpen} theme={theme} toggleTheme={toggleTheme} />
             <main className="admin-main">

@@ -1,17 +1,12 @@
-// Quiz Settings
-// ✅ Default number of questions
-// ✅ Shuffle questions
-// ✅ Shuffle answers
-// ✅ Default difficulty
-// ✅ Default question type (Multiple Choice / True-False)
-// ✅ Time limit (later)
-
-import { useSettings } from '../../../context/Admin/SettingsContext'
-import Input from '../../../components/Input'
-import Button from '../../../components/Button'
-import { defaultSettings } from '../../../config/defaultSettings'
-import './Settings.css'
 import { useEffect, useState } from 'react'
+import { useSettings } from '../../../context/Admin/SettingsContext'
+
+import Input from '../../../components/ui/Input'
+import Button from '../../../components/ui/Button'
+
+import { defaultSettings } from '../../../config/defaultSettings'
+
+import './Settings.css'
 
 const Settings = () => {
 

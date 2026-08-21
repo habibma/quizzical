@@ -1,16 +1,15 @@
 import SidebarItem from "./SidebarItem";
-import { sidebarItems } from "./sidebarItems";
-import Button from "../../../../components/Button";
+import Button from "../../ui/Button";
 
 import './Sidebar.css';
 
-const Sidebar = ( { collapsed, handleToggleSidebar, opened } ) => {
+const Sidebar = ( { collapsed, handleToggleSidebar, opened, items } ) => {
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${opened ? 'opened' : ''}`}>
       <h2>Admin Panel</h2>
       <nav className="admin-nav">
         <ul className="sidebar-menu">
-          {sidebarItems.map((item, index) => (
+          {items.map((item, index) => (
             <SidebarItem
               key={index}
               icon={item.icon}

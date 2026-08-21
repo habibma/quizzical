@@ -1,4 +1,4 @@
-import Modal from '../../../components/Modal.jsx';
+import Modal from '../../../components/ui/Modal';
 
 const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory }) => {
 
