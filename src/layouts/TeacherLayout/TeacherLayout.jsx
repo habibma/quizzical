@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { sidebarItems } from "./sidebarItems";
 
-import './AdminLayout.css'
+import '../AdminLayout.css'
 import Sidebar from "../../components/navigation/Sidebar/Sidebar";
-import Header from "./components/Header";
+import Header from "../components/Header";
 
-const AdminLayout = ({ theme, toggleTheme }) => {
+const TeacherLayout = ({ theme, toggleTheme }) => {
 
     const [collapsed, setCollapsed] = useState(false);
     const [opened, setOpened] = useState(false);
@@ -39,4 +39,4 @@ const AdminLayout = ({ theme, toggleTheme }) => {
     )
 }
 
-export default AdminLayout
+export default TeacherLayout

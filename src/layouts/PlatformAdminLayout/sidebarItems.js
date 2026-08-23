@@ -15,11 +15,6 @@ export const sidebarItems = [
     icon: DashboardIcon,
   },
   {
-    title: "Repositories",
-    path: "/admin/repositories",
-    icon: RepoIcon,
-  },
-  {
     title: "Categories",
     path: "/admin/categories",
     icon: CategoriesIcon,
@@ -28,11 +23,6 @@ export const sidebarItems = [
     title: "Questions",
     path: "/admin/questions",
     icon: QuestionsIcon,
-  },
-  {
-    title: "Quizzes",
-    path: "/admin/quizzes",
-    icon: QuizzesIcon,
   },
   {
     title: "Statistics",
