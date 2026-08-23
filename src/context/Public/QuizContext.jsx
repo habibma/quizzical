@@ -14,17 +14,17 @@ export const QuizProvider = ({ children }) => {
 
     const { getApiById } = useApi()
 
-    const selectedRepoId = localStorage.getItem('categoriesSourceApiId') || null;
-
-    console.log("Selected Repository ID:", selectedRepoId);
-    const fetchQuestions = async ({ amount, category, difficulty, type }) => {
+    const fetchQuestions = async ({ repoId, amount, category, difficulty, type }) => {
         setLoading(true)
         setError(null)
 
-        const api = getApiById(selectedRepoId)
+        const api = getApiById(repoId)
         try {
+            const api = getApiById(repoId)
+            if (!api) {
+                throw new Error(`API with ID ${repoId} not found.`)
+            }
             const fetchedQuestions = await getQuestions(api, { amount, category, difficulty, type })
-            console.log("Fetched questions:", fetchedQuestions)
             setQuestions(fetchedQuestions)
             setAnswers([])
             setScore(0)
