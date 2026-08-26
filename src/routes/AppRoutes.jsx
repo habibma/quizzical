@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 // public pages
 import PublicLayout from '../layouts/PublicLayout/PublicLayout'
+import HomePage from '../pages/HomePage/HomePage'
 import Home from '../pages/Public/Home/Home'
 import Quiz from '../pages/Public/Quiz/Quiz'
 import Result from '../pages/Public/Result/Result'
@@ -45,7 +46,7 @@ function AppRoutes({ theme, toggleTheme }) {
                     />
                 </QuizProvider>
             }>
-                <Route index element={<Home />} />
+                <Route index element={<HomePage />} />
                 <Route path="quiz" element={<Quiz />} />
                 <Route path="result" element={<Result />} />
                 <Route path="about" element={<About />} />
