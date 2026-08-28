@@ -1,18 +1,31 @@
 
 .btn {
-  width: 150px;
-  padding: 15px;
-  border-radius: var(--border-radius);
-  border: none;
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 46px;
+    padding: 0 20px;
+
+    border-radius: var(--radius-md);
+
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform var(--transition),
+        opacity var(--transition);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
 }
 
 .btn:active {
-  box-shadow: inset 2px 2px rgb(92, 92, 92);
-  color: var(--secondary-color);
-  user-select: none;
+    transform: translateY(0);
 }
 
 .btn:disabled {

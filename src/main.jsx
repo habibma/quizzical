@@ -6,8 +6,8 @@ import { SettingsProvider } from './context/Admin/SettingsContext.jsx'
 import { ApiProvider } from './context/Admin/ApiContext.jsx'
 import { ReposProvider } from './context/Admin/ReposContext.jsx'
 import { QuizProvider } from './context/Admin/QuizContext.jsx'
-import App from './App.jsx'
 import './styles/index.css'
+import App from './App.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
