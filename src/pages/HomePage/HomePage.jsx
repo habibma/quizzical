@@ -134,7 +134,7 @@ const HomePage = () => {
                     </ul>
 
                     <Link
-                        to="/explore-quizzes"
+                        to="/custom-quiz"
                         className="btn btn-primary"
                     >
                         Explore Quizzes →

@@ -2,10 +2,10 @@ import { Routes, Route } from 'react-router-dom'
 // public pages
 import PublicLayout from '../layouts/PublicLayout/PublicLayout'
 import HomePage from '../pages/HomePage/HomePage'
-import Home from '../pages/Public/Home/Home'
 import Quiz from '../pages/Public/Quiz/Quiz'
 import Result from '../pages/Public/Result/Result'
 import About from '../pages/Public/About/About'
+import CustomQuiz from '../pages/Public/CustomQuiz/CustomQuiz'
 // Platform Admin pages
 import PlatformAdminLayout from '../layouts/PlatformAdminLayout/PlatformAdminLayout'
 import Dashboard from '../pages/PlatformAdmin/Dashboard/Dashboard.jsx'
@@ -50,6 +50,7 @@ function AppRoutes({ theme, toggleTheme }) {
                 <Route path="quiz" element={<Quiz />} />
                 <Route path="result" element={<Result />} />
                 <Route path="about" element={<About />} />
+                <Route path="custom-quiz" element={<CustomQuiz />} />
             </Route>
             <Route path="/admin" element={<PlatformAdminLayout theme={theme} toggleTheme={toggleTheme} />} >
                 <Route index element={<PrincipalDashboard />} />

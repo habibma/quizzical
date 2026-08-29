@@ -49,40 +49,6 @@ p.info {
    BUTTONS
 ========================= */
 
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 46px;
-    padding: 0 20px;
-
-    border-radius: var(--radius-md);
-
-    font: inherit;
-    font-weight: 600;
-    text-decoration: none;
-
-    cursor: pointer;
-
-    transition:
-        transform var(--transition),
-        opacity var(--transition);
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn:active {
-    transform: translateY(0);
-}
-
-.btn:disabled {
-  opacity: 0.65;
-  cursor: auto;
-}
-
 /* primary */
 .btn-primary {
     background-color: var(--primary-color);
@@ -253,5 +219,9 @@ span {
 }
 
 li {
+    color: var(--text-secondary-color);
+}
+
+legend {
     color: var(--text-secondary-color);
 }

@@ -1,0 +1,140 @@
+/* custom quiz page */
+.custom-quiz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-color);
+}
+
+.custom-quiz-header {
+  text-align: center;
+  margin-bottom: 20px;
+
+  .quiz-eyebrow {
+    font-size: 12px;
+    color: var(--text-secondary-color);
+    margin-bottom: 5px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 0;
+  }
+}
+
+/* quiz builder */
+
+.custom-quiz .quiz-builder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 600px;
+  width: 100%;
+  margin-top: 20px;
+
+  .quiz-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      span {
+        font-size: 14px;
+        color: var(--text-secondary-color);
+      }
+    }
+  }
+
+  .quiz-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+
+    .settin-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+  }
+}
+
+/* subjects */
+
+.custom-quiz .subjects {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 700px;
+  margin: 20px auto;
+  border: 1px solid #DBDEF0;
+  border-radius: var(--radius-sm);
+  padding: 20px;
+
+  label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: var(--radius-sm);
+    padding: 5px 10px;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    margin: auto;
+
+    &:hover {
+      scale: 1.05;
+
+      transition: background-color 0.3s ease;
+    }
+  }
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + label {
+  background-color: var(--success-color);
+  border-color: var(--hover-color);
+}
+
+input[type="radio"]:disabled + label {
+  opacity: 0.65;
+}
+
+.custom-quiz .error {
+  color: var(--danger-color);
+  font-size: 12px;
+  margin-block: 10px;
+  font-weight: light;
+}
+
+/* quiz action */
+.custom-quiz .quiz-action {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+
+  .error {
+    color: var(--danger-color);
+    font-size: 12px;
+    margin-top: 10px;
+    font-weight: light;
+  } 
+}
+
