@@ -1,0 +1,17 @@
+.footer {
+    padding: 20px;
+    text-align: center;
+    font-family: 'poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--footer-text-color);
+    background-color: var(--footer-bg-color);
+}
+
+.small {
+    font-family: 'poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--text-color);
+}

@@ -2,8 +2,8 @@ import { Outlet } from "react-router-dom";
 
 import './PublicLayout.css'
 
-import Header from "../../pages/Public/components/Header/Header";
-import Footer from "../../components/Footer";
+import Header from "../../components/layout/Header/Header";
+import Footer from "../../components/layout/Footer/Footer";
 
 const PublicLayout = ({ theme, toggleTheme }) => {
     return (

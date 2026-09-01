@@ -1,0 +1,20 @@
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+.nav-item {
+  margin: 0 10px;
+  font-size: 14px;
+  color: var(--link-color);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+  }
+}
