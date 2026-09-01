@@ -7,11 +7,7 @@
     color: var(--header-text-color);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 102;
+    position: relative;
 }
 
 .header-left {
@@ -39,6 +35,9 @@
     height: 20px;
     border: none;
     cursor: pointer;
+
+    position: absolute;
+    z-index: 102;
 }
 
 .burger-menu .burger-bar {
@@ -47,6 +46,7 @@
     border-radius: 2px;
     margin: 3px 0;
     height: 3px;
+
 }
 
 @media screen and (min-width: 768px) {

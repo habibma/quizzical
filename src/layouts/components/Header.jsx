@@ -11,7 +11,6 @@ const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleS
     return (
         <header className="admin-header">
             <div className="header-left">
-                <Logo />
                 <h2 className="page-title">{pageTitle}</h2>
                 <div className="burger-menu" onClick={handleToggleSidebarOpen}>
                     <span className="burger-bar"></span>
