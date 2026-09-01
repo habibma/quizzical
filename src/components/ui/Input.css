@@ -2,6 +2,7 @@
 .label {
     margin: 0.5rem 0.5rem 0.5rem 0;
     font-weight: bold;
+    color: var(--text-primary-color);
 }
 
 select {
@@ -23,15 +24,15 @@ select {
     width: 100%;
 }
 
-.input[type="radio"] {
+input[type="radio"] {
   display: none;
 }
 
-.input[type="radio"]:checked + label {
+input[type="radio"]:checked + label {
   background-color: var(--success-color);
   border-color: var(--hover-color);
 }
 
-.input[type="radio"]:disabled + label {
+input[type="radio"]:disabled + label {
   opacity: 0.65;
 }

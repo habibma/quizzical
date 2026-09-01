@@ -66,25 +66,12 @@ const CustomQuiz = () => {
         <div className="container">
             <section className="custom-quiz">
 
-                <div className="custom-quiz-header">
-                    <span className="quiz-eyebrow">
-                        BUILD YOUR CHALLENGE
-                    </span>
-
-                    <h1>Create Your Quiz</h1>
-
-                    <p>
-                        Choose a subject, customize your quiz,
-                        and test your knowledge.
-                    </p>
-                </div>
-
                 <div className="quiz-builder">
 
                     {/* STEP 1 */}
                     <div className="quiz-section">
                         <div className="section-title">
-                            <span>1</span>
+                            <span className="number">1</span>
                             <div>
                                 <h2>Choose a Subject</h2>
                                 <p>Select what you want to be tested on.</p>
@@ -118,7 +105,7 @@ const CustomQuiz = () => {
                     {/* STEP 2 */}
                     <div className="quiz-section">
                         <div className="section-title">
-                            <span>2</span>
+                            <span className="number">2</span>
                             <div>
                                 <h2>Quiz Settings</h2>
                                 <p>Customize your challenge.</p>
@@ -127,49 +114,42 @@ const CustomQuiz = () => {
 
                         <div className="quiz-settings">
 
-                            <div className="setting-group">
-                                <Input
-                                    type="number"
-                                    label="Number of Questions"
-                                    name="numberOfQuestions"
-                                    value={quizSettings.numberOfQuestions}
-                                    onChange={handleSettingChange}
-                                    min={1}
-                                    max={100}
-                                />
-                            </div>
+                            <Input
+                                type="number"
+                                label="Number of Questions"
+                                name="numberOfQuestions"
+                                value={quizSettings.numberOfQuestions}
+                                onChange={handleSettingChange}
+                                min={1}
+                                max={100}
+                            />
 
-                            <div className="setting-group">
-                                <Input
-                                    as="select"
-                                    label="Difficulty"
-                                    name="difficulty"
-                                    value={quizSettings.difficulty}
-                                    onChange={handleSettingChange}
-                                    options={[
-                                        { value: "any", label: "Any Difficulty" },
-                                        { value: "easy", label: "Easy" },
-                                        { value: "medium", label: "Medium" },
-                                        { value: "hard", label: "Hard" },
-                                    ]}
-                                />
-                            </div>
+                            <Input
+                                as="select"
+                                label="Difficulty"
+                                name="difficulty"
+                                value={quizSettings.difficulty}
+                                onChange={handleSettingChange}
+                                options={[
+                                    { value: "any", label: "Any Difficulty" },
+                                    { value: "easy", label: "Easy" },
+                                    { value: "medium", label: "Medium" },
+                                    { value: "hard", label: "Hard" },
+                                ]}
+                            />
 
-
-                            <div className="setting-group">
-                                <Input
-                                    as="select"
-                                    label="Question Type"
-                                    name="questionType"
-                                    value={quizSettings.questionType}
-                                    onChange={handleSettingChange}
-                                    options={[
-                                        { value: "any", label: "Any Type" },
-                                        { value: "multiple", label: "Multiple Choice" },
-                                        { value: "boolean", label: "True / False" },
-                                    ]}
-                                />
-                            </div>
+                            <Input
+                                as="select"
+                                label="Question Type"
+                                name="questionType"
+                                value={quizSettings.questionType}
+                                onChange={handleSettingChange}
+                                options={[
+                                    { value: "any", label: "Any Type" },
+                                    { value: "multiple", label: "Multiple Choice" },
+                                    { value: "boolean", label: "True / False" },
+                                ]}
+                            />
 
                         </div>
                     </div>

@@ -4,31 +4,23 @@
   flex-direction: column;
   align-items: center;
   color: var(--text-color);
+  margin: 20px auto;
+  max-width: 800px;
 }
 
-.custom-quiz-header {
+.number {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
   text-align: center;
-  margin-bottom: 20px;
-
-  .quiz-eyebrow {
-    font-size: 12px;
-    color: var(--text-secondary-color);
-    margin-bottom: 5px;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-  }
-
-  p {
-    font-size: 1rem;
-    margin-bottom: 0;
-  }
+  line-height: 30px;
+  font-weight: bold;
 }
 
 /* quiz builder */
-
 .custom-quiz .quiz-builder {
   display: flex;
   flex-direction: column;
@@ -39,39 +31,25 @@
   margin-top: 20px;
 
   .quiz-section {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 
     .section-title {
       display: flex;
       align-items: center;
-      gap: 10px;
-
-      span {
-        font-size: 14px;
-        color: var(--text-secondary-color);
-      }
+      gap: 40px;
     }
   }
 
   .quiz-settings {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 10px;
-    width: 100%;
-
-    .settin-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-  }
+    width: 100%;}
 }
 
-/* subjects */
 
+/* subjects */
 .custom-quiz .subjects {
   display: flex;
   flex-wrap: wrap;
@@ -103,19 +81,6 @@
   }
 }
 
-input[type="radio"] {
-  display: none;
-}
-
-input[type="radio"]:checked + label {
-  background-color: var(--success-color);
-  border-color: var(--hover-color);
-}
-
-input[type="radio"]:disabled + label {
-  opacity: 0.65;
-}
-
 .custom-quiz .error {
   color: var(--danger-color);
   font-size: 12px;
@@ -129,12 +94,13 @@ input[type="radio"]:disabled + label {
   display: flex;
   justify-content: center;
   gap: 10px;
+  margin-block: 20px;
+  padding: 10px;
 
   .error {
     color: var(--danger-color);
     font-size: 12px;
-    margin-top: 10px;
     font-weight: light;
-  } 
+  }
 }
 
