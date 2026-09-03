@@ -1,19 +1,134 @@
+.about-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 100px;
+    background-color: var(--background-color);
+    color: var(--text-primary-color);
+
+    span {
+        font-size: 18px;
+        color: var(--text-secondary-color);
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 18px;
+        line-height: 1.6;
+    }
+}
+
+.about-hero {
+    text-align: center;
+    margin-block: 40px;
+}
+
+.about-intro {
+    text-align: center;
+    margin-block: 40px;
+}
+
+.about-audience {
+    text-align: center;
+    margin-block: 40px;
+
+    .audience-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .audience-card {
+        background-color: var(--card-background-color);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+
+        h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+    }
+}
+
+.about-features {
+    text-align: center;
+    margin-block: 40px;
+
+    .feature-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px; 
+    }
+
+    .feature-item {
+        background-color: var(--card-background-color);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+
+        h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.4;
+        }
+    }
+    .feature-number {
+        font-size: 32px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+}
+
+.about-xp {
+    text-align: center;
+    margin-block: 40px;
+
+    .xp-flow {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-block: 20px;
+    }
+}
+
+
 .content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
-
-    h2 {
-        margin-bottom: 20px;
-    }
-
-    p {
-        max-width: 600px;
-        text-align: center;
-        margin-bottom: 20px;
-    }
 }
 
 .about-title {
