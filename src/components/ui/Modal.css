@@ -40,3 +40,39 @@
     align-items: center;
     gap: 20px;
 }
+
+.modal h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.modal p {
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.modal legend {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.modal label {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 5px;
+}
+
+.modal .connection-error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.modal .connection-success {
+    color: green;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}

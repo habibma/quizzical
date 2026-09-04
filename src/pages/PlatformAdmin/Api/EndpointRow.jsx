@@ -16,6 +16,7 @@ const EndpointRow = ({ index, endpoint, onChange, onRemove, onConnect, isConnect
                 name="name"
                 value={endpoint.name || ''}
                 onChange={handleInputChange}
+                disabled={endpoint.name === 'Categories' || endpoint.name === 'Questions'}
             />
             <Input
                 as ="select"
@@ -25,21 +26,21 @@ const EndpointRow = ({ index, endpoint, onChange, onRemove, onConnect, isConnect
                     { value: "PUT", label: "PUT" },
                     { value: "DELETE", label: "DELETE" }
                 ]}
-                label={`Endpoint ${index + 1} Method`}
+                label="Method"
                 id={`endpoint-${index}-method`}
                 name="method"
                 value={endpoint.method || ''}
                 onChange={handleInputChange}
             />
             <Input
-                label={`Endpoint ${index + 1} Path`}
+                label="Path"
                 id={`endpoint-${index}-path`}
                 name="path"
                 value={endpoint.path || ''}
                 onChange={handleInputChange}
             />
             <Input
-                label={`Endpoint ${index + 1} Description`}
+                label="Description"
                 id={`endpoint-${index}-description`}
                 name="description"
                 value={endpoint.description || ''}

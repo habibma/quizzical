@@ -63,10 +63,25 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
         }));
     };
 
-    const addEndpoint = () => {
+    const addCategoryEndpoint = () => {
+        if (apiData.endpoints.some(ep => ep.name === 'Categories')) {
+            alert("Category endpoint already exists.");
+            return;
+        }
         setApiData(prevData => ({
             ...prevData,
-            endpoints: [...prevData.endpoints, { name: '', method: '', path: '', description: '' }]
+            endpoints: [...prevData.endpoints, { name: 'Categories', method: '', path: '', description: '' }]
+        }));
+    }
+
+    const addQuestionEndpoint = () => {
+        if (apiData.endpoints.some(ep => ep.name === 'Questions')) {
+            alert("Question endpoint already exists.");
+            return;
+        }
+        setApiData(prevData => ({
+            ...prevData,
+            endpoints: [...prevData.endpoints, { name: 'Questions', method: '', path: '', description: '' }]
         }));
     }
 
@@ -273,7 +288,8 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
                             error={connectionError}
                         />
                     ))}
-                    <Button type="button" className="btn-primary" text="Add Endpoint" onClick={addEndpoint} />
+                    <Button type="button" className="btn-primary" text="Add Category Endpoint" onClick={addCategoryEndpoint} />
+                    <Button type="button" className="btn-primary" text="Add Question Endpoint" onClick={addQuestionEndpoint} />
                 </fieldset>
                 <fieldset className="api-form--adaptor-name">
                     <legend>Adaptor Name</legend>
