@@ -22,12 +22,7 @@
     overflow-x: auto;
 }
 
-.api-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-}
-
+/* Api table */
 .api-table {
     width: 100%;
     border-collapse: collapse;
@@ -35,10 +30,12 @@
 
 .api-table--header {
     background-color: var(--surface-color);
+    color: var(--primary-color);
 }
 
 .api-table--body {
     background-color: var(--background-color);
+    color: var(--text-primary-color);
 }
 
 .api-table tr {
@@ -51,7 +48,6 @@
     text-align: left;
 }
 
-/* Api table */
 .api-table--actions {
     display: flex;
     justify-content: center;
@@ -72,6 +68,13 @@
             color: var(--primary-color);
         }
     }
+}
+
+/* Api actions */
+.api-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
 }
 
 .add-api-btn {
