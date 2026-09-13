@@ -1,22 +1,17 @@
-// This context is used to manage question in Admin page
-
 import { useState, useContext, createContext } from 'react';
 import { getQuestions } from '../../services/questionService.js';
 import { getCategories } from '../../services/categoryService.js';
 import { useApi } from './ApiContext';
 
-
 const QuestionsContext = createContext();
 
 export const QuestionsProvider = ({ children }) => {
-
 
     const [questions, setQuestions] = useState([]);
     const [customQuestions, setCustomQuestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [countByCategory, setCountByCategory] = useState({});
-
 
     const fetchQuestions = async (repository, params) => {
         setLoading(true);
@@ -32,7 +27,7 @@ export const QuestionsProvider = ({ children }) => {
         }
     };
 
-    const fetchCategories = async (repository) => { //// <<<-----
+    const fetchCategories = async (repository) => {
         setLoading(true);
         setError(null);
 

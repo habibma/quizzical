@@ -16,7 +16,7 @@ const transformApiToRepository = (api) => {
 
         isActive: api.enabled,
 
-        capabilities: api.endpoints.map(endpoint => ({
+        endpoints: api.endpoints?.map(endpoint => ({
             id: endpoint.id,
             name: endpoint.name,
             description: endpoint.description,
@@ -32,9 +32,6 @@ export const ReposProvider = ({ children }) => {
 
     const [repositories, setRepositories] = useState([]);
     const { apis } = useApi();
-
-
-    const apiNames = apis.map(api => api.name);
 
     const toggleRepository = (id) => {
         setRepositories(prevRepos => {

@@ -23,6 +23,7 @@ export function resolveEndpoint(repository, candidates) {
   return endpoint;
 }
 
+// to get catedories
 export async function getCategories(apiConfig) {
   if (!apiConfig) {
     throw new Error("No default API is configured.");
@@ -37,6 +38,7 @@ export async function getCategories(apiConfig) {
   return adaptTriviaApiCategories(data);
 }
 
+// to get questions
 export async function getQuestions(repository, options = {}) {
   const endpoint = resolveEndpoint(repository, ["questions", "get questions", "fetch questions"]);
 
@@ -60,7 +62,6 @@ export async function getQuestions(repository, options = {}) {
     url.searchParams.set("difficulties", difficulty);
   }
 
-  console.log("Constructed URL for fetching questions:", url.toString());
   const data = await request(url.toString(), {
     method: endpoint.method
   });

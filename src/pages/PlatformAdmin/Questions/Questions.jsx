@@ -97,6 +97,7 @@ const Questions = () => {
       return;
 
     const selectedRepo = activeRepositories.find(repo => repo.id === repository);
+    console.log("Selected repository:", selectedRepo);
     if (!selectedRepo) {
       return;
     }
@@ -117,7 +118,6 @@ const Questions = () => {
 
     const loadCategories = async () => {
       const categories = await fetchCategories(selectedRepo);
-      console.log(categories);
       setFilterCategories(categories);
     }
 
