@@ -96,7 +96,6 @@ const StudentModal = ({ isOpen, onClose, onSave }) => {
                         placeholder="Enter student name"
                         value={formData.name}
                         onChange={handleChange}
-                        required
                     />
                     {errors.name && <span className="field-error">{errors.name}</span>}
                 </div>
@@ -109,7 +108,6 @@ const StudentModal = ({ isOpen, onClose, onSave }) => {
                         placeholder="Enter class name"
                         value={formData.className}
                         onChange={handleChange}
-                        required
                     />
                     {errors.className && <span className="field-error">{errors.className}</span>}
                 </div>
@@ -123,7 +121,6 @@ const StudentModal = ({ isOpen, onClose, onSave }) => {
                         placeholder="Enter email address"
                         value={formData.email}
                         onChange={handleChange}
-                        required
                     />
                     {errors.email && <span className="field-error">{errors.email}</span>}
                 </div>

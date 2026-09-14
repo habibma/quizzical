@@ -27,6 +27,7 @@ import SchoolReports from '../pages/SchoolAdmin/Reports/Reports.jsx'
 import SchoolParents from '../pages/SchoolAdmin/Parents/Parents.jsx'
 import SchoolSettings from '../pages/SchoolAdmin/Settings/Settings.jsx'
 import StudentProfile from '../pages/SchoolAdmin/Students/StudentProfile.jsx'
+import TeacherProfile from '../pages/SchoolAdmin/Teachers/TeacherProfile.jsx'
 // teacher pages
 import TeacherLayout from '../layouts/TeacherLayout/TeacherLayout'
 import TeacherDashboard from '../pages/Teacher/Dashboard/Dashboard.jsx'
@@ -78,6 +79,7 @@ function AppRoutes({ theme, toggleTheme }) {
                 <Route path="students" element={<SchoolStudents />} />
                 <Route path="students/:studentId" element={<StudentProfile />} />
                 <Route path="teachers" element={<SchoolTeachers />} />
+                <Route path="teachers/:teacherId" element={<TeacherProfile />} />
                 <Route path="classes" element={<SchoolClasses />} />
                 <Route path="courses" element={<SchoolCourses />} />
                 <Route path="reports" element={<SchoolReports />} />

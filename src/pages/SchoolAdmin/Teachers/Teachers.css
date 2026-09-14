@@ -1,12 +1,11 @@
-
-.students-container {
+.teachers-container {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     padding: 1.25rem;
 }
 
-.students-header {
+.teachers-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -17,13 +16,13 @@
     border: 1px solid rgba(99, 102, 241, 0.12);
 }
 
-.students-header__content {
+.teachers-header__content {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.students-header__eyebrow {
+.teachers-header__eyebrow {
     margin: 0;
     font-size: 0.72rem;
     letter-spacing: 0.12em;
@@ -32,31 +31,26 @@
     font-weight: 700;
 }
 
-.students-header--title {
+.teachers-header--title {
     margin: 0;
     font-size: clamp(1.75rem, 2vw, 2.5rem);
     font-weight: 800;
     color: var(--card-text-primary-color);
 }
 
-.students-header--description {
+.teachers-header--description {
     margin: 0;
     font-size: 0.96rem;
     color: var(--card-text-secondary-color);
 }
 
-.students-header__actions {
-    display: flex;
-    align-items: center;
-}
-
-.student-summary-grid {
+.teacher-summary-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem;
 }
 
-.student-summary-card {
+.teacher-summary-card {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -67,19 +61,19 @@
     box-shadow: var(--shadow-sm);
 }
 
-.student-summary-card span {
+.teacher-summary-card span {
     font-size: 0.82rem;
     color: var(--card-text-secondary-color);
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
 
-.student-summary-card strong {
+.teacher-summary-card strong {
     font-size: 1.8rem;
     color: var(--card-text-primary-color);
 }
 
-.students-content {
+.teachers-content {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -90,15 +84,15 @@
     box-shadow: var(--shadow-sm);
 }
 
-.students-toolbar {
+.teachers-toolbar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    flex-wrap: wrap;
 }
 
-.students-toolbar__controls {
+.teachers-toolbar__controls {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -106,8 +100,8 @@
     flex: 1;
 }
 
-.students-toolbar__search,
-.students-toolbar__select {
+.teachers-toolbar__search,
+.teachers-toolbar__select {
     min-height: 44px;
     padding: 0.75rem 0.9rem;
     border: 1px solid rgba(148, 163, 184, 0.4);
@@ -117,22 +111,22 @@
     font: inherit;
 }
 
-.students-toolbar__search {
+.teachers-toolbar__search {
     min-width: min(100%, 260px);
     flex: 1 1 220px;
 }
 
-.students-toolbar__select {
+.teachers-toolbar__select {
     min-width: 170px;
 }
 
-.students-actions {
+.teachers-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
 }
 
-.students-list-header {
+.teachers-list-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -140,29 +134,25 @@
     padding-top: 0.5rem;
 }
 
-.students-list-header h2 {
+.teachers-list-header h2 {
     margin: 0;
     font-size: 1.2rem;
     color: var(--card-text-primary-color);
 }
 
-.students-list-header span {
+.teachers-list-header span {
     color: var(--card-text-secondary-color);
     font-size: 0.9rem;
 }
 
-.students-list {
+.teachers-list {
     display: grid;
     gap: 0.9rem;
 }
 
-/* ======================
-    Student Item Styles
-=========================*/
-
-.student-item {
+.teacher-item {
     display: grid;
-    grid-template-columns: minmax(0, 2.2fr) minmax(120px, 1fr) minmax(120px, 0.9fr) auto;
+    grid-template-columns: minmax(0, 2.2fr) minmax(140px, 1fr) minmax(140px, 1fr) minmax(120px, 0.9fr) auto;
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.1rem;
@@ -171,57 +161,23 @@
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    cursor: pointer;
-    outline: none;
 }
 
-.student-item:hover,
-.student-item:focus-visible {
+.teacher-item:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
     border-color: rgba(99, 102, 241, 0.35);
 }
 
-.student-item--selected {
-    border-color: rgba(99, 102, 241, 0.5);
-    background: rgba(99, 102, 241, 0.04);
-}
-
-.student-item__identity {
+.teacher-item__identity {
     display: flex;
     align-items: center;
     gap: 0.9rem;
     min-width: 0;
 }
 
-.student-item__meta,
-.student-item__status {
-    min-width: 0;
-}
-
-.student-item--remove {
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: rgba(242, 78, 30, 0.08);
-    color: var(--danger-color);
-    border-radius: 999px;
-    font-size: 1.5rem;
-    line-height: 1;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.student-item--remove:hover {
-    background: rgba(242, 78, 30, 0.15);
-    transform: scale(1.04);
-}
-
-.student-item--profile-pic,
-.student-item--profile-placeholder {
+.teacher-item--profile-pic,
+.teacher-item--profile-placeholder {
     width: 52px;
     height: 52px;
     border-radius: 50%;
@@ -234,51 +190,30 @@
     flex-shrink: 0;
 }
 
-.student-item--profile-pic {
+.teacher-item--profile-pic {
     object-fit: cover;
 }
 
-.student-item--info {
+.teacher-item--info {
     min-width: 0;
 }
 
-.student-item--topline {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 0.2rem;
-}
-
-.student-item--name {
-    margin: 0;
+.teacher-item--name {
+    margin: 0 0 0.2rem;
     font-size: 1.05rem;
     font-weight: 700;
     color: var(--card-text-primary-color);
 }
 
-.student-item--grade {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 34px;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
-    background: rgba(34, 197, 94, 0.12);
-    color: var(--success-color);
-    font-size: 0.72rem;
-    font-weight: 700;
-}
-
-.student-item--class,
-.student-item--email {
+.teacher-item--email,
+.teacher-item--subject,
+.teacher-item--classes {
     margin: 0;
     color: var(--card-text-secondary-color);
     font-size: 0.88rem;
 }
 
-.student-item--email {
-    margin-top: 0.2rem;
+.teacher-item--email {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -300,28 +235,51 @@
     color: var(--success-color);
 }
 
-.status-badge--invited {
-    background: rgba(99, 102, 241, 0.12);
-    color: var(--primary-color);
-}
-
-.status-badge--pending {
+.status-badge--on-leave {
     background: rgba(245, 166, 35, 0.12);
     color: var(--warning-color);
 }
 
-@media (max-width: 768px) {
-    .student-item {
-        grid-template-columns: 1fr;
-        align-items: flex-start;
-    }
-
-    .student-item--remove {
-        align-self: flex-end;
-    }
+.status-badge--inactive {
+    background: rgba(148, 163, 184, 0.15);
+    color: var(--text-secondary-color);
 }
 
-.students-empty {
+.teacher-item__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.teacher-item__view,
+.teacher-item__remove {
+    border: none;
+    border-radius: 999px;
+    padding: 0.5rem 0.85rem;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.teacher-item__view {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-color);
+}
+
+.teacher-item__remove {
+    background: rgba(242, 78, 30, 0.1);
+    color: var(--danger-color);
+}
+
+.teacher-item__view:hover,
+.teacher-item__remove:hover {
+    transform: translateY(-1px);
+}
+
+.teachers-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -336,96 +294,69 @@
     text-align: center;
 }
 
-.students-empty h3,
-.students-empty p {
+.teachers-empty h3,
+.teachers-empty p {
     margin: 0;
 }
 
-/* ===================
+
+/* ====================
     Modal Styles
-===================== */
-.student-modal,
-.confirm-modal {
-    width: min(520px, calc(100vw - 2rem));
-}
-
-.student-modal__header,
-.confirm-modal__header {
-    margin-bottom: 1rem;
-}
-
-.student-modal__header h2,
-.confirm-modal__header h2 {
-    margin: 0 0 0.35rem;
-    font-size: 1.7rem;
-    color: var(--danger-color);
-}
-
-.student-modal__header p,
-.confirm-modal__message {
-    margin: 0;
-    color: var(--card-text-secondary-color);
-    line-height: 1.5;
-}
-
-.student-modal__form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-}
-
-.student-modal__field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    text-align: left;
-}
-
-.field-error {
-    font-size: 0.78rem;
-    color: var(--danger-color);
-}
-
+======================*/
 .modal-actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
-    margin-top: 0.5rem;
+    margin-top: 1.5rem;
 }
 
-.confirm-modal__message {
-    margin-bottom: 1.25rem;
-    font-size: 1rem;
+
+/* ====================
+    Responsive Design
+=======================*/
+
+@media (max-width: 900px) {
+    .teacher-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .teacher-item {
+        grid-template-columns: 1fr;
+        align-items: flex-start;
+    }
+
+    .teacher-item__actions {
+        justify-content: flex-start;
+    }
 }
 
-.students-footer {
-    color: var(--card-text-secondary-color);
-    text-align: center;
-    font-size: 0.85rem;
-}
-
-@media (max-width: 768px) {
-    .students-header {
+@media (max-width: 640px) {
+    .teachers-header {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .student-summary-grid {
+    .teacher-summary-grid {
         grid-template-columns: 1fr;
     }
 
-    .students-toolbar {
-        align-items: stretch;
-    }
-
-    .students-toolbar__controls,
-    .students-actions {
+    .teachers-toolbar__controls,
+    .teachers-actions {
         width: 100%;
     }
 
-    .students-toolbar__search,
-    .students-toolbar__select {
+    .teachers-toolbar__search,
+    .teachers-toolbar__select {
         width: 100%;
     }
+}
+
+
+/* ======================
+    Confirm Remove Modal
+=========================*/
+.confirm-modal__header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--danger-color);
 }
