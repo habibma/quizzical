@@ -1,0 +1,123 @@
+
+.students-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.students-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+
+    .students-header--title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--card-text-primary-color);
+    }
+    .students-header--description {
+        font-size: 0.9rem;
+        color: var(--card-text-secondary-color);
+        margin-top: 10px;
+    }
+}
+
+.students-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    background-color: var(--container-bg-color);
+}
+
+.students-actions {
+    margin-top: 20px;
+}
+
+.students-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Student Item Styles */
+.student-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--card-bg-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    min-width: 250px;
+
+    position: relative;
+}
+
+.student-item--profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.student-item--info {
+    flex-grow: 1;
+}
+
+.student-item--name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--card-text-primary-color);
+}
+
+.student-item--class {
+    font-size: 0.9rem;
+    color: var(--card-text-secondary-color);
+}
+
+.student-item--email {
+    font-size: 0.8rem;
+    color: var(--card-text-tertiary-color);
+}
+
+.student-item--grade {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--card-text-primary-color);
+}
+
+.student-item--remove {
+    font-size: 1.2rem;
+    color: var(--danger-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    &:hover {
+        color: var(--danger-hover-color);
+    }
+}
+
+/* Student Actions Styles */
+.students-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Modal Styles */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 20px;
+}
