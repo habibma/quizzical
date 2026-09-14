@@ -8,11 +8,12 @@ function Modal({ isOpen, onClose, children, customClass }) {
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className={customClass || "modal"}>
-                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                    <div className="modal-content">
-                        {children}
-                    </div>
+            <div
+                className={customClass ? `modal ${customClass}` : 'modal'}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="modal-content">
+                    {children}
                 </div>
             </div>
         </div>
