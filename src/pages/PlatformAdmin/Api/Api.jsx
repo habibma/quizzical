@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useApi } from "../../../context/Admin/ApiContext.jsx";
 
 import Modal from "../../../components/ui/Modal";
@@ -17,7 +17,54 @@ const Api = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedApiSource, setSelectedApiSource] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const { apis, addApi, updateApi, removeApi } = useApi();
+
+  const getHealthStatus = (api) => {
+    if (!api.enabled) {
+      return { label: 'Offline', className: 'health-badge--offline' };
+    }
+
+    if (!api.endpoints || api.endpoints.length === 0) {
+      return { label: 'Warning', className: 'health-badge--warning' };
+    }
+
+    return { label: 'Healthy', className: 'health-badge--healthy' };
+  };
+
+  const filteredApis = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+
+    return apis.filter((api) => {
+      const searchableText = [api.name, api.adaptor, api.baseUrl, api.provider]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      const matchesSearch = !query || searchableText.includes(query);
+
+      if (!matchesSearch) {
+        return false;
+      }
+
+      if (statusFilter === 'all') {
+        return true;
+      }
+
+      const healthStatus = getHealthStatus(api).label.toLowerCase();
+
+      if (statusFilter === 'enabled') {
+        return api.enabled;
+      }
+
+      if (statusFilter === 'disabled') {
+        return !api.enabled;
+      }
+
+      return healthStatus === statusFilter;
+    });
+  }, [apis, searchTerm, statusFilter]);
 
   const handleAddApi = () => {
     setSelectedApiSource(null);
@@ -66,6 +113,8 @@ const Api = () => {
   const totalApis = apis.length;
   const enabledApis = apis.filter((api) => api.enabled).length;
   const defaultApis = apis.filter((api) => api.isDefault).length;
+  const healthyApis = apis.filter((api) => getHealthStatus(api).label === 'Healthy').length;
+  const offlineApis = apis.filter((api) => getHealthStatus(api).label === 'Offline').length;
 
   return (
     <div className="api-container">
@@ -91,12 +140,37 @@ const Api = () => {
           <strong>{enabledApis}</strong>
         </div>
         <div className="api-summary-card">
-          <span>Default</span>
-          <strong>{defaultApis}</strong>
+          <span>Healthy</span>
+          <strong>{healthyApis}</strong>
         </div>
         <div className="api-summary-card">
-          <span>Sources</span>
-          <strong>2</strong>
+          <span>Offline</span>
+          <strong>{offlineApis}</strong>
+        </div>
+      </section>
+
+      <section className="api-toolbar">
+        <div className="api-toolbar__search">
+          <label htmlFor="api-search">Search APIs</label>
+          <input
+            id="api-search"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search by name, adaptor, or URL"
+          />
+        </div>
+
+        <div className="api-toolbar__filter">
+          <label htmlFor="api-status-filter">Filter</label>
+          <select id="api-status-filter" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option value="all">All</option>
+            <option value="healthy">Healthy</option>
+            <option value="warning">Warning</option>
+            <option value="offline">Offline</option>
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
         </div>
       </section>
 
@@ -107,51 +181,67 @@ const Api = () => {
               <th>Name</th>
               <th>Adaptor</th>
               <th>Status</th>
+              <th>Health</th>
               <th>Default</th>
               <th>Endpoints</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody className="api-table--body">
-            {apis.map((api) => (
-              <tr key={api.id}>
-                <td className="api-table__name">{api.name}</td>
-                <td>{api.adaptor}</td>
-                <td>
-                  <span className={`status-badge ${api.enabled ? 'status-badge--enabled' : 'status-badge--disabled'}`}>
-                    {api.enabled ? 'Enabled' : 'Disabled'}
-                  </span>
-                </td>
-                <td>
-                  <span className={`status-badge ${api.isDefault ? 'status-badge--default' : 'status-badge--muted'}`}>
-                    {api.isDefault ? 'Default' : 'Optional'}
-                  </span>
-                </td>
-                <td>
-                  <ul className="api-endpoints-list">
-                    {api.endpoints.map((endpoint) => (
-                      <li key={endpoint.id}>
-                        {endpoint.name} <span>({endpoint.method})</span>
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td className="api-table--actions">
-                  <Button
-                    className="btn-secondary action-btn"
-                    text={<EditIcon />}
-                    onClick={() => hanldeEditApi(api)}
-                    title="Edit API"
-                  />
-                  <Button
-                    className="btn-danger action-btn"
-                    text={<DeleteIcon />}
-                    onClick={() => handleDeleteApi(api)}
-                    title="Delete API"
-                  />
+            {filteredApis.length > 0 ? filteredApis.map((api) => {
+              const healthStatus = getHealthStatus(api);
+
+              return (
+                <tr key={api.id}>
+                  <td className="api-table__name">{api.name}</td>
+                  <td>{api.adaptor}</td>
+                  <td>
+                    <span className={`status-badge ${api.enabled ? 'status-badge--enabled' : 'status-badge--disabled'}`}>
+                      {api.enabled ? 'Enabled' : 'Disabled'}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`health-badge ${healthStatus.className}`}>
+                      {healthStatus.label}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`status-badge ${api.isDefault ? 'status-badge--default' : 'status-badge--muted'}`}>
+                      {api.isDefault ? 'Default' : 'Optional'}
+                    </span>
+                  </td>
+                  <td>
+                    <ul className="api-endpoints-list">
+                      {api.endpoints.map((endpoint) => (
+                        <li key={endpoint.id}>
+                          {endpoint.name} <span>({endpoint.method})</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="api-table--actions">
+                    <Button
+                      className="btn-secondary action-btn"
+                      text={<EditIcon />}
+                      onClick={() => hanldeEditApi(api)}
+                      title="Edit API"
+                    />
+                    <Button
+                      className="btn-danger action-btn"
+                      text={<DeleteIcon />}
+                      onClick={() => handleDeleteApi(api)}
+                      title="Delete API"
+                    />
+                  </td>
+                </tr>
+              );
+            }) : (
+              <tr>
+                <td colSpan="7" className="api-empty-state">
+                  No APIs match the current search or filter.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </section>
@@ -162,6 +252,7 @@ const Api = () => {
         apiSource={selectedApiSource}
         isEditing={isEditing}
         onSubmit={handleSaveApi}
+        customClass="api-modal"
       />
 
       <section className="api-actions">

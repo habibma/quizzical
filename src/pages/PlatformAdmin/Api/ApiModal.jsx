@@ -21,7 +21,7 @@ const INITIAL_API_DATA = {
     endpoints: [],
 };
 
-const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
+const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass }) => {
 
     const [apiData, setApiData] = useState(INITIAL_API_DATA);
     const [isConnected, setIsConnected] = useState(false);
@@ -135,7 +135,7 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit }) => {
     if (!isOpen) return null;
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} customClass={customClass}>
             <header className="api-modal-header">
                 <h2>{isEditing ? "Edit" : "Add"} API</h2>
             </header>
