@@ -20,6 +20,11 @@ import SchoolAdminLayout from '../layouts/SchoolAdminLayout/SchoolAdminLayout'
 import PrincipalDashboard from '../pages/SchoolAdmin/Dashboard/Dashboard.jsx'
 import SchoolStudents from '../pages/SchoolAdmin/Students/Students.jsx'
 import SchoolTeachers from '../pages/SchoolAdmin/Teachers/Teachers.jsx'
+import SchoolClasses from '../pages/SchoolAdmin/Classes/Classes.jsx'
+import SchoolCourses from '../pages/SchoolAdmin/Courses/Courses.jsx'
+import SchoolReports from '../pages/SchoolAdmin/Reports/Reports.jsx'
+import SchoolParents from '../pages/SchoolAdmin/Parents/Parents.jsx'
+import SchoolSettings from '../pages/SchoolAdmin/Settings/Settings.jsx'
 // teacher pages
 import TeacherLayout from '../layouts/TeacherLayout/TeacherLayout'
 import Repositories from '../pages/Teacher/Repositories/Repos'
@@ -69,6 +74,11 @@ function AppRoutes({ theme, toggleTheme }) {
                 <Route index element={<PrincipalDashboard />} />
                 <Route path="students" element={<SchoolStudents />} />
                 <Route path="teachers" element={<SchoolTeachers />} />
+                <Route path="classes" element={<SchoolClasses />} />
+                <Route path="courses" element={<SchoolCourses />} />
+                <Route path="reports" element={<SchoolReports />} />
+                <Route path="parents" element={<SchoolParents />} />
+                <Route path="settings" element={<SchoolSettings />} />
             </Route>
             <Route path="/teacher" element={<TeacherLayout theme={theme} toggleTheme={toggleTheme} />} >
                 <Route index element={<Dashboard />} />
