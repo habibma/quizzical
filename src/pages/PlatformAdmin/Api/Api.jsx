@@ -63,19 +63,50 @@ const Api = () => {
   }
 
 
+  const totalApis = apis.length;
+  const enabledApis = apis.filter((api) => api.enabled).length;
+  const defaultApis = apis.filter((api) => api.isDefault).length;
+
   return (
     <div className="api-container">
       <section className="api-header">
-        <h1>APIs</h1>
-        <p className="lead">Add, Remove, Update and Retrieve API endpoints!</p>
+        <div className="api-header__content">
+          <p className="api-header__eyebrow">Platform Admin</p>
+          <h1>APIs</h1>
+          <p className="lead">Manage and monitor your connected quiz providers.</p>
+        </div>
+
+        <div className="api-header__actions">
+          <Button className="btn-primary" text="Add API" onClick={handleAddApi} />
+        </div>
       </section>
+
+      <section className="api-summary-grid">
+        <div className="api-summary-card">
+          <span>Total APIs</span>
+          <strong>{totalApis}</strong>
+        </div>
+        <div className="api-summary-card">
+          <span>Enabled</span>
+          <strong>{enabledApis}</strong>
+        </div>
+        <div className="api-summary-card">
+          <span>Default</span>
+          <strong>{defaultApis}</strong>
+        </div>
+        <div className="api-summary-card">
+          <span>Sources</span>
+          <strong>2</strong>
+        </div>
+      </section>
+
       <section className="api-table-container">
         <table className="api-table">
           <thead className="api-table--header">
             <tr>
               <th>Name</th>
               <th>Adaptor</th>
-              <th>Enabled</th>
+              <th>Status</th>
               <th>Default</th>
               <th>Endpoints</th>
               <th>Actions</th>
@@ -84,15 +115,23 @@ const Api = () => {
           <tbody className="api-table--body">
             {apis.map((api) => (
               <tr key={api.id}>
-                <td>{api.name}</td>
+                <td className="api-table__name">{api.name}</td>
                 <td>{api.adaptor}</td>
-                <td>{api.enabled ? "Yes" : "No"}</td>
-                <td>{api.isDefault ? "Yes" : "No"}</td>
+                <td>
+                  <span className={`status-badge ${api.enabled ? 'status-badge--enabled' : 'status-badge--disabled'}`}>
+                    {api.enabled ? 'Enabled' : 'Disabled'}
+                  </span>
+                </td>
+                <td>
+                  <span className={`status-badge ${api.isDefault ? 'status-badge--default' : 'status-badge--muted'}`}>
+                    {api.isDefault ? 'Default' : 'Optional'}
+                  </span>
+                </td>
                 <td>
                   <ul className="api-endpoints-list">
                     {api.endpoints.map((endpoint) => (
                       <li key={endpoint.id}>
-                        {endpoint.name} ({endpoint.method})
+                        {endpoint.name} <span>({endpoint.method})</span>
                       </li>
                     ))}
                   </ul>
@@ -102,11 +141,13 @@ const Api = () => {
                     className="btn-secondary action-btn"
                     text={<EditIcon />}
                     onClick={() => hanldeEditApi(api)}
+                    title="Edit API"
                   />
                   <Button
                     className="btn-danger action-btn"
                     text={<DeleteIcon />}
                     onClick={() => handleDeleteApi(api)}
+                    title="Delete API"
                   />
                 </td>
               </tr>
@@ -114,6 +155,7 @@ const Api = () => {
           </tbody>
         </table>
       </section>
+
       <ApiModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -121,11 +163,12 @@ const Api = () => {
         isEditing={isEditing}
         onSubmit={handleSaveApi}
       />
+
       <section className="api-actions">
         <Button className="btn-primary" text="Add OpenTDB API" onClick={addOpenTDBApiSource} />
         <Button className="btn-primary" text="Add Trivia API" onClick={addTriviaApiSource} />
-        <Button className="btn-primary" text="Add API" onClick={handleAddApi} />
       </section>
+
       <footer className="api-footer">
         <p>Quizical &copy; 2024 | in progress...</p>
       </footer>
