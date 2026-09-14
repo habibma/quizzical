@@ -7,6 +7,7 @@ import StatisticsIcon from "../../assets/icons/StatisticsIcon";
 import SettingsIcon from "../../assets/icons/SettingsIcon";
 import ThemesIcon from "../../assets/icons/ThemesIcon";
 import ApiIcon from "../../assets/icons/ApiIcon";
+import AwardIcon from "../../assets/icons/AwardIcon";
 
 export const sidebarItems = [
   {
@@ -23,6 +24,11 @@ export const sidebarItems = [
     title: "Questions",
     path: "/admin/questions",
     icon: QuestionsIcon,
+  },
+  {
+    title: "Rewards",
+    path: "/admin/rewards",
+    icon: AwardIcon,
   },
   {
     title: "Statistics",

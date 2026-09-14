@@ -8,13 +8,14 @@ import About from '../pages/Public/About/About'
 import CustomQuiz from '../pages/Public/CustomQuiz/CustomQuiz'
 // Platform Admin pages
 import PlatformAdminLayout from '../layouts/PlatformAdminLayout/PlatformAdminLayout'
-import Dashboard from '../pages/PlatformAdmin/Dashboard/Dashboard.jsx'
+import PlatformAdminDashboard from '../pages/PlatformAdmin/Dashboard/Dashboard.jsx'
 import Api from '../pages/PlatformAdmin/Api/Api'
 import Themes from '../pages/PlatformAdmin/Themes/Themes.jsx'
 import Categories from '../pages/PlatformAdmin/Categories/Categories.jsx'
 import Questions from '../pages/PlatformAdmin/Questions/Questions'
 import Settings from '../pages/PlatformAdmin/Settings/Settings.jsx'
 import Statistics from '../pages/PlatformAdmin/Statistics/Statistics.jsx'
+import Rewards from '../pages/PlatformAdmin/Rewards/Rewards.jsx'
 // School Admin pages
 import SchoolAdminLayout from '../layouts/SchoolAdminLayout/SchoolAdminLayout'
 import PrincipalDashboard from '../pages/SchoolAdmin/Dashboard/Dashboard.jsx'
@@ -27,6 +28,7 @@ import SchoolParents from '../pages/SchoolAdmin/Parents/Parents.jsx'
 import SchoolSettings from '../pages/SchoolAdmin/Settings/Settings.jsx'
 // teacher pages
 import TeacherLayout from '../layouts/TeacherLayout/TeacherLayout'
+import TeacherDashboard from '../pages/Teacher/Dashboard/Dashboard.jsx'
 import Repositories from '../pages/Teacher/Repositories/Repos'
 import Quizzes from '../pages/Teacher/Quizzes/Quizzes.jsx'
 import TeacherDashboard from '../pages/Teacher/Dashboard/Dashboard.jsx'
@@ -58,13 +60,14 @@ function AppRoutes({ theme, toggleTheme }) {
                 <Route path="custom-quiz" element={<CustomQuiz />} />
             </Route>
             <Route path="/admin" element={<PlatformAdminLayout theme={theme} toggleTheme={toggleTheme} />} >
-                <Route index element={<PrincipalDashboard />} />
+                <Route index element={<PlatformAdminDashboard />} />
                 <Route path="questions" element={
                     <QuestionsProvider>
                         <Questions />
                     </QuestionsProvider>
                 } />
                 <Route path="categories" element={<Categories />} />
+                <Route path="rewards" element={<Rewards />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="themes" element={<Themes />} />
                 <Route path="api" element={<Api />} />
@@ -81,7 +84,7 @@ function AppRoutes({ theme, toggleTheme }) {
                 <Route path="settings" element={<SchoolSettings />} />
             </Route>
             <Route path="/teacher" element={<TeacherLayout theme={theme} toggleTheme={toggleTheme} />} >
-                <Route index element={<Dashboard />} />
+                <Route index element={<TeacherDashboard />} />
                 <Route path="repositories" element={<Repositories />} />
                 <Route path="quizzes" element={<Quizzes />} />
             </Route>
