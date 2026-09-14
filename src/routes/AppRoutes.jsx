@@ -31,7 +31,6 @@ import TeacherLayout from '../layouts/TeacherLayout/TeacherLayout'
 import TeacherDashboard from '../pages/Teacher/Dashboard/Dashboard.jsx'
 import Repositories from '../pages/Teacher/Repositories/Repos'
 import Quizzes from '../pages/Teacher/Quizzes/Quizzes.jsx'
-import TeacherDashboard from '../pages/Teacher/Dashboard/Dashboard.jsx'
 // student pages
 import StudentLayout from '../layouts/StudentLayout/StudentLayout'
 import StudentDashboard from '../pages/Student/Dashboard/Dashboard.jsx'
