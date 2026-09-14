@@ -1,18 +1,26 @@
 
-const StudentItem = ({ name, className, email, profilePic, grade, status, isSelected, onSelect, onRemove }) => {
+import { useNavigate } from 'react-router-dom';
+
+const StudentItem = ({ id, name, className, email, profilePic, grade, status, isSelected, onSelect, onRemove }) => {
+    const navigate = useNavigate();
     const initials = name?.charAt(0).toUpperCase() || '?';
+
+    const handleOpenProfile = () => {
+        if (!id) return;
+        navigate(`/principal/students/${id}`);
+    };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            onSelect?.();
+            handleOpenProfile();
         }
     };
 
     return (
         <article
             className={`student-item ${isSelected ? 'student-item--selected' : ''}`}
-            onClick={onSelect}
+            onClick={handleOpenProfile}
             onKeyDown={handleKeyDown}
             role="button"
             tabIndex={0}

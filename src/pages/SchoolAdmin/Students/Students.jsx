@@ -200,6 +200,7 @@ const SchoolStudents = () => {
                         visibleStudents.map((student, index) => (
                             <StudentItem
                                 key={student.id}
+                                id={student.id}
                                 name={student.name}
                                 className={student.className}
                                 email={student.email}
