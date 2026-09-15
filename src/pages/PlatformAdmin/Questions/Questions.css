@@ -225,6 +225,10 @@
     color: var(--primary-color);
 }
 
+.question-section .pagination {
+    align-self: stretch;
+}
+
 .questions-list {
     display: flex;
     flex-direction: column;

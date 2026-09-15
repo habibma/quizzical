@@ -13,6 +13,9 @@ import { useQuestions } from '../../../context/Admin/QuestionsContext';
 import { useRepo } from '../../../context/Admin/ReposContext';
 
 import Button from '../../../components/ui/Button';
+import Pagination from '../../../components/ui/Pagination/Pagination';
+
+const QUESTIONS_PAGE_SIZE = 10;
 
 const Questions = () => {
 
@@ -29,6 +32,7 @@ const Questions = () => {
   const [selectedApiIds, setSelectedApiIds] = useState([]);
   const [selectedCustomIds, setSelectedCustomIds] = useState([]);
   const [questionToDelete, setQuestionToDelete] = useState(null);
+  const [apiPage, setApiPage] = useState(1);
   const importInputRef = useRef(null);
   const {
     questions,
@@ -143,6 +147,11 @@ const Questions = () => {
   }, [questions, searchTerm]);
 
   const displayedApiQuestions = repository === 'any' ? [] : filteredApiQuestions;
+  const apiTotalPages = Math.ceil(displayedApiQuestions.length / QUESTIONS_PAGE_SIZE);
+  const paginatedApiQuestions = displayedApiQuestions.slice(
+    (apiPage - 1) * QUESTIONS_PAGE_SIZE,
+    apiPage * QUESTIONS_PAGE_SIZE
+  );
 
   const filteredCustomQuestions = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -152,6 +161,7 @@ const Questions = () => {
   const clearFilters = () => {
     setFilters({ repository: 'any', category: 'any', difficulty: 'any', type: 'any' });
     setSearchTerm('');
+    setApiPage(1);
   };
 
   const exportQuestions = () => {
@@ -186,6 +196,10 @@ const Questions = () => {
   };
 
   useEffect(() => {
+    setApiPage(1);
+  }, [searchTerm, repository, category, difficulty, type]);
+
+  useEffect(() => {
     if (repository === 'any')
       return;
 
@@ -195,7 +209,9 @@ const Questions = () => {
       return;
     }
 
-    fetchQuestions(selectedRepo, { amount: 10, category, difficulty, type });
+    setApiPage(1);
+    setSelectedApiIds([]);
+    fetchQuestions(selectedRepo, { amount: 50, category, difficulty, type });
   }, [repository, category, difficulty, type, activeRepositories]);
 
   useEffect(() => {
@@ -267,7 +283,7 @@ const Questions = () => {
             count={displayedApiQuestions.length}
           >
           <ApiQuestionsTable
-            questions={displayedApiQuestions}
+            questions={paginatedApiQuestions}
             onToggleVisibility={toggleVisibility}
             isVisible={isVisible}
             loading={loading}
@@ -276,8 +292,13 @@ const Questions = () => {
             onSelect={(ids, checked) => handleSelection(ids, checked, setSelectedApiIds)}
             onRetry={() => {
               const selectedRepo = activeRepositories.find((repo) => repo.id === repository);
-              if (selectedRepo) fetchQuestions(selectedRepo, { amount: 10, category, difficulty, type });
+              if (selectedRepo) fetchQuestions(selectedRepo, { amount: 50, category, difficulty, type });
             }}
+          />
+          <Pagination
+            currentPage={apiPage}
+            totalPages={apiTotalPages}
+            onPageChange={setApiPage}
           />
           </QuestionSection>
           <QuestionSection

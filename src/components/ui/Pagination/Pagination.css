@@ -1,0 +1,26 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 0 0.25rem;
+}
+
+.pagination__status {
+  min-width: 7rem;
+  color: var(--text-secondary-color);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .pagination__status {
+    min-width: auto;
+  }
+}
