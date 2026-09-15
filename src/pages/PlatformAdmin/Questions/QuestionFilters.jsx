@@ -16,6 +16,7 @@ const QuestionFilters = ({ config, values, onChange }) => {
                                 label={filter.label}
                                 options={filter.options}
                                 value={values[filter.name]}
+                                disabled={filter.name === 'category' && values.repository === 'any'}
                                 onChange={(e) => onChange(filter.name, e.target.value)}
                             />
                         );

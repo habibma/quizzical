@@ -1,4 +1,4 @@
-import { useState, useContext, createContext } from 'react';
+import { useState, useContext, createContext, useEffect } from 'react';
 import { getQuestions } from '../../services/questionService.js';
 import { getCategories } from '../../services/categoryService.js';
 import { useApi } from './ApiContext';
@@ -8,7 +8,22 @@ const QuestionsContext = createContext();
 export const QuestionsProvider = ({ children }) => {
 
     const [questions, setQuestions] = useState([]);
-    const [customQuestions, setCustomQuestions] = useState([]);
+    const [customQuestions, setCustomQuestions] = useState(() => {
+        try {
+            const storedQuestions = localStorage.getItem('customQuestions');
+            return storedQuestions ? JSON.parse(storedQuestions) : [];
+        } catch {
+            return [];
+        }
+    });
+    const [visibilityMap, setVisibilityMap] = useState(() => {
+        try {
+            const storedVisibility = localStorage.getItem('questionVisibility');
+            return storedVisibility ? JSON.parse(storedVisibility) : {};
+        } catch {
+            return {};
+        }
+    });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [countByCategory, setCountByCategory] = useState({});
@@ -68,6 +83,25 @@ export const QuestionsProvider = ({ children }) => {
         setCustomQuestions(prevQuestions => prevQuestions.map(q => q.id === updatedQuestion.id ? updatedQuestion : q));
     };
 
+    const deleteQuestions = (ids) => {
+        setCustomQuestions(prevQuestions => prevQuestions.filter(question => !ids.includes(question.id)));
+    };
+
+    const setQuestionVisibility = (ids, isVisible) => {
+        setVisibilityMap(prevVisibility => ids.reduce((nextVisibility, id) => ({
+            ...nextVisibility,
+            [id]: isVisible,
+        }), prevVisibility));
+    };
+
+    useEffect(() => {
+        localStorage.setItem('customQuestions', JSON.stringify(customQuestions));
+    }, [customQuestions]);
+
+    useEffect(() => {
+        localStorage.setItem('questionVisibility', JSON.stringify(visibilityMap));
+    }, [visibilityMap]);
+
     return (
         <QuestionsContext.Provider
             value={{
@@ -79,6 +113,9 @@ export const QuestionsProvider = ({ children }) => {
                 addQuestion,
                 updateQuestion,
                 deleteQuestion,
+                deleteQuestions,
+                visibilityMap,
+                setQuestionVisibility,
                 fetchCategories,
             }}
         >

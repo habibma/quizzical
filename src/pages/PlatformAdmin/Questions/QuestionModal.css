@@ -80,3 +80,20 @@
         opacity: 0.8;
     }
 }
+
+.modal-main {
+    width: 100%;
+}
+
+.modal-actions {
+    margin-top: 0.5rem;
+}
+
+.modal-actions .modal-btn {
+    width: auto;
+    flex: 1;
+}
+
+.question-validation-error {
+    text-align: left;
+}

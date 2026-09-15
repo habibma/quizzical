@@ -42,8 +42,15 @@ export async function getCategories(apiConfig) {
 export async function getQuestions(repository, options = {}) {
   const endpoint = resolveEndpoint(repository, ["questions", "get questions", "fetch questions"]);
 
+  if (!endpoint) {
+    throw new Error("No questions endpoint is configured for this API.");
+  }
+
+  // Older saved configurations used /api/questions, which is not a v2 route.
+  const endpointPath = endpoint.path === "/api/questions" ? "/questions" : endpoint.path;
+
   const url = new URL(
-    repository.baseUrl + endpoint.path
+    repository.baseUrl + endpointPath
   );
 
   const {

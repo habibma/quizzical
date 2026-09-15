@@ -16,6 +16,7 @@ const INITIAL_QUESTION_DATA = {
 const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, question }) => {
 
     const [questionData, setQuestionData] = useState(INITIAL_QUESTION_DATA);
+    const [validationError, setValidationError] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -50,13 +51,28 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, questio
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleSaveQuestion(questionData);
+        const questionText = questionData.question.trim();
+        const options = questionData.options.map((option) => option.trim());
+
+        if (!questionText) {
+            setValidationError('Enter the question text.');
+            return;
+        }
+
+        if (questionData.type === 'multiple' && (options.some((option) => !option) || questionData.correctOption === null)) {
+            setValidationError('Complete every answer option and select the correct answer.');
+            return;
+        }
+
+        setValidationError('');
+        handleSaveQuestion({ ...questionData, question: questionText, options });
         setQuestionData(INITIAL_QUESTION_DATA);
         onClose();
     }
 
     const handleClose = () => {
         setQuestionData(INITIAL_QUESTION_DATA);
+        setValidationError('');
         onClose();
     }
 
@@ -133,11 +149,15 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, questio
                             </div>
                         </div>
                     ) : null}
+                    {validationError && <p className="question-validation-error" role="alert">{validationError}</p>}
+                    <div className="modal-actions">
+                        <Button className='btn-secondary' type="button" text="Cancel" onClick={handleClose} />
                     <Button
                         className='modal-btn'
                         type="submit"
                         text={isEditing ? 'Update Question' : 'Add Question'}
                     />
+                    </div>
                 </form>
             </main>
         </Modal>

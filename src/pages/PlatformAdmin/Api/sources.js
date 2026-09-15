@@ -54,7 +54,7 @@ export const apiSources = [
         id: 2,
         name: "Questions",
         method: "GET",
-        path: "/api/questions",
+        path: "/questions",
         description: "trivia questions",
       },
     ],
