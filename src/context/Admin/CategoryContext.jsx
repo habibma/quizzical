@@ -11,6 +11,9 @@ const normalizeCategory = (category) => ({
     apiName: category.apiName ?? category.name,
     displayName: category.displayName ?? category.name,
     enabled: category.enabled ?? true,
+    icon: category.icon ?? " ",
+    color: category.color ?? "#6366f1",
+    displayOrder: Number.isFinite(Number(category.displayOrder)) ? Number(category.displayOrder) : 0,
 });
 
 const loadCategoriesFromStorage = () => {
@@ -19,7 +22,13 @@ const loadCategoriesFromStorage = () => {
     if (!stored) return {};
 
     try {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        return Object.fromEntries(
+            Object.entries(parsed).map(([repoId, categories]) => [
+                repoId,
+                Array.isArray(categories) ? categories.map(normalizeCategory) : [],
+            ])
+        );
     } catch {
         return {};
     }
@@ -30,34 +39,46 @@ export function CategoryProvider({ children }) {
     const [selectedRepoId, setSelectedRepoId] = useState(null);
     const [categoriesByRepository, setCategoriesByRepository] =
         useState(loadCategoriesFromStorage);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const { activeRepositories } = useRepo();
 
 
     // Load categories for a repository
     const getCategoriesForRepository = async (repoId) => {
+        const normalizedRepoId = repoId ? String(repoId) : null;
+
+        if (!normalizedRepoId) return [];
+
         // Return cached categories
-        if (categoriesByRepository[repoId]) {
-            return categoriesByRepository[repoId];
+        if (categoriesByRepository[normalizedRepoId]) {
+            return categoriesByRepository[normalizedRepoId];
         }
 
         const repository = activeRepositories.find(
-            repo => repo.id === repoId
+            repo => String(repo.id) === normalizedRepoId
         );
 
         if (!repository) return [];
 
-       try {
+      setLoading(true);
+      setError(null);
+
+      try {
             const apiCategories = await getCategories(repository);
             const normalizedCategories = apiCategories.map(normalizeCategory);
             setCategoriesByRepository(prev => ({
                 ...prev,
-                [repoId]: normalizedCategories,
+                [normalizedRepoId]: normalizedCategories,
             }));
             return normalizedCategories;
         } catch (error) {
+            setError(error.message || "Unable to load categories.");
             console.error("Error fetching categories for repository:", error);
             return [];
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -75,6 +96,41 @@ export function CategoryProvider({ children }) {
         }));
     };
 
+    const setCategoriesEnabled = (repoId, categoryIds, enabled) => {
+        setCategoriesByRepository(prev => ({
+            ...prev,
+            [repoId]: (prev[repoId] ?? []).map(category =>
+                categoryIds.includes(category.id)
+                    ? { ...category, enabled }
+                    : category
+            ),
+        }));
+    };
+
+    const importCategories = (repoId, importedCategories) => {
+        const normalizedCategories = importedCategories
+            .filter(category => category.apiName || category.name || category.displayName)
+            .map(category => normalizeCategory({
+                ...category,
+                id: category.id ?? `${Date.now()}-${Math.random()}`,
+                name: category.apiName ?? category.name ?? category.displayName,
+            }));
+
+        setCategoriesByRepository(prev => ({
+            ...prev,
+            [repoId]: normalizedCategories,
+        }));
+    };
+
+    const updateCategoryDetails = (id, details) => {
+        setCategoriesByRepository(prev => ({
+            ...prev,
+            [selectedRepoId]: (prev[selectedRepoId] ?? []).map(category =>
+                category.id === id ? { ...category, ...details } : category
+            ),
+        }));
+    };
+
     // Persist categories
     useEffect(() => {
         localStorage.setItem(
@@ -85,8 +141,9 @@ export function CategoryProvider({ children }) {
 
     // Select repository
     const selectRepository = (repoId) => {
-        setSelectedRepoId(repoId);
-        getCategoriesForRepository(repoId);
+        const normalizedRepoId = repoId ? String(repoId) : null;
+        setSelectedRepoId(normalizedRepoId);
+        getCategoriesForRepository(normalizedRepoId);
     };
 
     // Rename category
@@ -121,11 +178,16 @@ export function CategoryProvider({ children }) {
         <CategoryContext.Provider
             value={{
                 categoriesByRepository,
+                loading,
+                error,
 
                 selectedRepoId,
                 selectRepository,
 
                 toggleCategory,
+                setCategoriesEnabled,
+                importCategories,
+                updateCategoryDetails,
                 renameCategory,
                 updateCategoryName: renameCategory,
 
