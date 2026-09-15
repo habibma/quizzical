@@ -1,4 +1,4 @@
-import Questions from '../../PlatformAdmin/Questions/Questions';
+import Questions from '../../PlatformAdmin/QuestionSources/QuestionSources';
 
 const QuestionBank = () => <Questions mode="teacher" pageTitle="Question Bank" />;
 

@@ -12,7 +12,7 @@ import PlatformAdminDashboard from '../pages/PlatformAdmin/Dashboard/Dashboard.j
 import Api from '../pages/PlatformAdmin/Api/Api'
 import Themes from '../pages/PlatformAdmin/Themes/Themes.jsx'
 import Categories from '../pages/PlatformAdmin/Categories/Categories.jsx'
-import Questions from '../pages/PlatformAdmin/Questions/Questions'
+import Questions from '../pages/PlatformAdmin/QuestionSources/QuestionSources'
 import Settings from '../pages/PlatformAdmin/Settings/Settings.jsx'
 import Statistics from '../pages/PlatformAdmin/Statistics/Statistics.jsx'
 import Rewards from '../pages/PlatformAdmin/Rewards/Rewards.jsx'

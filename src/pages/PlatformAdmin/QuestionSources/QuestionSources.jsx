@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import QuestionModal from './QuestionModal';
-import ApiQuestionsTable from './ApiQuestionsTable';
+import ApiQuestionsTable from './QuestionTable';
 import CustomQuestionsTable from './CustomQuestionsTable';
 import { createFilterConfig } from './filterConfig';
 import QuestionSummary from './QuestionSummary';
@@ -344,19 +344,3 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
 }
 
 export default Questions
-
-// TODO: Add features to the questions page
-// ✅ View question details in a modal
-// Future version (your own backend)
-// ✅ Add question
-// ✅ Edit question
-// ✅ Delete question
-// ✅ Search questions
-// ✅ Filter by category
-// ✅ Import/Export questions
-// ✅ Bulk actions
-
-
-//TODO: Add features to the questions page
-// make the questions table more interactive
-// make form react controlled
