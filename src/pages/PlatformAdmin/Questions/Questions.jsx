@@ -141,10 +141,17 @@ const Questions = () => {
 
   const { repository, category, difficulty, type } = filters;
 
+  const matchesQuestionType = (question) => (
+    type === 'any' || (question.type || 'multiple') === type
+  );
+
   const filteredApiQuestions = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
-    return questions.filter((question) => !query || question.question.toLowerCase().includes(query));
-  }, [questions, searchTerm]);
+    return questions.filter((question) => (
+      matchesQuestionType(question)
+      && (!query || question.question.toLowerCase().includes(query))
+    ));
+  }, [questions, searchTerm, type]);
 
   const displayedApiQuestions = repository === 'any' ? [] : filteredApiQuestions;
   const apiTotalPages = Math.ceil(displayedApiQuestions.length / QUESTIONS_PAGE_SIZE);
@@ -155,8 +162,11 @@ const Questions = () => {
 
   const filteredCustomQuestions = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
-    return customQuestions.filter((question) => !query || question.question.toLowerCase().includes(query));
-  }, [customQuestions, searchTerm]);
+    return customQuestions.filter((question) => (
+      matchesQuestionType(question)
+      && (!query || question.question.toLowerCase().includes(query))
+    ));
+  }, [customQuestions, searchTerm, type]);
 
   const clearFilters = () => {
     setFilters({ repository: 'any', category: 'any', difficulty: 'any', type: 'any' });

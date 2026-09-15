@@ -4,6 +4,7 @@ export function adaptOpenTriviaQuestions(questions) {
   return questions.map(question => ({
     id: Date.now().toString() + Math.random().toString(36).substring(2, 15),
     question: decodeHtml(question.question),
+    type: question.type === 'boolean' ? 'boolean' : 'multiple',
     answer: decodeHtml(question.correct_answer),
     options: [...question.incorrect_answers, question.correct_answer]
       .map(option => decodeHtml(option)),

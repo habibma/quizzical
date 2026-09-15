@@ -3,6 +3,9 @@ export function adaptTriviaApiQuestions(data) {
     return data.map(question => ({
         id: Date.now().toString() + Math.random().toString(36).substring(2, 15),
         question: question.question.text,
+        type: ['boolean', 'true_false', 'true-false'].includes((question.type || '').toLowerCase())
+            ? 'boolean'
+            : 'multiple',
         answer: question.correctAnswer,
         options: [
             ...question.incorrectAnswers,
