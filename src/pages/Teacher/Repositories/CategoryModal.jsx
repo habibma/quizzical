@@ -1,13 +1,20 @@
 import Modal from '../../../components/ui/Modal';
 
-const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory }) => {
+const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory, loading, error, onRetry }) => {
 
   if (!isOpen) return null;
 
   return (
     <Modal customClass="repos-category-modal" isOpen={isOpen} onClose={onClose}>
       <h3>Categories</h3>
-      {list.length > 0 ? (
+      {loading ? (
+        <p className="repository-modal-state">Loading categories...</p>
+      ) : error ? (
+        <div className="repository-modal-state repository-modal-state--error">
+          <p>{error}</p>
+          <button type="button" className="btn-secondary" onClick={onRetry}>Retry</button>
+        </div>
+      ) : list.length > 0 ? (
         <table className="category-table">
           <thead>
             <tr>
