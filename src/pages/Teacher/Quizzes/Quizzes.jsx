@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useQuiz } from '../../../context/Admin/QuizContext'
 import { useRepo } from '../../../context/Admin/ReposContext'
 import { useCategories } from '../../../context/Admin/CategoryContext'
+import { useQuestions } from '../../../context/Admin/QuestionsContext'
 
 import QuizCard from './QuizCard'
 import QuizModal from './QuizModal'
@@ -17,6 +18,7 @@ const createEmptyQuiz = () => ({
   content: {
     repositories: [],
     categories: [],
+    questionIds: [],
     questionCount: 0,
     questionSelection: 'random',
   },
@@ -49,6 +51,7 @@ const Quizzes = () => {
 
   const { activeRepositories } = useRepo();
   const { getActiveCategories } = useCategories();
+  const { customQuestions } = useQuestions();
 
   const activeCategories = getActiveCategories(inputValues.content.repositories);
 
@@ -59,6 +62,10 @@ const Quizzes = () => {
   const categoryOptions = activeCategories.map(category => ({
     value: `${category.repositoryId}-${category.id}`,
     label: category.displayName,
+  }));
+  const questionOptions = customQuestions.map(question => ({
+    value: String(question.id),
+    label: question.question,
   }));
 
 
@@ -180,6 +187,7 @@ const Quizzes = () => {
     onInputChange: handleInputChange,
     repositoryOptions: repositoryOptions,
     categoryOptions: categoryOptions,
+    questionOptions,
   };
 
   console.log('quizzes:', quizzes);

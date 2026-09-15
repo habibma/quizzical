@@ -20,6 +20,12 @@ const modalFields = [
 				optionsKey: 'categories',
 			},
 			{
+				name: 'questionIds',
+				label: 'My Questions',
+				type: 'multiselect',
+				optionsKey: 'questionIds',
+			},
+			{
 				name: 'difficulty',
 				label: 'Difficulty',
 				type: 'select',

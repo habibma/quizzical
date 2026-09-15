@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route } from 'react-router-dom'
 // public pages
 import PublicLayout from '../layouts/PublicLayout/PublicLayout'
 import HomePage from '../pages/HomePage/HomePage'
@@ -33,6 +33,8 @@ import TeacherLayout from '../layouts/TeacherLayout/TeacherLayout'
 import TeacherDashboard from '../pages/Teacher/Dashboard/Dashboard.jsx'
 import Repositories from '../pages/Teacher/Repositories/Repos'
 import Quizzes from '../pages/Teacher/Quizzes/Quizzes.jsx'
+import QuestionBank from '../pages/Teacher/Questions/QuestionBank.jsx'
+import MyQuestions from '../pages/Teacher/Questions/MyQuestions.jsx'
 // student pages
 import StudentLayout from '../layouts/StudentLayout/StudentLayout'
 import StudentDashboard from '../pages/Student/Dashboard/Dashboard.jsx'
@@ -41,6 +43,7 @@ import StudentInsights from '../pages/Student/Insights/Insights.jsx'
 import StudentLeaderboard from '../pages/Student/Leaderboard/Leaderboard.jsx'
 // context providers
 import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
+import { QuizProvider as AdminQuizProvider } from '../context/Admin/QuizContext.jsx'
 import { QuizProvider } from '../context/Public/QuizContext.jsx'
 
 function AppRoutes({ theme, toggleTheme }) {
@@ -62,11 +65,12 @@ function AppRoutes({ theme, toggleTheme }) {
             </Route>
             <Route path="/admin" element={<PlatformAdminLayout theme={theme} toggleTheme={toggleTheme} />} >
                 <Route index element={<PlatformAdminDashboard />} />
-                <Route path="questions" element={
+                <Route path="question-sources" element={
                     <QuestionsProvider>
-                        <Questions />
+                        <Questions mode="sources" />
                     </QuestionsProvider>
                 } />
+                <Route path="questions" element={<Navigate to="/admin/question-sources" replace />} />
                 <Route path="categories" element={<Categories />} />
                 <Route path="rewards" element={<Rewards />} />
                 <Route path="settings" element={<Settings />} />
@@ -89,7 +93,23 @@ function AppRoutes({ theme, toggleTheme }) {
             <Route path="/teacher" element={<TeacherLayout theme={theme} toggleTheme={toggleTheme} />} >
                 <Route index element={<TeacherDashboard />} />
                 <Route path="repositories" element={<Repositories />} />
-                <Route path="quizzes" element={<Quizzes />} />
+                <Route path="question-bank" element={
+                    <QuestionsProvider>
+                        <QuestionBank />
+                    </QuestionsProvider>
+                } />
+                <Route path="my-questions" element={
+                    <QuestionsProvider>
+                        <MyQuestions />
+                    </QuestionsProvider>
+                } />
+                <Route path="quizzes" element={
+                    <AdminQuizProvider>
+                        <QuestionsProvider>
+                            <Quizzes />
+                        </QuestionsProvider>
+                    </AdminQuizProvider>
+                } />
             </Route>
             <Route path="/student" element={<StudentLayout theme={theme} toggleTheme={toggleTheme} />} >
                 <Route index element={<StudentDashboard />} />

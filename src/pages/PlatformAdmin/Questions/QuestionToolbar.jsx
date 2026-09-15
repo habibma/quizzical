@@ -30,10 +30,10 @@ const QuestionToolbar = ({
       <QuestionFilters config={config} values={values} onChange={onChange} />
       <Button className="btn-secondary" text="Clear filters" onClick={onClear} />
     </div>
-    <div className="question-toolbar__tools">
-      <Button className="btn-secondary" text="Import JSON" onClick={onImport} />
-      <Button className="btn-secondary" text="Export JSON" onClick={onExport} />
-    </div>
+    {(onImport || onExport) && <div className="question-toolbar__tools">
+      {onImport && <Button className="btn-secondary" text="Import JSON" onClick={onImport} />}
+      {onExport && <Button className="btn-secondary" text="Export JSON" onClick={onExport} />}
+    </div>}
   </section>
 );
 

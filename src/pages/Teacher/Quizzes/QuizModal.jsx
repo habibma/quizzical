@@ -11,7 +11,7 @@ const getFieldOptions = (field, inputValues) => {
 	return field.options ?? [];
 };
 
-const FormField = ({ field, inputValues, onInputChange, section, repositoryOptions, categoryOptions }) => {
+const FormField = ({ field, inputValues, onInputChange, section, repositoryOptions, categoryOptions, questionOptions }) => {
 
 	const value = inputValues[section]?.[field.name] ?? '';
 
@@ -22,6 +22,8 @@ const FormField = ({ field, inputValues, onInputChange, section, repositoryOptio
 			return repositoryOptions;
 		} else if (field.name === 'categories') {
 			return categoryOptions;
+		} else if (field.name === 'questionIds') {
+			return questionOptions;
 		}
 		return options;
 	}
@@ -93,7 +95,7 @@ const FormField = ({ field, inputValues, onInputChange, section, repositoryOptio
 	);
 };
 
-const QuizModal = ({ isOpen, onClose, onSave, isEditing, inputValues, onInputChange, repositoryOptions, categoryOptions }) => {
+const QuizModal = ({ isOpen, onClose, onSave, isEditing, inputValues, onInputChange, repositoryOptions, categoryOptions, questionOptions }) => {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -135,6 +137,7 @@ const QuizModal = ({ isOpen, onClose, onSave, isEditing, inputValues, onInputCha
 												section={sectionName}
 												repositoryOptions={repositoryOptions}
 												categoryOptions={categoryOptions}
+															questionOptions={questionOptions}
 											/>
 										))}
 									</fieldset>

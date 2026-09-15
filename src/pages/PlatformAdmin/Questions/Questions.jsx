@@ -17,7 +17,9 @@ import Pagination from '../../../components/ui/Pagination/Pagination';
 
 const QUESTIONS_PAGE_SIZE = 10;
 
-const Questions = () => {
+const Questions = ({ mode = 'sources', pageTitle }) => {
+  const isTeacherView = mode === 'teacher';
+  const heading = pageTitle || (isTeacherView ? 'Question Bank' : 'Question Sources');
 
   const [filters, setFilters] = useState({
     repository: 'any',
@@ -73,6 +75,7 @@ const Questions = () => {
   ];
 
   const filterConfig = createFilterConfig(categoryOptions, repositoryOptions);
+  const teacherFilterConfig = filterConfig.filter(filter => filter.name === 'type');
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -210,7 +213,7 @@ const Questions = () => {
   }, [searchTerm, repository, category, difficulty, type]);
 
   useEffect(() => {
-    if (repository === 'any')
+    if (isTeacherView || repository === 'any')
       return;
 
     const selectedRepo = activeRepositories.find(repo => repo.id === repository);
@@ -222,10 +225,10 @@ const Questions = () => {
     setApiPage(1);
     setSelectedApiIds([]);
     fetchQuestions(selectedRepo, { amount: 50, category, difficulty, type });
-  }, [repository, category, difficulty, type, activeRepositories]);
+  }, [isTeacherView, repository, category, difficulty, type, activeRepositories]);
 
   useEffect(() => {
-    if (repository === 'any')
+    if (isTeacherView || repository === 'any')
     {
       setFilterCategories([])
       return ;
@@ -241,7 +244,7 @@ const Questions = () => {
     }
 
     loadCategories();
-  }, [repository, activeRepositories]);
+  }, [isTeacherView, repository, activeRepositories]);
 
 
   return (
@@ -249,45 +252,38 @@ const Questions = () => {
       <section className='questions-header'>
         <div>
           <p className='questions-eyebrow'>Platform Admin</p>
-          <h1>Questions</h1>
-          <p className='lead'>Manage, review, and curate your question library.</p>
+          <h1>{heading}</h1>
+          <p className='lead'>{isTeacherView ? 'Create, organize, and maintain questions for your quizzes.' : 'Review questions provided by connected API repositories.'}</p>
         </div>
-        <Button className='btn-primary' text="Add Question" onClick={handleAddQuestion} />
+        {isTeacherView && <Button className='btn-primary' text="Add Question" onClick={handleAddQuestion} />}
       </section>
       <section className='questions-content'>
         <QuestionSummary
-          apiCount={displayedApiQuestions.length}
-          customCount={filteredCustomQuestions.length}
-          visibleCount={displayedApiQuestions.filter((question) => isVisible(question.id)).length}
-          selectedRepository={activeRepositories.find((repo) => repo.id === repository)?.title}
+          apiCount={isTeacherView ? 0 : displayedApiQuestions.length}
+          customCount={isTeacherView ? filteredCustomQuestions.length : 0}
+          visibleCount={isTeacherView ? 0 : displayedApiQuestions.filter((question) => isVisible(question.id)).length}
+          selectedRepository={isTeacherView ? 'My question library' : activeRepositories.find((repo) => repo.id === repository)?.title}
         />
         <QuestionToolbar
-          config={filterConfig}
+          config={isTeacherView ? teacherFilterConfig : filterConfig}
           values={filters}
           onChange={handleFilterChange}
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           onClear={clearFilters}
           resultCount={displayedApiQuestions.length + filteredCustomQuestions.length}
-          onExport={exportQuestions}
-          onImport={() => importInputRef.current?.click()}
+          onExport={isTeacherView ? exportQuestions : undefined}
+          onImport={isTeacherView ? () => importInputRef.current?.click() : undefined}
         />
-        <input ref={importInputRef} className="question-import-input" type="file" accept="application/json" onChange={importQuestions} />
-        {(selectedApiIds.length > 0 || selectedCustomIds.length > 0) && (
+        {isTeacherView && <input ref={importInputRef} className="question-import-input" type="file" accept="application/json" onChange={importQuestions} />}
+        {isTeacherView && selectedCustomIds.length > 0 && (
           <div className="question-bulk-actions">
-            {selectedApiIds.length > 0 && <>
-              <span>{selectedApiIds.length} API selected</span>
-              <Button className="btn-secondary" text="Show selected" onClick={() => handleBulkVisibility(true)} />
-              <Button className="btn-secondary" text="Hide selected" onClick={() => handleBulkVisibility(false)} />
-            </>}
-            {selectedCustomIds.length > 0 && <>
-              <span>{selectedCustomIds.length} custom selected</span>
-              <Button className="btn-danger" text="Delete selected" onClick={handleDeleteSelected} />
-            </>}
+            <span>{selectedCustomIds.length} selected</span>
+            <Button className="btn-danger" text="Delete selected" onClick={handleDeleteSelected} />
           </div>
         )}
         <div className='questions-list'>
-          <QuestionSection
+          {!isTeacherView && <QuestionSection
             title="API Questions"
             description={repository === 'any' ? 'Choose a repository to load external questions.' : 'Questions fetched from the selected repository.'}
             count={displayedApiQuestions.length}
@@ -310,8 +306,8 @@ const Questions = () => {
             totalPages={apiTotalPages}
             onPageChange={setApiPage}
           />
-          </QuestionSection>
-          <QuestionSection
+          </QuestionSection>}
+          {isTeacherView && <QuestionSection
             title="Custom Questions"
             description="Questions created by your team and stored locally."
             count={filteredCustomQuestions.length}
@@ -323,7 +319,7 @@ const Questions = () => {
             selectedIds={selectedCustomIds}
             onSelect={(ids, checked) => handleSelection(ids, checked, setSelectedCustomIds)}
           />
-          </QuestionSection>
+          </QuestionSection>}
         </div>
         {isModalOpen && (
           <QuestionModal

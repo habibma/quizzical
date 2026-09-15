@@ -21,8 +21,8 @@ export const sidebarItems = [
     icon: CategoriesIcon,
   },
   {
-    title: "Questions",
-    path: "/admin/questions",
+    title: "Question Sources",
+    path: "/admin/question-sources",
     icon: QuestionsIcon,
   },
   {

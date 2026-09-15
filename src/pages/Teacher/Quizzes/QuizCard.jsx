@@ -9,6 +9,7 @@ const QuizCard = ({ quiz, onEdit, onDelete, onDuplicate, onPublish }) => {
 				<div className='quiz-card--meta'>
 					<p className='quiz-card--meta-item'>Repositories: {quiz.content.repositories.join(', ')}</p>
 					<p className='quiz-card--meta-item'>Categories: {quiz.content.categories.join(', ')}</p>
+					<p className='quiz-card--meta-item'>My Questions: {(quiz.content.questionIds ?? []).length}</p>
 				</div>
 				<div className='quiz-card--meta'>
 					<p className='quiz-card--meta-item'>Number of Questions: {quiz.content.questionCount}</p>
