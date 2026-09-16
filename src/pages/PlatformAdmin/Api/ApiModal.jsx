@@ -136,11 +136,11 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} customClass={customClass}>
-            <header className="api-modal-header">
+            <header className="api-modal--header">
                 <h2>{isEditing ? "Edit" : "Add"} API</h2>
             </header>
-            <form className="api-form" onSubmit={handleSubmit}>
-                <fieldset className="api-form-general">
+            <form className="api-modal--form" onSubmit={handleSubmit}>
+                <fieldset className="form-fieldset api-form-general">
                     <legend>Identity</legend>
                     <Input
                         label="Name"
@@ -164,7 +164,7 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass
                         onChange={handleInputChange}
                     />
                 </fieldset>
-                <fieldset className="api-form-connection">
+                <fieldset className="form-fieldset api-form-connection">
                     <legend>Connection</legend>
                     <Input
                         label="Base URL"
@@ -181,7 +181,7 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass
                         onChange={handleInputChange}
                     />
                 </fieldset>
-                <fieldset className="api-form-authentication">
+                <fieldset className="form-fieldset api-form-authentication">
                     <legend>Authentication</legend>
                     <Input
                         as="select"
@@ -208,7 +208,8 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass
                         />
                     )}
                 </fieldset>
-                <fieldset className="api-form-capabilities">
+                {/* This fieldset isn't functional yet TODO: Implement the functionality */}
+                {/* <fieldset className="api-form-capabilities">
                     <legend>Question capabilities</legend>
                     <div>
                         <Input
@@ -254,8 +255,8 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass
                             onChange={handleInputChange}
                         />
                     </div>
-                </fieldset>
-                <fieldset className="api-form-checkboxes">
+                </fieldset> */}
+                <fieldset className="form-fieldset api-form-checkboxes">
                     <legend>Settings</legend>
                     <Input
                         type="checkbox"
@@ -274,7 +275,7 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass
                         onChange={handleInputChange}
                     />
                 </fieldset>
-                <fieldset className="api-form-endpoints">
+                <fieldset className="form-fieldset api-form-endpoints">
                     <legend>Endpoints</legend>
                     {apiData.endpoints.map((endpoint, index) => (
                         <EndpointRow
@@ -291,7 +292,7 @@ const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass
                     <Button type="button" className="btn-primary" text="Add Category Endpoint" onClick={addCategoryEndpoint} />
                     <Button type="button" className="btn-primary" text="Add Question Endpoint" onClick={addQuestionEndpoint} />
                 </fieldset>
-                <fieldset className="api-form--adaptor-name">
+                <fieldset className="form-fieldset api-form--adaptor-name">
                     <legend>Adaptor Name</legend>
                     {/* this name is used to identify the API adaptor. it should be unique. TODO: Add validation and error handling and info for users */}
                     <Input

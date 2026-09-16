@@ -263,43 +263,19 @@
     width: 150px;
 }
 
-/* Api modal */
-.api-modal {
-    width: 100%;
-    max-width: 800px;
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-lg);
+/* ==================
+     Api modal
+=====================*/
+
+.api-modal--header {
+    padding: 1.25rem 1.25rem 0;
 }
 
-.api-modal .modal-content {
-    padding: 0;
-}
-
-.api-form {
+.api-modal--form {
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 1.25rem;
-
-    fieldset {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        border-radius: var(--radius-md);
-        padding: 1rem;
-        background: rgba(15, 23, 42, 0.02);
-
-        legend {
-            padding: 0 0.35rem;
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--primary-color);
-            font-weight: 800;
-        }
-    }
+    padding: 1rem;
 
     .api-form-checkboxes {
         flex-direction: row;
@@ -314,16 +290,6 @@
         }
     }
 
-}
-
-.api-modal-header {
-    padding: 1.25rem 1.25rem 0;
-}
-
-.api-modal-header h2 {
-    margin: 0;
-    color: var(--card-text-primary-color);
-    font-size: 1.5rem;
 }
 
 /* Endpoint row */
