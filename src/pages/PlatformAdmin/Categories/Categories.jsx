@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useCategories } from '../../../context/Admin/CategoryContext.jsx'
 import { useRepo } from '../../../context/Admin/ReposContext.jsx'
 import Button from '../../../components/ui/Button'
+import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog'
 import CategoriesModal from './CategoriesModal'
 import CategorySummary from './CategorySummary'
 import CategoryToolbar from './CategoryToolbar'
@@ -14,6 +15,7 @@ const Categories = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoriesToDisable, setCategoriesToDisable] = useState(null);
   const [selectedRepositoryId, setSelectedRepositoryId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIds, setSelectedIds] = useState([]);
@@ -86,6 +88,18 @@ const Categories = () => {
     setSelectedIds([]);
   };
 
+  const requestDisableSelected = () => {
+    if (selectedIds.length === 0) return;
+    setCategoriesToDisable([...selectedIds]);
+  };
+
+  const confirmDisableSelected = () => {
+    if (!categoriesToDisable) return;
+    setCategoriesEnabled(selectedRepositoryId, categoriesToDisable, false);
+    setSelectedIds(currentIds => currentIds.filter(id => !categoriesToDisable.includes(id)));
+    setCategoriesToDisable(null);
+  };
+
   const clearControls = () => {
     setSearchTerm('');
     setPage(1);
@@ -152,7 +166,7 @@ const Categories = () => {
           onSearchChange={setSearchTerm}
           onClear={clearControls}
           onEnableAll={() => toggleAll(true)}
-          onDisableAll={() => toggleAll(false)}
+          onDisableAll={requestDisableSelected}
           onExport={exportCategories}
           onImport={() => importInputRef.current?.click()}
         />
@@ -161,7 +175,7 @@ const Categories = () => {
           <div className="category-bulk-actions">
             <span>{selectedIds.length} selected</span>
             <Button className="btn-secondary" text="Enable selected" onClick={() => toggleAll(true)} />
-            <Button className="btn-secondary" text="Disable selected" onClick={() => toggleAll(false)} />
+            <Button className="btn-secondary" text="Disable selected" onClick={requestDisableSelected} />
           </div>
         )}
         {!selectedRepositoryId ? (
@@ -243,6 +257,15 @@ const Categories = () => {
           category={selectedCategory}
           onSave={handleSave}
           existingNames={categories.map(category => category.displayName)}
+        />
+        <ConfirmDialog
+          isOpen={Boolean(categoriesToDisable)}
+          title="Disable categories?"
+          message={`Are you sure you want to disable ${categoriesToDisable?.length || 0} selected ${categoriesToDisable?.length === 1 ? 'category' : 'categories'}?`}
+          confirmText="Disable"
+          cancelText="Keep enabled"
+          onConfirm={confirmDisableSelected}
+          onClose={() => setCategoriesToDisable(null)}
         />
       </section>
     </div>

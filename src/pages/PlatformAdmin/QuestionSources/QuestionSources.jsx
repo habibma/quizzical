@@ -6,13 +6,13 @@ import { createFilterConfig } from './filterConfig';
 import QuestionSummary from './QuestionSummary';
 import QuestionToolbar from './QuestionToolbar';
 import QuestionSection from './QuestionSection';
-import ConfirmQuestionDialog from './ConfirmQuestionDialog';
 import './Questions.css'
 
 import { useQuestions } from '../../../context/Admin/QuestionsContext';
 import { useRepo } from '../../../context/Admin/ReposContext';
 
 import Button from '../../../components/ui/Button';
+import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
 import Pagination from '../../../components/ui/Pagination/Pagination';
 
 const QUESTIONS_PAGE_SIZE = 10;
@@ -332,10 +332,12 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
         )}
         <div className='actions-footer' />
       </section>
-      <ConfirmQuestionDialog
+      <ConfirmDialog
         isOpen={Boolean(questionToDelete)}
         title="Delete questions?"
         message={`Are you sure you want to delete ${questionToDelete?.label || 'the selected questions'}? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
         onConfirm={confirmDelete}
         onClose={() => setQuestionToDelete(null)}
       />

@@ -2,11 +2,11 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/ui/Button';
+import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
 import { useTeachers } from '../../../context/SchoolAdmin/TeachersContext';
 
 import TeacherItem from './TeacherItem';
 import TeacherModal from './TeacherModal';
-import ConfirmRemoveModal from './ConfirmRemoveModal';
 
 import './Teachers.css';
 
@@ -214,9 +214,12 @@ const SchoolTeachers = () => {
                 onSave={handleAddTeacher}
             />
 
-            <ConfirmRemoveModal
+            <ConfirmDialog
                 isOpen={Boolean(selectedTeacherToRemove)}
-                teacherName={selectedTeacherToRemove?.name || ''}
+                title="Remove teacher?"
+                message={`Are you sure you want to remove ${selectedTeacherToRemove?.name || 'this teacher'}?`}
+                confirmText="Remove"
+                cancelText="Keep teacher"
                 onClose={handleCloseRemoveModal}
                 onConfirm={handleConfirmRemoveTeacher}
             />

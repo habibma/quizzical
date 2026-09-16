@@ -4,8 +4,8 @@ import { useStudents } from '../../../context/SchoolAdmin/StudentsContext';
 import Button from '../../../components/ui/Button';
 import Modal from '../../../components/ui/Modal';
 import Input from '../../../components/ui/Input';
+import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
 
-import ConfirmRemoveModal from './ConfirmRemoveModal';
 import StudentModal from './StudentModal';
 import StudentItem from './StudentItem';
 
@@ -231,9 +231,12 @@ const SchoolStudents = () => {
                 onSave={handleAddStudent}
             />
 
-            <ConfirmRemoveModal
+            <ConfirmDialog
                 isOpen={Boolean(studentToRemove)}
-                studentName={studentToRemove?.name || ''}
+                title="Remove student?"
+                message={`Are you sure you want to remove ${studentToRemove?.name || 'this student'} from the student list?`}
+                confirmText="Remove"
+                cancelText="Keep student"
                 onClose={handleCloseRemoveModal}
                 onConfirm={handleRemoveStudent}
             />
