@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { useApi } from "../../../context/Admin/ApiContext.jsx";
 
-import Modal from "../../../components/ui/Modal";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
+import ConfirmDialog from "../../../components/ui/ConfirmDialog/ConfirmDialog";
 import EditIcon from "../../../assets/icons/EditIcon";
 import DeleteIcon from "../../../assets/icons/DeleteIcon";
 import ApiModal from "./ApiModal";
@@ -17,6 +17,7 @@ const Api = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedApiSource, setSelectedApiSource] = useState(null);
+  const [apiToDelete, setApiToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const { apis, addApi, updateApi, removeApi } = useApi();
@@ -79,8 +80,13 @@ const Api = () => {
   }
 
   const handleDeleteApi = (api) => {
-    if (window.confirm(`Are you sure you want to delete the API: ${api.name}?`)) {
-      removeApi(api.id);
+    setApiToDelete(api);
+  };
+
+  const handleConfirmDelete = () => {
+    if (apiToDelete) {
+      removeApi(apiToDelete.id);
+      setApiToDelete(null);
     }
   };
 
@@ -119,8 +125,8 @@ const Api = () => {
   return (
     <div className="api-container">
       <section className="api-header">
-        <div className="api-header__content">
-          <p className="api-header__eyebrow">Platform Admin</p>
+        <div className="api-header--content">
+          <p className="api-header--eyebrow">Platform Admin</p>
           <h1>APIs</h1>
           <p className="lead">Manage and monitor your connected quiz providers.</p>
         </div>
@@ -253,6 +259,16 @@ const Api = () => {
         isEditing={isEditing}
         onSubmit={handleSaveApi}
         customClass="api-modal"
+      />
+
+      <ConfirmDialog
+        isOpen={Boolean(apiToDelete)}
+        title="Delete API?"
+        message={`Are you sure you want to delete ${apiToDelete?.name}? This action cannot be undone.`}
+        confirmText="Delete API"
+        cancelText="Keep API"
+        onConfirm={handleConfirmDelete}
+        onClose={() => setApiToDelete(null)}
       />
 
       <section className="api-actions">

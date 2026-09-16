@@ -16,13 +16,13 @@
     border: 1px solid rgba(99, 102, 241, 0.12);
 }
 
-.api-header__content {
+.api-header--content {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.api-header__eyebrow {
+.api-header--eyebrow {
     margin: 0;
     font-size: 0.72rem;
     letter-spacing: 0.12em;
