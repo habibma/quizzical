@@ -6,11 +6,17 @@ import Button from "../../../components/ui/Button";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog/ConfirmDialog";
 import EditIcon from "../../../assets/icons/EditIcon";
 import DeleteIcon from "../../../assets/icons/DeleteIcon";
+import InfoTooltip from "../../../components/ui/InfoTooltip/InfoTooltip.jsx";
 import ApiModal from "./ApiModal";
 
 import { apiSources } from "./sources.js";
 
 import './Api.css'
+
+// This is a temporary settings object. In the future, these settings will be managed through the SettingsContext and persisted in localStorage.
+const settings = {
+  showStatusExplanations: true, // Set to true to show explanations for health status
+};
 
 const Api = () => {
 
@@ -187,7 +193,14 @@ const Api = () => {
               <th>Name</th>
               <th>Adaptor</th>
               <th>Status</th>
-              <th>Health</th>
+              <th>Health
+                <InfoTooltip
+                  content="Healthy: enabled and has at least one endpoint
+Warning: enabled but no endpoint configured
+Offline: API is disabled"
+                  disabled={!settings.showStatusExplanations}
+                />
+              </th>
               <th>Default</th>
               <th>Endpoints</th>
               <th>Actions</th>
