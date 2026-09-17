@@ -113,6 +113,10 @@
     color: var(--card-text-primary-color);
 }
 
+
+/* ==============
+    Toolbar
+================= */
 .api-toolbar {
     display: flex;
     align-items: end;
@@ -125,8 +129,8 @@
     border-radius: var(--radius-md);
 }
 
-.api-toolbar__search,
-.api-toolbar__filter {
+.api-toolbar--search,
+.api-toolbar--filter {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
@@ -157,11 +161,42 @@
     border-color: rgba(99, 102, 241, 0.4);
 }
 
+/* =================
+    Api table
+===================== */
+
 .api-table--actions {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.75rem;
+}
+
+.api-table--actions .action-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--radius-lg);
+    background-color: rgba(148, 163, 184, 0.08);
+    color: var(--card-text-secondary-color);
+
+    &:hover {
+        background-color: rgba(148, 163, 184, 0.16);
+        color: var(--card-text-primary-color);
+    }
+
+    &.btn-danger {
+        background-color: rgba(239, 68, 68, 0.08);
+        color: var(--danger-color);
+
+        &:hover {
+            background-color: rgba(239, 68, 68, 0.16);
+            color: var(--card-text-primary-color);
+        }
+    }
 }
 
 .api-endpoints-list {

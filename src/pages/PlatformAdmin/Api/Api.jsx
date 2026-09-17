@@ -156,7 +156,7 @@ const Api = () => {
       </section>
 
       <section className="api-toolbar">
-        <div className="api-toolbar__search">
+        <div className="api-toolbar--search">
           <label htmlFor="api-search">Search APIs</label>
           <input
             id="api-search"
@@ -167,7 +167,7 @@ const Api = () => {
           />
         </div>
 
-        <div className="api-toolbar__filter">
+        <div className="api-toolbar--filter">
           <label htmlFor="api-status-filter">Filter</label>
           <select id="api-status-filter" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="all">All</option>
@@ -227,14 +227,16 @@ const Api = () => {
                   </td>
                   <td className="api-table--actions">
                     <Button
+                      type="button"
                       className="btn-secondary action-btn"
-                      text={<EditIcon />}
+                      text="edit"
                       onClick={() => hanldeEditApi(api)}
                       title="Edit API"
                     />
                     <Button
+                      type="button"
                       className="btn-danger action-btn"
-                      text={<DeleteIcon />}
+                      text="delete"
                       onClick={() => handleDeleteApi(api)}
                       title="Delete API"
                     />
@@ -271,6 +273,7 @@ const Api = () => {
         onClose={() => setApiToDelete(null)}
       />
 
+      {/* These buttons are temporary. TODO: will be replaced with a more permanent solution */}
       <section className="api-actions">
         <Button className="btn-primary" text="Add OpenTDB API" onClick={addOpenTDBApiSource} />
         <Button className="btn-primary" text="Add Trivia API" onClick={addTriviaApiSource} />
