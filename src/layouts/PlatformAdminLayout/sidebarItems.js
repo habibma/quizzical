@@ -11,41 +11,49 @@ import AwardIcon from "../../assets/icons/AwardIcon";
 
 export const sidebarItems = [
   {
+    section: "Overview",
     title: "Dashboard",
     path: "/admin",
     icon: DashboardIcon,
   },
   {
+    section: "Content",
     title: "Categories",
     path: "/admin/categories",
     icon: CategoriesIcon,
   },
   {
+    section: "Content",
     title: "Question Sources",
     path: "/admin/question-sources",
     icon: QuestionsIcon,
   },
   {
+    section: "Content",
     title: "Rewards",
     path: "/admin/rewards",
     icon: AwardIcon,
   },
   {
+    section: "Overview",
     title: "Statistics",
     path: "/admin/statistics",
     icon: StatisticsIcon,
   },
   {
+    section: "System",
     title: "Settings",
     path: "/admin/settings",
     icon: SettingsIcon,
   },
   {
+    section: "System",
     title: "Themes",
     path: "/admin/themes",
     icon: ThemesIcon,
   },
   {
+    section: "System",
     title: "API Management",
     path: "/admin/api",
     icon: ApiIcon,

@@ -43,6 +43,9 @@
 
   --tooltip-background-color: #1A1A1A;
   --tooltip-text-color: #F5F7FB;
+
+  --scrollbar-color: #4D5B9E;
+  --scrollbar-bg: #E0E0E0;
 }
 
 [data-theme="dark"] {
@@ -89,4 +92,7 @@
 
   --tooltip-background-color: #F5F7FB;
   --tooltip-text-color: #1A1A1A;
+
+  --scrollbar-color: #8BD3FF;
+  --scrollbar-bg: #4D5B9E;
 }

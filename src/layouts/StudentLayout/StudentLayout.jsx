@@ -29,7 +29,7 @@ const StudentLayout = ({ theme, toggleTheme }) => {
 
     return (
         <div className="admin-layout">
-            <Sidebar className="admin-sidebar" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} items={sidebarItems} />
+            <Sidebar className="admin-sidebar" title="Student Workspace" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} handleCloseSidebar={() => setOpened(false)} items={sidebarItems} />
             {opened && <div className="overlay" onClick={() => setOpened(false)}></div>}
             <Header className="admin-header" opened={opened} handleToggleSidebarOpen={handleToggleSidebarOpen} theme={theme} toggleTheme={toggleTheme} />
             <main className="admin-main">
