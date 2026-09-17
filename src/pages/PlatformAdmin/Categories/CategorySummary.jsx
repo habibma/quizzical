@@ -1,4 +1,4 @@
-const CategorySummary = ({ total, enabled, selectedRepository }) => (
+const CategorySummary = ({ total, enabled, selectedSource }) => (
   <section className="category-summary" aria-label="Category summary">
     <div className="category-summary__card">
       <span>Total categories</span>
@@ -13,8 +13,8 @@ const CategorySummary = ({ total, enabled, selectedRepository }) => (
       <strong>{total - enabled}</strong>
     </div>
     <div className="category-summary__card category-summary__card--wide">
-      <span>Repository</span>
-      <strong>{selectedRepository || 'Choose a repository'}</strong>
+      <span>API source</span>
+      <strong>{selectedSource || 'Choose an API source'}</strong>
     </div>
   </section>
 );

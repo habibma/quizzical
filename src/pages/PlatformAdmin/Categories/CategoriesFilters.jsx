@@ -1,17 +1,17 @@
-const CategoriesFilters = ({ repositories, selectedRepoId, onFilterChange }) => {
+const CategoriesFilters = ({ sources, selectedSourceId, onFilterChange }) => {
 
   const options = [
-    { value: '', label: 'select repository' },
-    ...repositories.map(repo => ({ value: String(repo.id), label: repo.title }))
+    { value: '', label: 'Select API source' },
+    ...sources.map(source => ({ value: String(source.id), label: source.title }))
   ]
 
   return (
     <div className='categories--table-filter'>
-      <label className="label" htmlFor="category-repository">Repository</label>
+      <label className="label" htmlFor="category-source">API source</label>
       <select
-        id="category-repository"
-        name="repository"
-        value={selectedRepoId ? String(selectedRepoId) : ''}
+        id="category-source"
+        name="source"
+        value={selectedSourceId ? String(selectedSourceId) : ''}
         onChange={onFilterChange}
       >
         {options.map(option => (

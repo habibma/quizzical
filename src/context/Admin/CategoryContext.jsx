@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getCategories } from "../../services/categoryService.js";
 import { useRepo } from "./ReposContext.jsx";
+import { useApi } from "./ApiContext.jsx";
 
 const CategoryContext = createContext();
 
-const STORAGE_KEY = "categoriesByRepository";
+const STORAGE_KEY = "categoriesBySource";
+const LEGACY_STORAGE_KEY = "categoriesByRepository";
 
 const normalizeCategory = (category) => ({
     id: category.id,
@@ -17,15 +19,15 @@ const normalizeCategory = (category) => ({
 });
 
 const loadCategoriesFromStorage = () => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
 
     if (!stored) return {};
 
     try {
         const parsed = JSON.parse(stored);
         return Object.fromEntries(
-            Object.entries(parsed).map(([repoId, categories]) => [
-                repoId,
+            Object.entries(parsed).map(([sourceId, categories]) => [
+                sourceId,
                 Array.isArray(categories) ? categories.map(normalizeCategory) : [],
             ])
         );
@@ -36,54 +38,73 @@ const loadCategoriesFromStorage = () => {
 
 export function CategoryProvider({ children }) {
 
-    const [selectedRepoId, setSelectedRepoId] = useState(null);
-    const [categoriesByRepository, setCategoriesByRepository] =
+    const [selectedSourceId, setSelectedSourceId] = useState(null);
+    const [categoriesBySource, setCategoriesBySource] =
         useState(loadCategoriesFromStorage);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const { apis } = useApi();
     const { activeRepositories } = useRepo();
 
+    const loadCategories = async (source, normalizedSourceId) => {
+        setLoading(true);
+        setError(null);
 
-    // Load categories for a repository
-    const getCategoriesForRepository = async (repoId) => {
-        const normalizedRepoId = repoId ? String(repoId) : null;
-
-        if (!normalizedRepoId) return [];
-
-        // Return cached categories
-        if (categoriesByRepository[normalizedRepoId]) {
-            return categoriesByRepository[normalizedRepoId];
-        }
-
-        const repository = activeRepositories.find(
-            repo => String(repo.id) === normalizedRepoId
-        );
-
-        if (!repository) return [];
-
-      setLoading(true);
-      setError(null);
-
-      try {
-            const apiCategories = await getCategories(repository);
+        try {
+            const apiCategories = await getCategories(source);
             const normalizedCategories = apiCategories.map(normalizeCategory);
-            setCategoriesByRepository(prev => ({
+            setCategoriesBySource(prev => ({
                 ...prev,
-                [normalizedRepoId]: normalizedCategories,
+                [normalizedSourceId]: normalizedCategories,
             }));
             return normalizedCategories;
         } catch (error) {
             setError(error.message || "Unable to load categories.");
-            console.error("Error fetching categories for repository:", error);
+            console.error("Error fetching categories for source:", error);
             return [];
         } finally {
             setLoading(false);
         }
     };
 
+
+    const getCategoriesForSource = async (sourceId) => {
+        const normalizedSourceId = sourceId ? String(sourceId) : null;
+
+        if (!normalizedSourceId) return [];
+
+        // Return cached categories
+        if (categoriesBySource[normalizedSourceId]) {
+            return categoriesBySource[normalizedSourceId];
+        }
+
+        const source = activeRepositories.find(item => String(item.id) === normalizedSourceId)
+            ?? apis.find(item => String(item.id) === normalizedSourceId && item.enabled);
+
+        if (!source) return [];
+
+        return loadCategories(source, normalizedSourceId);
+    };
+
+    const getCategoriesForApi = async (apiId) => {
+        const normalizedApiId = apiId ? String(apiId) : null;
+
+        if (!normalizedApiId) return [];
+
+        if (categoriesBySource[normalizedApiId]) {
+            return categoriesBySource[normalizedApiId];
+        }
+
+        const api = apis.find(source => String(source.id) === normalizedApiId && source.enabled);
+
+        if (!api) return [];
+
+        return loadCategories(api, normalizedApiId);
+    };
+
     const toggleCategory = (repoId, categoryId) => {
-        setCategoriesByRepository(prev => ({
+            setCategoriesBySource(prev => ({
             ...prev,
             [repoId]: (prev[repoId] ?? []).map(category =>
                 category.id === categoryId
@@ -97,7 +118,7 @@ export function CategoryProvider({ children }) {
     };
 
     const setCategoriesEnabled = (repoId, categoryIds, enabled) => {
-        setCategoriesByRepository(prev => ({
+        setCategoriesBySource(prev => ({
             ...prev,
             [repoId]: (prev[repoId] ?? []).map(category =>
                 categoryIds.includes(category.id)
@@ -116,16 +137,16 @@ export function CategoryProvider({ children }) {
                 name: category.apiName ?? category.name ?? category.displayName,
             }));
 
-        setCategoriesByRepository(prev => ({
+        setCategoriesBySource(prev => ({
             ...prev,
             [repoId]: normalizedCategories,
         }));
     };
 
     const updateCategoryDetails = (id, details) => {
-        setCategoriesByRepository(prev => ({
+        setCategoriesBySource(prev => ({
             ...prev,
-            [selectedRepoId]: (prev[selectedRepoId] ?? []).map(category =>
+            [selectedSourceId]: (prev[selectedSourceId] ?? []).map(category =>
                 category.id === id ? { ...category, ...details } : category
             ),
         }));
@@ -135,22 +156,27 @@ export function CategoryProvider({ children }) {
     useEffect(() => {
         localStorage.setItem(
             STORAGE_KEY,
-            JSON.stringify(categoriesByRepository)
+            JSON.stringify(categoriesBySource)
         );
-    }, [categoriesByRepository]);
+    }, [categoriesBySource]);
 
-    // Select repository
-    const selectRepository = (repoId) => {
-        const normalizedRepoId = repoId ? String(repoId) : null;
-        setSelectedRepoId(normalizedRepoId);
-        getCategoriesForRepository(normalizedRepoId);
+    const selectSource = (sourceId) => {
+        const normalizedSourceId = sourceId ? String(sourceId) : null;
+        setSelectedSourceId(normalizedSourceId);
+        getCategoriesForSource(normalizedSourceId);
+    };
+
+    const selectApi = (apiId) => {
+        const normalizedApiId = apiId ? String(apiId) : null;
+        setSelectedSourceId(normalizedApiId);
+        getCategoriesForApi(normalizedApiId);
     };
 
     // Rename category
     const renameCategory = (id, displayName) => {
-        setCategoriesByRepository(prev => ({
+        setCategoriesBySource(prev => ({
             ...prev,
-            [selectedRepoId]: (prev[selectedRepoId] ?? []).map(category =>
+            [selectedSourceId]: (prev[selectedSourceId] ?? []).map(category =>
                 category.id === id
                     ? {
                         ...category,
@@ -161,14 +187,14 @@ export function CategoryProvider({ children }) {
         }));
     };
 
-    // Get enabled categories from multiple repositories
-    const getActiveCategories = (repoIds) => {
-        return repoIds.flatMap(repoId =>
-            (categoriesByRepository[repoId] ?? [])
+    // Get enabled categories from multiple sources
+    const getActiveCategories = (sourceIds) => {
+        return sourceIds.flatMap(sourceId =>
+            (categoriesBySource[sourceId] ?? [])
                 .filter(category => category.enabled)
                 .map(category => ({
                     ...category,
-                    repositoryId: repoId,
+                    sourceId,
                 }))
         );
     };
@@ -177,12 +203,13 @@ export function CategoryProvider({ children }) {
     return (
         <CategoryContext.Provider
             value={{
-                categoriesByRepository,
+                categoriesBySource,
                 loading,
                 error,
 
-                selectedRepoId,
-                selectRepository,
+                selectedSourceId,
+                selectSource,
+                selectApi,
 
                 toggleCategory,
                 setCategoriesEnabled,
@@ -191,7 +218,8 @@ export function CategoryProvider({ children }) {
                 renameCategory,
                 updateCategoryName: renameCategory,
 
-                getCategoriesForRepository,
+                getCategoriesForSource,
+                getCategoriesForApi,
                 getActiveCategories,
             }}
         >

@@ -2,9 +2,9 @@ import Button from '../../../components/ui/Button';
 import CategoriesFilters from './CategoriesFilters';
 
 const CategoryToolbar = ({
-  repositories,
-  selectedRepoId,
-  onRepositoryChange,
+  sources,
+  selectedSourceId,
+  onSourceChange,
   searchTerm,
   onSearchChange,
   onClear,
@@ -16,9 +16,9 @@ const CategoryToolbar = ({
   <section className="category-toolbar" aria-label="Category controls">
     <div className="category-toolbar__filters">
       <CategoriesFilters
-        repositories={repositories}
-        selectedRepoId={selectedRepoId}
-        onFilterChange={onRepositoryChange}
+        sources={sources}
+        selectedSourceId={selectedSourceId}
+        onFilterChange={onSourceChange}
       />
       <div className="category-search">
         <label htmlFor="category-search">Search categories</label>

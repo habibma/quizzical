@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useCategories } from '../../../context/Admin/CategoryContext.jsx'
-import { useRepo } from '../../../context/Admin/ReposContext.jsx'
+import { useApi } from '../../../context/Admin/ApiContext.jsx'
 import Button from '../../../components/ui/Button'
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog'
 import CategoriesModal from './CategoriesModal'
@@ -16,7 +16,7 @@ const Categories = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categoriesToDisable, setCategoriesToDisable] = useState(null);
-  const [selectedRepositoryId, setSelectedRepositoryId] = useState('');
+  const [selectedSourceId, setSelectedSourceId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIds, setSelectedIds] = useState([]);
   const [page, setPage] = useState(1);
@@ -24,18 +24,19 @@ const Categories = () => {
   const PAGE_SIZE = 10;
 
   const {
-    categoriesByRepository,
+    categoriesBySource,
     toggleCategory,
     updateCategoryDetails,
     setCategoriesEnabled,
     importCategories,
-    selectRepository,
+    selectApi,
     loading,
     error,
-    getCategoriesForRepository,
+    getCategoriesForApi,
   } = useCategories();
 
-  const { activeRepositories } = useRepo();
+  const { apis } = useApi();
+  const enabledApis = apis.filter(api => api.enabled);
 
   const openModal = (category) => {
     setSelectedCategory(category);
@@ -53,15 +54,15 @@ const Categories = () => {
   }
 
   const handleFilterChange = (e) => {
-    const repoId = e.target.value;
-    setSelectedRepositoryId(repoId);
-    selectRepository(repoId);
+    const sourceId = e.target.value;
+    setSelectedSourceId(sourceId);
+    selectApi(sourceId);
     setSearchTerm('');
     setSelectedIds([]);
     setPage(1);
   }
 
-  const categories = categoriesByRepository[selectedRepositoryId] ?? [];
+  const categories = categoriesBySource[selectedSourceId] ?? [];
   const filteredCategories = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
     return categories
@@ -83,8 +84,8 @@ const Categories = () => {
   };
 
   const toggleAll = (enabled) => {
-    if (!selectedRepositoryId) return;
-    setCategoriesEnabled(selectedRepositoryId, selectedIds, enabled);
+    if (!selectedSourceId) return;
+    setCategoriesEnabled(selectedSourceId, selectedIds, enabled);
     setSelectedIds([]);
   };
 
@@ -95,7 +96,7 @@ const Categories = () => {
 
   const confirmDisableSelected = () => {
     if (!categoriesToDisable) return;
-    setCategoriesEnabled(selectedRepositoryId, categoriesToDisable, false);
+    setCategoriesEnabled(selectedSourceId, categoriesToDisable, false);
     setSelectedIds(currentIds => currentIds.filter(id => !categoriesToDisable.includes(id)));
     setCategoriesToDisable(null);
   };
@@ -110,21 +111,21 @@ const Categories = () => {
     const url = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${selectedRepositoryId || 'categories'}.json`;
+    link.download = `${selectedSourceId || 'categories'}.json`;
     link.click();
     URL.revokeObjectURL(url);
   };
 
   const importCategoryFile = (event) => {
     const file = event.target.files?.[0];
-    if (!file || !selectedRepositoryId) return;
+    if (!file || !selectedSourceId) return;
 
     const reader = new FileReader();
     reader.onload = () => {
       try {
         const imported = JSON.parse(reader.result);
         if (!Array.isArray(imported)) throw new Error();
-        importCategories(selectedRepositoryId, imported);
+        importCategories(selectedSourceId, imported);
         setPage(1);
       } catch {
         window.alert('Unable to import categories. Use a valid JSON array.');
@@ -149,19 +150,19 @@ const Categories = () => {
         <div>
           <p className="categories-eyebrow">Platform Admin</p>
           <h1>Categories</h1>
-          <p className='lead'>Manage category visibility and display names for each repository.</p>
+          <p className='lead'>Manage category visibility and display names for each API source.</p>
         </div>
       </section>
       <section className='categories-table-container'>
         <CategorySummary
           total={categories.length}
           enabled={enabledCount}
-          selectedRepository={activeRepositories.find(repo => String(repo.id) === selectedRepositoryId)?.title}
+          selectedSource={enabledApis.find(api => String(api.id) === selectedSourceId)?.name}
         />
         <CategoryToolbar
-          repositories={activeRepositories}
-          selectedRepoId={selectedRepositoryId}
-          onRepositoryChange={handleFilterChange}
+          sources={enabledApis.map(api => ({ ...api, title: api.name }))}
+          selectedSourceId={selectedSourceId}
+          onSourceChange={handleFilterChange}
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           onClear={clearControls}
@@ -178,12 +179,12 @@ const Categories = () => {
             <Button className="btn-secondary" text="Disable selected" onClick={requestDisableSelected} />
           </div>
         )}
-        {!selectedRepositoryId ? (
-          <CategoryState type="empty" message="Select a repository to view its categories." />
+        {!selectedSourceId ? (
+          <CategoryState type="empty" message="Select an API source to view its categories." />
         ) : loading ? (
           <CategoryState type="loading" message="Loading categories..." />
         ) : error ? (
-          <CategoryState type="error" message={error} onRetry={() => getCategoriesForRepository(selectedRepositoryId)} />
+          <CategoryState type="error" message={error} onRetry={() => getCategoriesForApi(selectedSourceId)} />
         ) : (
         <table className='categories-table'>
           <thead className='categories-table-header'>
@@ -222,14 +223,14 @@ const Categories = () => {
                 </td>
                 <td className="category-api-name">{category.apiName}</td>
                 <td className="category-question-count">&mdash;</td>
-                {/* TODO: Add question count when supported by the repository */}
+                {/* TODO: Add question count when supported by the API source */}
                 <td>
                   <label className="category-toggle">
                     <input
                       type="checkbox"
                       checked={category.enabled}
                       aria-label={`${category.displayName} enabled`}
-                      onChange={() => toggleCategory(selectedRepositoryId, category.id)}
+                      onChange={() => toggleCategory(selectedSourceId, category.id)}
                     />
                     <span className="slider"></span>
                     <span>{category.enabled ? 'Enabled' : 'Disabled'}</span>
@@ -244,7 +245,7 @@ const Categories = () => {
           <tfoot className='categories-table-footer'>
             <tr>
               <td colSpan="6">
-                <p className="text-muted">Changes are saved automatically. Question counts will appear when supported by the repository.</p>
+                <p className="text-muted">Changes are saved automatically. Question counts will appear when supported by the API source.</p>
               </td>
             </tr>
           </tfoot>

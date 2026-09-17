@@ -10,6 +10,7 @@ import './Questions.css'
 
 import { useQuestions } from '../../../context/Admin/QuestionsContext';
 import { useRepo } from '../../../context/Admin/ReposContext';
+import { useApi } from '../../../context/Admin/ApiContext';
 
 import Button from '../../../components/ui/Button';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
@@ -50,6 +51,12 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
     fetchCategories,
   } = useQuestions();
   const { activeRepositories } = useRepo();
+  const { apis } = useApi();
+  const availableSources = useMemo(() => (
+    isTeacherView
+      ? activeRepositories
+      : apis.filter(api => api.enabled).map(api => ({ ...api, title: api.name }))
+  ), [isTeacherView, activeRepositories, apis]);
 
   const handleFilterChange = (name, value) => {
     setFilters(prevValues => ({
@@ -66,15 +73,15 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
     }))
   ];
 
-  const repositoryOptions = [
-    { value: 'any', label: 'Any Repository' },
-    ...activeRepositories.map(repo => ({
+  const apiOptions = [
+    { value: 'any', label: 'Any Api' },
+    ...availableSources.map(repo => ({
       value: repo.id,
       label: repo.title,
     }))
   ];
 
-  const filterConfig = createFilterConfig(categoryOptions, repositoryOptions);
+  const filterConfig = createFilterConfig(categoryOptions, apiOptions);
   const teacherFilterConfig = filterConfig.filter(filter => filter.name === 'type');
 
   const openModal = () => {
@@ -216,7 +223,7 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
     if (isTeacherView || repository === 'any')
       return;
 
-    const selectedRepo = activeRepositories.find(repo => repo.id === repository);
+    const selectedRepo = availableSources.find(repo => String(repo.id) === String(repository));
     console.log("Selected repository:", selectedRepo);
     if (!selectedRepo) {
       return;
@@ -225,7 +232,7 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
     setApiPage(1);
     setSelectedApiIds([]);
     fetchQuestions(selectedRepo, { amount: 50, category, difficulty, type });
-  }, [isTeacherView, repository, category, difficulty, type, activeRepositories]);
+  }, [isTeacherView, repository, category, difficulty, type, availableSources]);
 
   useEffect(() => {
     if (isTeacherView || repository === 'any')
@@ -234,7 +241,7 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
       return ;
     }
 
-    const selectedRepo = activeRepositories.find(repo => repo.id === repository);
+    const selectedRepo = availableSources.find(repo => String(repo.id) === String(repository));
 
     if (!selectedRepo) return ;
 
@@ -244,7 +251,7 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
     }
 
     loadCategories();
-  }, [isTeacherView, repository, activeRepositories]);
+  }, [isTeacherView, repository, availableSources]);
 
 
   return (
@@ -297,7 +304,7 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
             selectedIds={selectedApiIds}
             onSelect={(ids, checked) => handleSelection(ids, checked, setSelectedApiIds)}
             onRetry={() => {
-              const selectedRepo = activeRepositories.find((repo) => repo.id === repository);
+              const selectedRepo = availableSources.find((repo) => String(repo.id) === String(repository));
               if (selectedRepo) fetchQuestions(selectedRepo, { amount: 50, category, difficulty, type });
             }}
           />

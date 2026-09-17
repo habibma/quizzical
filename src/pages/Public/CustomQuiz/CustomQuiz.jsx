@@ -8,7 +8,7 @@ import Button from "../../../components/ui/Button";
 import "./CustomQuiz.css";
 
 const CustomQuiz = () => {
-    const { categoriesByRepository } = useCategories();
+    const { categoriesBySource } = useCategories();
     const { loading, fetchQuestions } = useQuiz();
     const { settings } = useSettings();
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const CustomQuiz = () => {
         questionType: settings.questionType,
     });
 
-    const allEnabledCategories = Object.entries(categoriesByRepository)
+    const allEnabledCategories = Object.entries(categoriesBySource)
         .flatMap(([repositoryId, categories]) =>
             categories
                 .filter(category => category.enabled)
