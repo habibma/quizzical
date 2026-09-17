@@ -7,7 +7,7 @@ export const sidebarItems = [
   {
     section: "Overview",
     title: "Dashboard",
-    path: "/teacher",
+    path: "/student",
     icon: DashboardIcon,
   },
   {
