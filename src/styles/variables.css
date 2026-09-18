@@ -46,6 +46,9 @@
 
   --scrollbar-color: #4D5B9E;
   --scrollbar-bg: #E0E0E0;
+
+  --header-background-color: #F8F9FA;
+  --header-text-color: #293264;
 }
 
 [data-theme="dark"] {
@@ -95,4 +98,7 @@
 
   --scrollbar-color: #8BD3FF;
   --scrollbar-bg: #4D5B9E;
+
+  --header-background-color: #1A1A1A;
+  --header-text-color: #F5F7FB;
 }

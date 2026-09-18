@@ -1,11 +1,12 @@
-.admin-header {
+.admin-topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 64px;
     padding: 10px 20px;
     background-color: var(--header-background-color);
     color: var(--header-text-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
 
     position: relative;
 }
@@ -26,32 +27,51 @@
     gap: 10px;
 }
 
-.theme-toggle {
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
     cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+    background-color: var(--hover-color);
+    color: var(--text-color);
+    outline: none;
 }
 
 .burger-menu {
-    width: 25px;
-    height: 20px;
-    border: none;
-    cursor: pointer;
-
-    position: absolute;
-    z-index: 102;
+    display: none;
+    margin-right: 8px;
 }
 
 .burger-menu .burger-bar {
     display: block;
-    background-color: #ddd;
+    width: 20px;
+    height: 2px;
+    background-color: currentColor;
     border-radius: 2px;
     margin: 3px 0;
-    height: 3px;
-
 }
 
 @media screen and (min-width: 768px) {
     .burger-menu {
         display: none;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .burger-menu {
+        display: inline-flex;
     }
 }
 
@@ -66,4 +86,11 @@
 
 .view-site a:hover {
     color: var(--hover-color);
+}
+
+.page-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
 }

@@ -1,27 +1,38 @@
-import Logo from "../../components/ui/Logo/Logo";
-
-import UserIcon from "../../assets/icons/UserIcon";
 import UserMenu from "./UserMenu";
 import LightIcon from "../../assets/icons/LightIcon";
 import DarkIcon from "../../assets/icons/DarkIcon";
 
 import './Header.css';
 
-const Header = ({ isSidebarOpen, toggleSidebar, pageTitle, opened, handleToggleSidebarOpen, theme, toggleTheme }) => {
+const Header = ({ pageTitle = "Dashboard", handleToggleSidebarOpen, theme, toggleTheme }) => {
     return (
-        <header className="admin-header">
+        <header className="admin-topbar">
             <div className="header-left">
+                <button
+                    className="icon-button burger-menu"
+                    type="button"
+                    aria-label="Open navigation menu"
+                    title="Open navigation menu"
+                    onClick={handleToggleSidebarOpen}
+                >
+                    <div className="burger-bar-container">
+                        <span className="burger-bar"></span>
+                        <span className="burger-bar"></span>
+                        <span className="burger-bar"></span>
+                    </div>
+                </button>
                 <h2 className="page-title">{pageTitle}</h2>
-                <div className="burger-menu" onClick={handleToggleSidebarOpen}>
-                    <span className="burger-bar"></span>
-                    <span className="burger-bar"></span>
-                    <span className="burger-bar"></span>
-                </div>
             </div>
             <div className="header-right">
-                <div className="theme-toggle" onClick={toggleTheme}>
+                <button
+                    className="icon-button theme-toggle"
+                    type="button"
+                    aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+                    title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+                    onClick={toggleTheme}
+                >
                     {theme === 'light' ? <LightIcon /> : <DarkIcon />}
-                </div>
+                </button>
                 <div className="view-site">
                     <a href="/" target="_blank" rel="noopener noreferrer">
                         View Site

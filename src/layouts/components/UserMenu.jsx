@@ -13,9 +13,15 @@ const UserMenu = () => {
 
     return (
         <div className="user-menu">
-            <div className="user-avatar" onClick={toggleMenu}>
+            <button
+                className="user-avatar"
+                type="button"
+                aria-label="Open user menu"
+                title="Open user menu"
+                onClick={toggleMenu}
+            >
                 <UserIcon />
-            </div>
+            </button>
             {isOpen && (
                 <div className="user-menu-content">
                     <ul className="user-menu-list">

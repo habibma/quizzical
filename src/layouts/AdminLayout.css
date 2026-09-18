@@ -28,7 +28,7 @@
     grid-area: sidebar;
 }
 
-.admin-header {
+.admin-topbar {
     background-color: var(--header-background-color);
     color: var(--header-text-color);
     grid-area: header;
