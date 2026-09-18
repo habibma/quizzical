@@ -1,61 +1,34 @@
 
-const QuizCard = ({ quiz, onEdit, onDelete, onDuplicate, onPublish }) => {
+const QuizCard = ({ quiz, onEdit, onDelete, onDuplicate, onPublish, onArchive, onPreview }) => {
+	const status = quiz.access?.status ?? (quiz.isPublished ? 'published' : 'draft');
+	const questionCount = quiz.content.questionCount || (quiz.content.questionIds ?? []).length;
 
 	return (
-		<div className='quiz-card'>
-			<h3 className='quiz-card--header'>{quiz.general.title}</h3>
-			<section className='quiz-card--content'>
-				<p className='quiz-card--description'>{quiz.general.description}</p>
-				<div className='quiz-card--meta'>
-					<p className='quiz-card--meta-item'>Repositories: {quiz.content.repositories.join(', ')}</p>
-					<p className='quiz-card--meta-item'>Categories: {quiz.content.categories.join(', ')}</p>
-					<p className='quiz-card--meta-item'>My Questions: {(quiz.content.questionIds ?? []).length}</p>
-				</div>
-				<div className='quiz-card--meta'>
-					<p className='quiz-card--meta-item'>Number of Questions: {quiz.content.questionCount}</p>
-					<p className='quiz-card--meta-item'>Question Selection: {quiz.content.questionSelection}</p>
-				</div>
-				<div className='quiz-card--meta'>
-					<p className='quiz-card--meta-item'>Difficulty: {quiz.rules.difficulty}</p>
-					<p className='quiz-card--meta-item'>Time Limit: {quiz.rules.timeLimit} mins</p>
-				</div>
-				<div className='quiz-card--meta'>
-					<p className='quiz-card--meta-item'>Attempts: {quiz.rules.attempts}</p>
-					<p className='quiz-card--meta-item'>Passing Score: {quiz.rules.passingScore}%</p>
-				</div>
-				<div className='quiz-card--meta'>
-					<p className='quiz-card--meta-item'>Completion XP: {quiz.rewards.completionXP}</p>
-					<p className='quiz-card--meta-item'>Pass XP: {quiz.rewards.passXP}</p>
-					<p className='quiz-card--meta-item'>Perfect Score XP: {quiz.rewards.perfectScoreXP}</p>
-				</div>
-				<div className='quiz-card--meta'>
-					<p className='quiz-card--meta'>Updated At: {quiz.updatedAt}</p>
-					<p className='quiz-card--meta'>Created At: {quiz.createdAt}</p>
-				</div>
-			</section>
-			{quiz.isPublished ? (
-				<span className='quiz-card--status published'>Published</span>
-			) : (
-				<span className='quiz-card--status draft'>Draft</span>
-			)}
-			<div className='quiz-card-actions'>
-				<button className='btn-primary' onClick={() => onEdit(quiz)}>
-					Edit
-				</button>
-				<button className='btn-secondary' onClick={() => { }}>
-					Preview
-				</button>
-				<button className='btn-success' onClick={() => onDuplicate(quiz.id)}>
-					Duplicate
-				</button>
-				<button className='btn-warning' onClick={() => onPublish(quiz.id)}>
-					Publish
-				</button>
-				<button className='btn-danger' onClick={() => onDelete(quiz.id)}>
-					Delete
-				</button>
+		<article className='quiz-card'>
+			<div className='quiz-card--header'>
+				<h3>{quiz.general.title || 'Untitled quiz'}</h3>
+				<span className={`quiz-card--status ${status}`}>{status}</span>
 			</div>
-		</div>
+			<section className='quiz-card--content'>
+				<p className='quiz-card--description'>{quiz.general.description || 'No description provided.'}</p>
+				<div className='quiz-card--facts'>
+					<span>{questionCount} questions</span>
+					<span>{quiz.rules.timeLimit || 'No'} min limit</span>
+					<span>{quiz.rules.attempts || 'Unlimited'} attempts</span>
+					<span>{quiz.access?.visibility || 'class'} visibility</span>
+				</div>
+				<p className='quiz-card--updated'>Updated {quiz.updatedAt || 'not yet'}</p>
+			</section>
+			<div className='quiz-card-actions'>
+				<button className='btn-primary' onClick={() => onEdit(quiz)}>Edit</button>
+				<button className='btn-secondary' onClick={() => onPreview(quiz)}>Preview</button>
+				<div className='quiz-card-actions__secondary'>
+					<button className='btn-secondary' onClick={() => onDuplicate(quiz.id)}>Duplicate</button>
+					{status === 'published' ? <button className='btn-warning' onClick={() => onArchive(quiz.id)}>Archive</button> : status !== 'archived' ? <button className='btn-success' onClick={() => onPublish(quiz.id)}>Publish</button> : null}
+					<button className='btn-danger' onClick={() => onDelete(quiz.id)}>Delete</button>
+				</div>
+			</div>
+		</article>
 	)
 }
 

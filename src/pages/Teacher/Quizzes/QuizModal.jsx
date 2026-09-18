@@ -42,6 +42,7 @@ const FormField = ({ field, inputValues, onInputChange, section, repositoryOptio
 					value={value}
 					onChange={(e) => onInputChange(section, e)}
 				>
+					{getOptionsForField(field).length === 0 && <option value="" disabled>No options available</option>}
 					{getOptionsForField(field).map(option => (
 						<option
 							key={option.value}
@@ -89,6 +90,9 @@ const FormField = ({ field, inputValues, onInputChange, section, repositoryOptio
 					name={field.name}
 					value={value}
 					onChange={(e) => onInputChange(section, e)}
+					min={field.min}
+					max={field.max}
+					required={field.required}
 				/>
 			)}
 		</div>
