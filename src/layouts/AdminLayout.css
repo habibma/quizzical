@@ -48,10 +48,16 @@
     grid-area: main;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: #888 var(--background-color);
+    scrollbar-color: #888 var(--scrollbar-bg);
     flex: 1;
     height: 100vh;
-    padding: 50px 20px 20px;
+    padding: 75px 20px;
     background-color: var(--background-color);
     color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .admin-main {
+        padding: 20px;
+    }
 }
