@@ -138,8 +138,13 @@
 .health-dot--warning { background: var(--warning-color); }
 
 .repository-card__actions { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; padding: 0 1.1rem 1.1rem; }
-.repository-toggle { display: inline-flex; align-items: center; gap: 0.4rem; margin-right: auto; color: var(--card-text-secondary-color); cursor: pointer; font-size: 0.85rem; font-weight: 700; }
-.repository-toggle input { accent-color: var(--primary-color); }
+.repository-availability { display: inline-flex; align-items: center; gap: 0.55rem; margin-right: auto; color: var(--card-text-secondary-color); cursor: pointer; font-size: 0.85rem; font-weight: 700; }
+.repository-availability input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.repository-switch { position: relative; width: 2.5rem; height: 1.4rem; flex-shrink: 0; border-radius: 999px; background: var(--disabled-color); transition: background-color 0.2s ease; }
+.repository-switch::after { position: absolute; top: 0.2rem; left: 0.2rem; width: 1rem; height: 1rem; border-radius: 50%; background: #fff; content: ''; transition: transform 0.2s ease; }
+.repository-availability input:checked + .repository-switch { background: var(--success-color); }
+.repository-availability input:checked + .repository-switch::after { transform: translateX(1.1rem); }
+.repository-availability input:focus-visible + .repository-switch { outline: 3px solid rgba(99, 102, 241, 0.35); outline-offset: 2px; }
 .repository-state { padding: 2rem; border: 1px dashed rgba(148, 163, 184, 0.35); border-radius: var(--radius-md); color: var(--card-text-secondary-color); text-align: center; }
 
 .repository-card:hover {
@@ -150,7 +155,6 @@
 .repositories-toolbar input:focus-visible,
 .repositories-toolbar select:focus-visible,
 .repository-card button:focus-visible,
-.repository-toggle input:focus-visible,
 .repos-category-modal button:focus-visible {
     outline: 3px solid rgba(99, 102, 241, 0.35);
     outline-offset: 2px;
@@ -209,7 +213,7 @@
         flex-direction: column;
     }
 
-    .repository-toggle { margin-right: 0; }
+    .repository-availability { margin-right: 0; }
 
     .repos-category-modal .category-table {
         display: block;

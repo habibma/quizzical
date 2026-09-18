@@ -1,6 +1,9 @@
+import { useState } from "react";
 import Button from "../../../components/ui/Button";
+import ConfirmDialog from "../../../components/ui/ConfirmDialog/ConfirmDialog";
 
 const Card = ({ ...props }) => {
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const {
     title,
@@ -15,6 +18,20 @@ const Card = ({ ...props }) => {
     onActiveToggle,
     onViewCategories,
   } = props;
+
+  const handleAvailabilityChange = () => {
+    if (isActive) {
+      setIsConfirmOpen(true);
+      return;
+    }
+
+    onActiveToggle();
+  };
+
+  const confirmDeactivation = () => {
+    onActiveToggle();
+    setIsConfirmOpen(false);
+  };
 
   return (
     <article className="repository-card">
@@ -38,10 +55,27 @@ const Card = ({ ...props }) => {
         </div>
       </div>
       <div className="repository-card__actions">
-        <Button className={`btn ${isActive ? 'btn-danger' : 'btn-success'}`} text={isActive ? 'Deactivate' : 'Activate'} onClick={onActiveToggle} />
+        <label className="repository-availability">
+          <span>Available to teachers</span>
+          <input
+            type="checkbox"
+            checked={isActive}
+            onChange={handleAvailabilityChange}
+            aria-label={`${isActive ? 'Deactivate' : 'Activate'} ${title}`}
+          />
+          <span className="repository-switch" aria-hidden="true" />
+        </label>
         <Button className="btn-secondary" text="Test connection" onClick={onTestConnection} disabled={health.status === 'checking'} />
         <Button className="btn-primary" text="View categories" onClick={onViewCategories} />
       </div>
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        title="Deactivate repository?"
+        message={`${title} will no longer be available to teachers when they create new quizzes.`}
+        confirmText="Deactivate"
+        onConfirm={confirmDeactivation}
+        onClose={() => setIsConfirmOpen(false)}
+      />
     </article>
   )
 }
