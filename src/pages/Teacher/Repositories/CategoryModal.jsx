@@ -20,24 +20,24 @@ const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory, loadin
             <tr>
               <th>Name</th>
               <th>Status</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {list.map(item => (
               <tr key={item.id}>
                 <td>{item.displayName}</td>
-                <td>{item.enabled ? "Enabled" : "Disabled"}</td>
                 <td>
-                  <button className= {item.enabled ? "btn-danger" : "btn-success"} onClick={() => onToggleCategory(repoId, item.id)}>
-                    {item.enabled ? "Disable" : "Enable"}
-                  </button>
+                  <td>
+                    <span className={item.enabled ? "status-enabled" : "status-disabled"}>
+                      {item.enabled ? "Available" : "Unavailable"}
+                    </span>
+                  </td>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        ) : (<p>No categories available.</p>)}
+      ) : (<p>No categories available.</p>)}
     </Modal>
   )
 }

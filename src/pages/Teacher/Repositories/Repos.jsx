@@ -36,7 +36,7 @@ const RepositoriesList = ({ repositories, toggleRepository, onViewCategories, nu
 const Repositories = () => {
 
   const { repositories, toggleRepository, healthByRepository, testRepository } = useRepo();
-  const { categoriesBySource, getCategoriesForSource, toggleCategory, loading, error } = useCategories();
+  const { categoriesBySource, getCategoriesForRepository, loading, error } = useCategories();
 
   const [selectedRepository, setSelectedRepository] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +59,7 @@ const Repositories = () => {
   }, [repositories, searchTerm, statusFilter]);
 
   const handleViewCategories = async (repoId) => {
-    await getCategoriesForSource(repoId);
+    await getCategoriesForRepository(repoId);
 
     setSelectedRepository(repoId);
     setIsModalOpen(true);
@@ -122,10 +122,9 @@ const Repositories = () => {
                 onClose={handleCloseModal}
                 list={activeCategories}
                 repoId={selectedRepository}
-                onToggleCategory={toggleCategory}
                 loading={loading}
                 error={error}
-                onRetry={() => getCategoriesForSource(selectedRepository)}
+                onRetry={() => getCategoriesForRepository(selectedRepository)}
             />
         )
         }

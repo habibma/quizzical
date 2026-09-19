@@ -39,8 +39,7 @@ const loadCategoriesFromStorage = () => {
 export function CategoryProvider({ children }) {
 
     const [selectedSourceId, setSelectedSourceId] = useState(null);
-    const [categoriesBySource, setCategoriesBySource] =
-        useState(loadCategoriesFromStorage);
+    const [categoriesBySource, setCategoriesBySource] = useState(loadCategoriesFromStorage);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -69,22 +68,24 @@ export function CategoryProvider({ children }) {
     };
 
 
-    const getCategoriesForSource = async (sourceId) => {
-        const normalizedSourceId = sourceId ? String(sourceId) : null;
+    // TODO: only show enabled categories for repositories.
+    const getCategoriesForRepository = async (repoId) => {
+        const id = repoId ? String(repoId) : null;
 
-        if (!normalizedSourceId) return [];
+        if (!id) return [];
 
         // Return cached categories
-        if (categoriesBySource[normalizedSourceId]) {
-            return categoriesBySource[normalizedSourceId];
+        if (categoriesBySource[id]) {
+            return categoriesBySource[id];
         }
 
-        const source = activeRepositories.find(item => String(item.id) === normalizedSourceId)
-            ?? apis.find(item => String(item.id) === normalizedSourceId && item.enabled);
+        const repository = activeRepositories.find(
+            repo => String(repo.id) === id
+        );
 
-        if (!source) return [];
+        if (!repository) return [];
 
-        return loadCategories(source, normalizedSourceId);
+        return loadCategories(repository, id)
     };
 
     const getCategoriesForApi = async (apiId) => {
@@ -104,7 +105,7 @@ export function CategoryProvider({ children }) {
     };
 
     const toggleCategory = (repoId, categoryId) => {
-            setCategoriesBySource(prev => ({
+        setCategoriesBySource(prev => ({
             ...prev,
             [repoId]: (prev[repoId] ?? []).map(category =>
                 category.id === categoryId
@@ -163,7 +164,7 @@ export function CategoryProvider({ children }) {
     const selectSource = (sourceId) => {
         const normalizedSourceId = sourceId ? String(sourceId) : null;
         setSelectedSourceId(normalizedSourceId);
-        getCategoriesForSource(normalizedSourceId);
+        getCategoriesForRepository(normalizedSourceId);
     };
 
     const selectApi = (apiId) => {
@@ -218,7 +219,7 @@ export function CategoryProvider({ children }) {
                 renameCategory,
                 updateCategoryName: renameCategory,
 
-                getCategoriesForSource,
+                getCategoriesForRepository,
                 getCategoriesForApi,
                 getActiveCategories,
             }}
