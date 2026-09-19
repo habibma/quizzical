@@ -92,49 +92,6 @@ const Settings = () => {
             />
           </div>
         </section>
-
-        <section className="school-settings-section">
-          <div className="section-heading">
-            <h2>Quiz policies</h2>
-            <p>Set reasonable limits for quizzes created by teachers.</p>
-          </div>
-          <div className="school-fields">
-            <Input
-              id="maxQuestions"
-              name="maxQuestions"
-              type="number"
-              min="1"
-              max="100"
-              label="Maximum questions per quiz"
-              value={settings.maxQuestions}
-              onChange={handleChange}
-            />
-            <Input
-              id="defaultTimeLimit"
-              name="defaultTimeLimit"
-              type="number"
-              min="0"
-              max="240"
-              label="Default time limit (minutes)"
-              value={settings.defaultTimeLimit}
-              onChange={handleChange}
-            />
-          </div>
-          <label className="school-toggle" htmlFor="allowAnyDifficulty">
-            <input
-              id="allowAnyDifficulty"
-              name="allowAnyDifficulty"
-              type="checkbox"
-              checked={settings.allowAnyDifficulty}
-              onChange={handleChange}
-            />
-            <span>
-              <strong>Allow any difficulty</strong>
-              <small>Teachers can choose any difficulty when creating a quiz.</small>
-            </span>
-          </label>
-        </section>
-
         <section className="school-settings-section">
           <div className="section-heading">
             <h2>School branding</h2>
