@@ -9,7 +9,7 @@ import Logo from "../../../components/ui/Logo/Logo";
 
 const ThemeToggleButton = ({ theme, toggleTheme }) => {
   return (
-    <Button className='theme-btn' onClick={toggleTheme} text={theme === "light" ? "Dark Mode" : "Light Mode"} />
+    <Button className='theme-btn' size='sm' onClick={toggleTheme} text={theme === "light" ? "Dark Mode" : "Light Mode"} />
   )
 }
 
