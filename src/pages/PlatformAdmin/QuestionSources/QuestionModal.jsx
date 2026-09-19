@@ -86,21 +86,26 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, questio
     }, [isEditing, question]);
 
     return (
-        <Modal isOpen={isOpen} onClose={handleClose} title="Question Details">
-            <header className='modal-header'>
-                <h2>{isEditing ? 'Edit Question' : 'Add Question'}</h2>
-            </header>
-            <main className='modal-main'>
-                <form className='modal-form' onSubmit={handleSubmit}>
-                    <Input
-                        type="text"
-                        id="question"
-                        name="question"
-                        label="Question"
-                        value={questionData.question}
-                        onChange={handleInputChange}
-                    />
-                    <fieldset className='modal-radio-group'>
+        <Modal
+            isOpen={isOpen}
+            onClose={handleClose}
+            customClass="question-modal"
+            title={isEditing ? 'Edit Question' : 'Add Question'}
+        >
+            <main className='question-modal-main'>
+                <form className='question-modal-form' onSubmit={handleSubmit}>
+                    <fieldset className='question-modal-fieldset'>
+                        <legend>Question Details</legend>
+                        <Input
+                            type="text"
+                            id="question"
+                            name="question"
+                            label="Question"
+                            value={questionData.question}
+                            onChange={handleInputChange}
+                        />
+                    </fieldset>
+                    <fieldset className='question-modal-radio-group'>
                         <legend>Question Type</legend>
                         <Input
                             type="radio"
@@ -112,7 +117,6 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, questio
                             onChange={toggleQuestionType}
                         />
                         <Input
-                            className='modal-radio'
                             type="radio"
                             id="type-boolean"
                             name="type"
@@ -123,10 +127,12 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, questio
                         />
                     </fieldset>
                     {questionData.type === 'multiple' ? (
-                        <div className='modal-multiple-choice'>
-                            <div className='modal-multiple-choice-option'>
+                    <fieldset className='question-modal-fieldset'>
+                        <legend>Answer Options</legend>
+                        <div className='question-modal-multiple-choice'>
+                            <div className='question-modal-options'>
                                 {questionData.options.map((option, index) => (
-                                    <div key={index} className='modal-option'>
+                                    <div key={index} className='question-modal-option'>
                                         <Input
                                             type="text"
                                             id={`option-${index}`}
@@ -139,7 +145,7 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, questio
                                             type="radio"
                                             id={`correct-option-${index}`}
                                             name="correctOption"
-                                            label="Correct"
+                                            label="Correct answer"
                                             radioValue={index}
                                             value={questionData.correctOption}
                                             onChange={() => handleCorrectOptionChange(index)}
@@ -148,12 +154,15 @@ const QuestionModal = ({ handleSaveQuestion, isOpen, onClose, isEditing, questio
                                 ))}
                             </div>
                         </div>
-                    ) : null}
+                    </fieldset>
+                    ) : (
+                        <p className="question-modal-help">True-False questions use the standard True and False answers.</p>
+                    )}
                     {validationError && <p className="question-validation-error" role="alert">{validationError}</p>}
-                    <div className="modal-actions">
+                    <div className="question-modal-actions">
                         <Button className='btn-secondary' type="button" text="Cancel" onClick={handleClose} />
                     <Button
-                        className='modal-btn'
+                        className='question-modal-submit'
                         type="submit"
                         text={isEditing ? 'Update Question' : 'Add Question'}
                     />
