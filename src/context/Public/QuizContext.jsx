@@ -18,7 +18,6 @@ export const QuizProvider = ({ children }) => {
         setLoading(true)
         setError(null)
 
-        const api = getApiById(repoId)
         try {
             const api = getApiById(repoId)
             if (!api) {
@@ -30,9 +29,12 @@ export const QuizProvider = ({ children }) => {
             setScore(0)
         } catch (err) {
             setError(err.message)
+            return false
         } finally {
             setLoading(false)
         }
+
+        return true
     };
 
     const selectAnswer = (questionId, answer) => {

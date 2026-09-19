@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useCategories } from "../../../context/Admin/CategoryContext";
 import { useQuiz } from "../../../context/Public/QuizContext";
 import { useSettings } from "../../../context/Admin/SettingsContext";
+import { useRepo } from "../../../context/Admin/ReposContext";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
 import "./CustomQuiz.css";
 
 const CustomQuiz = () => {
     const { categoriesBySource } = useCategories();
-    const { loading, fetchQuestions } = useQuiz();
+    const { loading, error, fetchQuestions } = useQuiz();
     const { settings } = useSettings();
+    const { activeRepositories } = useRepo();
     const navigate = useNavigate();
 
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -28,12 +30,14 @@ const CustomQuiz = () => {
                 .map(category => ({
                     ...category,
                     repositoryId,
+                    repositoryName: activeRepositories.find(repository => String(repository.id) === repositoryId)?.title ?? 'Repository',
+                    selectionKey: `${repositoryId}-${category.id}`,
                 }))
         );
 
     const handleCategoryChange = (e) => {
         const selected = allEnabledCategories.find(
-            category => String(category.id) === e.target.value
+            category => category.selectionKey === e.target.value
         );
 
         setSelectedCategory(selected ?? null);
@@ -48,10 +52,10 @@ const CustomQuiz = () => {
         }));
     };
 
-    const startQuiz = () => {
+    const startQuiz = async () => {
         if (!selectedCategory) return;
 
-        fetchQuestions({
+        const loaded = await fetchQuestions({
             repoId: selectedCategory.repositoryId,
             amount: Number(quizSettings.numberOfQuestions),
             category: selectedCategory.id,
@@ -59,7 +63,7 @@ const CustomQuiz = () => {
             type: quizSettings.questionType,
         });
 
-        navigate('/quiz');
+        if (loaded) navigate('/quiz');
     };
 
     return (
@@ -85,11 +89,15 @@ const CustomQuiz = () => {
                                         className="subject"
                                         key={`${category.repositoryId}-${category.id}`}
                                         type="radio"
-                                        label={category.displayName}
+                                                    label={
+                                                        <span>
+                                                            <strong>{category.displayName}</strong>
+                                                        </span>
+                                                    }
                                         name="category"
                                         id={`${category.repositoryId}-${category.id}`}
-                                        radioValue={String(category.id)}
-                                        value={selectedCategory?.id ?? ""}
+                                                    radioValue={category.selectionKey}
+                                                    value={selectedCategory?.selectionKey ?? ""}
                                         onChange={handleCategoryChange}
                                     />
                                 ))
@@ -157,7 +165,8 @@ const CustomQuiz = () => {
 
                     {/* ACTION */}
                     <div className="quiz-action">
-                        {!selectedCategory && (
+                        {error && <p className="error" role="alert">{error}</p>}
+                        {!selectedCategory && !error && (
                             <p className="error">
                                 Select a subject to start your quiz.
                             </p>
@@ -168,6 +177,11 @@ const CustomQuiz = () => {
                             onClick={startQuiz}
                             text={loading ? "Loading Quiz..." : "Start Quiz →"}
                         />
+                        {selectedCategory && (
+                            <p className="quiz-summary">
+                                {selectedCategory.displayName} · {selectedCategory.repositoryName} · {quizSettings.numberOfQuestions} questions · {quizSettings.difficulty} · {quizSettings.questionType}
+                            </p>
+                        )}
                     </div>
 
                 </div>

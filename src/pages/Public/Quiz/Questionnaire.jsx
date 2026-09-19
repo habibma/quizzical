@@ -4,22 +4,13 @@ import './Quiz.css';
 
 const Options = ({ id, questionId, option, selectedOption, answer, onChange, isQuizFinished }) => {
 
-    let styles;
+    let answerClass = '';
     if (isQuizFinished) {
         if (option === answer) {
-            styles = {
-                backgroundColor: "#94D7A2",
-                color: "#20349b",
-                opacity: "1",
-                borderColor: "#94D7A2"
-            }
+            answerClass = 'option--correct';
         }
         if (option !== answer && option === selectedOption) {
-            styles = {
-                backgroundColor: "#F8BCBC",
-                color: "#20349b",
-                borderColor: "#F8BCBC"
-            }
+            answerClass = 'option--incorrect';
         }
     }
 
@@ -36,8 +27,7 @@ const Options = ({ id, questionId, option, selectedOption, answer, onChange, isQ
             />
             <label
                 htmlFor={id}
-                className='option'
-                style={styles}
+                className={`option ${answerClass}`}
             >
                 {decode(option)}
             </label>
@@ -47,16 +37,18 @@ const Options = ({ id, questionId, option, selectedOption, answer, onChange, isQ
 
 const Questionnaire = ({ questions, onChange, isQuizFinished, answers }) => {
 
-    const questionnaire = questions.map(question => {
+    const questionnaire = questions.map((question, index) => {
 
         const answerMap = Object.fromEntries(answers.map(answer => [answer.questionId, answer.answer]));
         const selectedOption = answerMap[question.id];
         return (
             <li key={question.id} id={question.id} className='question-item'>
-                <h3 className='question-text'>
+                <h3 className='question-text' id={`question-${question.id}`}>
+                    <span className='question-number'>Question {index + 1}</span>
                     {decode(question.question)}
                 </h3>
-                <fieldset className='options'>
+                <fieldset className='options' aria-labelledby={`question-${question.id}`}>
+                    <legend className='sr-only'>Answer options</legend>
                     {question.options.map((option, index) => {
                         return (
                             <Options
@@ -77,7 +69,7 @@ const Questionnaire = ({ questions, onChange, isQuizFinished, answers }) => {
     });
 
     return (
-        <ul>
+        <ul className='questionnaire'>
             {questionnaire}
         </ul>)
 }
