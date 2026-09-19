@@ -8,6 +8,7 @@ import QuizCard from './QuizCard'
 import QuizModal from './QuizModal'
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog'
 import Modal from '../../../components/ui/Modal'
+import Button from '../../../components/ui/Button'
 
 import './Quizzes.css'
 
@@ -37,6 +38,38 @@ const createEmptyQuiz = () => ({
     completionXP: 0,
     passXP: 0,
     perfectScoreXP: 0,
+  },
+  access: {
+    status: 'draft',
+    visibility: 'class',
+  },
+});
+
+const createSampleQuiz = () => ({
+  general: {
+    title: 'Sample Quiz',
+    description: 'This is a sample quiz for demonstration purposes.',
+  },
+  content: {
+    repositories: ['opentdb', 'triviaapi'],
+    categories: ['history', 'science'],
+    questionIds: [],
+    questionCount: 10,
+    questionSelection: 'random',
+  },
+  rules: {
+    difficulty: 'easy',
+    timeLimit: 15,
+    attempts: 3,
+    pointsCorrect: 1,
+    pointsWrong: -1,
+    pointsSkipped: 0,
+    passingScore: 70,
+  },
+  rewards: {
+    completionXP: 10,
+    passXP: 20,
+    perfectScoreXP: 30,
   },
   access: {
     status: 'draft',
@@ -93,6 +126,17 @@ const Quizzes = () => {
         [name]: newValue,
       },
     }));
+  };
+
+  // to test
+  const handleAddSampleQuiz = () => {
+    const sampleQuiz = createSampleQuiz();
+    addQuiz({
+      ...sampleQuiz,
+      id: Date.now(),
+      createdAt: new Date().toDateString(),
+      updatedAt: new Date().toDateString(),
+    });
   };
 
   // functions to handle quiz actions
@@ -244,8 +288,16 @@ const Quizzes = () => {
   return (
     <div className='quizzes'>
       <section className='quizzes-header'>
-        <h1>Quizzes</h1>
-        <p className='lead'>Manage your quizzes here.</p>
+        <div className="quiz-header--content">
+          <h1>Quizzes</h1>
+          <p className='lead'>Manage your quizzes here.</p>
+        </div>
+        <div className="quiz-header--actions">
+          <button className='btn btn-primary quizzes-add' onClick={handleOpenCreateModal}>
+            Add quiz
+          </button>
+          <Button className='btn btn-secondary quizzes-add-sample' onClick={handleAddSampleQuiz} text='Add sample quiz' />
+        </div>
       </section>
       <section className='quizzes-content'>
         <div className='quizzes-toolbar'>
@@ -280,9 +332,6 @@ const Quizzes = () => {
               <option value='status'>Status</option>
             </select>
           </label>
-          <button className='btn btn-primary quizzes-add' onClick={handleOpenCreateModal}>
-            Add quiz
-          </button>
         </div>
         <div className='quizzes-list'>
           {loading && <p>Loading quizzes...</p>}

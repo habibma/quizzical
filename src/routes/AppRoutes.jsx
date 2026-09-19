@@ -43,7 +43,6 @@ import StudentInsights from '../pages/Student/Insights/Insights.jsx'
 import StudentLeaderboard from '../pages/Student/Leaderboard/Leaderboard.jsx'
 // context providers
 import { QuestionsProvider } from '../context/Admin/QuestionsContext.jsx'
-import { QuizProvider as AdminQuizProvider } from '../context/Admin/QuizContext.jsx'
 import { QuizProvider } from '../context/Public/QuizContext.jsx'
 
 function AppRoutes({ theme, toggleTheme }) {
@@ -104,11 +103,9 @@ function AppRoutes({ theme, toggleTheme }) {
                     </QuestionsProvider>
                 } />
                 <Route path="quizzes" element={
-                    <AdminQuizProvider>
-                        <QuestionsProvider>
-                            <Quizzes />
-                        </QuestionsProvider>
-                    </AdminQuizProvider>
+                    <QuestionsProvider>
+                        <Quizzes />
+                    </QuestionsProvider>
                 } />
             </Route>
             <Route path="/student" element={<StudentLayout theme={theme} toggleTheme={toggleTheme} />} >

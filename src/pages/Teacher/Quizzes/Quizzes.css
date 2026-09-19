@@ -8,7 +8,29 @@
   color: var(--text-primary-color);
 }
 
-.quizzes-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.quizzes-header {
+  display: flex;
+  justify-content: space-between;
+   align-items: flex-end;
+  gap: 20px;
+  padding: 1.5rem 1.25rem;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(99, 102, 241, 0.02));
+  border: 1px solid rgba(99, 102, 241, 0.12);
+}
+
+.quiz-header--content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quiz-header--actions{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 .quizzes-header h1, .quizzes-header p { margin: 0; }
 .quizzes-header .lead { color: var(--text-secondary-color); }
 .quizzes-content, .quizzes-list { display: flex; width: 100%; flex-direction: column; gap: 16px; }

@@ -1,9 +1,23 @@
-import { createContext, useState, useContext } from 'react'
+import { createContext, useEffect, useState, useContext } from 'react'
 
 const QuizContext = createContext()
+const STORAGE_KEY = 'quizzes'
+
+const loadQuizzes = () => {
+  const stored = localStorage.getItem(STORAGE_KEY)
+
+  if (!stored) return []
+
+  try {
+    const parsed = JSON.parse(stored)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
 
 export const QuizProvider = ({ children }) => {
-  const [quizzes, setQuizzes] = useState([]);
+  const [quizzes, setQuizzes] = useState(loadQuizzes);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,6 +41,10 @@ export const QuizProvider = ({ children }) => {
     setLoading(true);
     setError(null);
   };
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(quizzes));
+  }, [quizzes]);
 
   const value = {
     quizzes,
