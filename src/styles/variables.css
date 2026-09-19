@@ -49,6 +49,11 @@
 
   --header-background-color: #F8F9FA;
   --header-text-color: #293264;
+
+  --modal-background-color: rgba(0, 0, 0, 0.5);
+  --modal-content-background-color: #FFFFFF;
+  --modal-heading-color: #4D5B9E;
+  --modal-text-color: #1e293b;
 }
 
 [data-theme="dark"] {
@@ -101,4 +106,9 @@
 
   --header-background-color: #1A1A1A;
   --header-text-color: #F5F7FB;
+
+  --modal-background-color: rgba(0, 0, 0, 0.5);
+  --modal-content-background-color: #1A1A1A;
+  --modal-heading-color: #8BD3FF;
+  --modal-text-color: #F5F7FB;
 }

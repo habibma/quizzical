@@ -23,6 +23,7 @@ const ConfirmDialog = ({
         isOpen={isOpen}
         onClose={onClose}
         customClass="confirm-modal"
+        role="alertdialog"
         ariaLabelledBy={titleId}
         ariaDescribedBy={messageId}
     >

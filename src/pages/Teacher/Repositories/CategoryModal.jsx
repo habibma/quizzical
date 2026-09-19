@@ -5,8 +5,7 @@ const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory, loadin
   if (!isOpen) return null;
 
   return (
-    <Modal customClass="repos-category-modal" isOpen={isOpen} onClose={onClose}>
-      <h3>Categories</h3>
+    <Modal customClass="repos-category-modal" isOpen={isOpen} onClose={onClose} title="Categories">
       {loading ? (
         <p className="repository-modal-state">Loading categories...</p>
       ) : error ? (
@@ -27,11 +26,9 @@ const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory, loadin
               <tr key={item.id}>
                 <td>{item.displayName}</td>
                 <td>
-                  <td>
-                    <span className={item.enabled ? "status-enabled" : "status-disabled"}>
-                      {item.enabled ? "Available" : "Unavailable"}
-                    </span>
-                  </td>
+                  <span className={item.enabled ? "status-enabled" : "status-disabled"}>
+                    {item.enabled ? "Available" : "Unavailable"}
+                  </span>
                 </td>
               </tr>
             ))}
