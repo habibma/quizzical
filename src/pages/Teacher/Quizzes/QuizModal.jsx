@@ -125,12 +125,12 @@ const QuizModal = ({ isOpen, onClose, onSave, isEditing, inputValues, onInputCha
 										key={sectionName}
 										className='form-subsection'
 									>
-										<h3>
+										<legend>
 											{sectionName
 												.charAt(0)
 												.toUpperCase() +
 												sectionName.slice(1)}
-										</h3>
+										</legend>
 
 										{fields.map(field => (
 											<FormField
