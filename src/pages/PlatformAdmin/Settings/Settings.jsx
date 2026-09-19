@@ -25,13 +25,6 @@ const Settings = () => {
     }));
   }
 
-  const handleReset = () => {
-    if (!window.confirm('Reset all quiz defaults to their original values?')) return;
-    setSettings(defaultSettings);
-    setInputs({ ...defaultSettings });
-    setIsSaved(true);
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setSettings(inputs);
@@ -76,7 +69,6 @@ const Settings = () => {
                 </div>
               </div>
               <div className='form-actions'>
-                <Button className='reset-btn' type='button' onClick={handleReset} text='Reset to Defaults' />
                 <Button className='form-btn' type='submit' disabled={!isDirty} text={isSaved ? 'Saved' : 'Save Changes'} />
               </div>
             </form>
