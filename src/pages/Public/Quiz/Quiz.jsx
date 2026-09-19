@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuiz } from '../../../context/Public/QuizContext.jsx'
 import Questionnaire from './Questionnaire'
-import Button from "../../../components/ui/Button"
+import Button from "../../../components/ui/Button/Button"
 
 import './Quiz.css'
 
@@ -61,17 +61,17 @@ function Quiz() {
         <div className='quiz-state quiz-state--error' role='alert'>
           <h2>We could not load this quiz</h2>
           <p>{error}</p>
-          <button type='button' className='btn btn-secondary' onClick={() => navigate('/custom-quiz')}>
+          <Button type='button' className='btn btn-secondary' onClick={() => navigate('/custom-quiz')}>
             Back to quiz builder
-          </button>
+          </Button>
         </div>
       ) : !hasQuestions ? (
         <div className='quiz-state'>
           <h2>No questions available</h2>
           <p>Choose a subject and settings to build a quiz.</p>
-          <button type='button' className='btn btn-primary' onClick={() => navigate('/custom-quiz')}>
+          <Button type='button' className='btn btn-primary' onClick={() => navigate('/custom-quiz')}>
             Build a quiz
-          </button>
+          </Button>
         </div>
       ) : (
         <>

@@ -5,7 +5,7 @@ import { useQuiz } from "../../../context/Public/QuizContext";
 import { useSettings } from "../../../context/Admin/SettingsContext";
 import { useRepo } from "../../../context/Admin/ReposContext";
 import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/Button/Button";
 import "./CustomQuiz.css";
 
 const CustomQuiz = () => {

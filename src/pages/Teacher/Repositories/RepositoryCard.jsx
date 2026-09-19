@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/Button/Button";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog/ConfirmDialog";
 
 const Card = ({ ...props }) => {

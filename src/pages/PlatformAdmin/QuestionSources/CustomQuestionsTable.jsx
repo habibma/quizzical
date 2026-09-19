@@ -1,4 +1,4 @@
-import Button from '../../../components/ui/Button';
+import Button from '../../../components/ui/Button/Button';
 import EditIcon from '../../../assets/icons/EditIcon';
 import DeleteIcon from '../../../assets/icons/DeleteIcon';
 

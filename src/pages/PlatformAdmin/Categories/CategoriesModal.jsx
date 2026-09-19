@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Modal from '../../../components/ui/Modal';
-import Button from '../../../components/ui/Button';
+import Button from '../../../components/ui/Button/Button';
 import Input from '../../../components/ui/Input';
 
 const CategoriesModal = ({ isOpen, onClose, category, onSave, existingNames = [] }) => {

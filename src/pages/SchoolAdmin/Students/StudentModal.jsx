@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import Modal from "../../../components/ui/Modal";
 import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/Button/Button";
 
 const StudentModal = ({ isOpen, onClose, onSave }) => {
     const [formData, setFormData] = useState({

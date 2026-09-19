@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef } from 'react'
+import Button from './Button/Button'
 
 import './Modal.css'
 
@@ -101,9 +102,13 @@ function Modal({
                 <div className="modal-content">
                     <div className="modal-header">
                         {title && <h2 id={generatedTitleId}>{title}</h2>}
-                        <button type="button" className="modal-close" onClick={onClose} aria-label="Close dialog">
+                        <Button
+                            className="modal-close"
+                            onClick={onClose}
+                            aria-label="Close dialog"
+                        >
                             <span aria-hidden="true">&times;</span>
-                        </button>
+                        </Button>
                     </div>
                     {children}
                 </div>

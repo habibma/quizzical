@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useApi } from "../../../context/Admin/ApiContext.jsx";
 
 import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/Button/Button";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog/ConfirmDialog";
 import EditIcon from "../../../assets/icons/EditIcon";
 import DeleteIcon from "../../../assets/icons/DeleteIcon";
@@ -288,8 +288,8 @@ Offline: API is disabled"
 
       {/* These buttons are temporary. TODO: will be replaced with a more permanent solution */}
       <section className="api-actions">
-        <Button className="btn-primary" text="Add OpenTDB API" onClick={addOpenTDBApiSource} />
-        <Button className="btn-primary" text="Add Trivia API" onClick={addTriviaApiSource} />
+        <Button className="btn-primary" size="lg" text="Add OpenTDB API" onClick={addOpenTDBApiSource} />
+        <Button className="btn-primary" size="lg" text="Add Trivia API" onClick={addTriviaApiSource} />
       </section>
 
       <footer className="api-footer">

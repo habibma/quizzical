@@ -1,7 +1,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/ui/Button';
+import Button from '../../../components/ui/Button/Button';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
 import { useTeachers } from '../../../context/SchoolAdmin/TeachersContext';
 

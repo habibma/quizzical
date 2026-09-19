@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import Modal from "../../../components/ui/Modal";
 import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/Button/Button";
 import EndpointRow from "./EndpointRow";
 
 import './Api.css'

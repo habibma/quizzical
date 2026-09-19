@@ -12,7 +12,7 @@ import { useQuestions } from '../../../context/Admin/QuestionsContext';
 import { useRepo } from '../../../context/Admin/ReposContext';
 import { useApi } from '../../../context/Admin/ApiContext';
 
-import Button from '../../../components/ui/Button';
+import Button from '../../../components/ui/Button/Button';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
 import Pagination from '../../../components/ui/Pagination/Pagination';
 

@@ -1,5 +1,6 @@
 import Modal from '../../../components/ui/Modal';
 import Input from '../../../components/ui/Input';
+import Button from '../../../components/ui/Button/Button';
 
 import modalFields from './modalFields';
 
@@ -152,20 +153,18 @@ const QuizModal = ({ isOpen, onClose, onSave, isEditing, inputValues, onInputCha
 				</div>
 
 				<div className='form-actions'>
-					<button
+					<Button
 						type='submit'
 						className='btn-primary'
-					>
-						{isEditing ? 'Save Changes' : 'Create Quiz'}
-					</button>
+						text={isEditing ? 'Save Changes' : 'Create Quiz'}
+					/>
 
-					<button
+					<Button
 						type='button'
 						className='btn-secondary'
 						onClick={onClose}
-					>
-						Cancel
-					</button>
+						text="Cancel"
+					/>
 				</div>
 			</form>
 		</Modal>

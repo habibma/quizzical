@@ -8,7 +8,7 @@ import QuizCard from './QuizCard'
 import QuizModal from './QuizModal'
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog'
 import Modal from '../../../components/ui/Modal'
-import Button from '../../../components/ui/Button'
+import Button from '../../../components/ui/Button/Button'
 
 import './Quizzes.css'
 
@@ -293,9 +293,9 @@ const Quizzes = () => {
           <p className='lead'>Manage your quizzes here.</p>
         </div>
         <div className="quiz-header--actions">
-          <button className='btn btn-primary quizzes-add' onClick={handleOpenCreateModal}>
+          <Button className='btn btn-primary quizzes-add' onClick={handleOpenCreateModal}>
             Add quiz
-          </button>
+          </Button>
           <Button className='btn btn-secondary quizzes-add-sample' onClick={handleAddSampleQuiz} text='Add sample quiz' />
         </div>
       </section>
@@ -336,7 +336,7 @@ const Quizzes = () => {
         <div className='quizzes-list'>
           {loading && <p>Loading quizzes...</p>}
           {error && <p className='error'>{error}</p>}
-          {!loading && !error && quizzes.length === 0 && <div className='quiz-empty-state'><h2>No quizzes yet</h2><p>Create your first quiz to start building assessments.</p><button className='btn btn-primary' onClick={handleOpenCreateModal}>Add quiz</button></div>}
+          {!loading && !error && quizzes.length === 0 && <div className='quiz-empty-state'><h2>No quizzes yet</h2><p>Create your first quiz to start building assessments.</p><Button className='btn btn-primary' onClick={handleOpenCreateModal} text='Add quiz' /></div>}
           {!loading && !error && quizzes.length > 0 && filteredQuizzes.length === 0 && <div className='quiz-empty-state'><h2>No matching quizzes</h2><p>Try changing your search or filters.</p></div>}
           {!loading && !error && filteredQuizzes.length > 0 && (
             <div className='quizzes-grid'>
@@ -382,7 +382,7 @@ const Quizzes = () => {
               <span>{previewQuiz.rules.timeLimit || 'No'} min limit</span>
               <span>{previewQuiz.rules.attempts || 'Unlimited'} attempts</span>
             </div>
-            <button className='btn btn-secondary' onClick={() => setPreviewQuiz(null)}>Close preview</button>
+            <Button className='btn btn-secondary' onClick={() => setPreviewQuiz(null)} text='Close preview' />
           </div>
         )}
       </Modal>

@@ -1,7 +1,7 @@
 import { useId } from 'react';
 
 import Modal from '../../../components/ui/Modal';
-import Button from '../../../components/ui/Button';
+import Button from '../../../components/ui/Button/Button';
 
 import './ConfirmDialog.css';
 

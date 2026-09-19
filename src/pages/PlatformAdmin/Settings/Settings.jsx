@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSettings } from '../../../context/Admin/SettingsContext'
 
 import Input from '../../../components/ui/Input'
-import Button from '../../../components/ui/Button'
+import Button from '../../../components/ui/Button/Button'
 
 import { defaultSettings } from '../../../config/defaultSettings'
 

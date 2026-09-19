@@ -1,5 +1,5 @@
 import Navbar from "../../navigation/Navbar/Navbar";
-import Button from "../../ui/Button";
+import Button from "../../ui/Button/Button";
 
 import "./Header.css"
 

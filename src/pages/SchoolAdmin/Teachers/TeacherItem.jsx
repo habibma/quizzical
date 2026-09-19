@@ -1,3 +1,5 @@
+import Button from '../../../components/ui/Button/Button';
+
 
 const TeacherItem = ({ teacher, onView, onRemove }) => {
     const initials = teacher.name?.charAt(0).toUpperCase() || '?';
@@ -41,20 +43,16 @@ const TeacherItem = ({ teacher, onView, onRemove }) => {
             </div>
 
             <div className="teacher-item__actions">
-                <button
-                    type="button"
+                <Button
                     className="teacher-item__view"
                     onClick={() => onView(teacher)}
-                >
-                    View
-                </button>
-                <button
-                    type="button"
+                    text="View"
+                />
+                <Button
                     className="teacher-item__remove"
                     onClick={() => onRemove(teacher)}
-                >
-                    Remove
-                </button>
+                    text="Remove"
+                />
             </div>
         </div>
     );

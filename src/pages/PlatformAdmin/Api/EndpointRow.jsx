@@ -1,5 +1,5 @@
 import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/Button/Button";
 
 const EndpointRow = ({ index, endpoint, onChange, onRemove, onConnect, isConnected, error }) => {
 
@@ -46,8 +46,8 @@ const EndpointRow = ({ index, endpoint, onChange, onRemove, onConnect, isConnect
                 value={endpoint.description || ''}
                 onChange={handleInputChange}
             />
-            <Button className="btn-danger remove-endpoint" text="Remove" onClick={() => onRemove(index)} />
-            <Button className="btn-success connect-endpoint" text="Test Connection" onClick={() => onConnect(endpoint)} />
+            <Button className="btn-danger remove-endpoint" text="Remove" size="sm" onClick={() => onRemove(index)} />
+            <Button className="btn-success connect-endpoint" size="sm" text="Test Connection" onClick={() => onConnect(endpoint)} />
             {error && <p className="connection-error">{error}</p>}
             {isConnected && <p className="connection-success">Connection successful!</p>}
         </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import UserIcon from "../../assets/icons/UserIcon";
+import Button from "../../components/ui/Button/Button";
 
 import './UserMenu.css'
 
@@ -13,7 +14,7 @@ const UserMenu = () => {
 
     return (
         <div className="user-menu">
-            <button
+            <Button
                 className="user-avatar"
                 type="button"
                 aria-label="Open user menu"
@@ -21,7 +22,7 @@ const UserMenu = () => {
                 onClick={toggleMenu}
             >
                 <UserIcon />
-            </button>
+            </Button>
             {isOpen && (
                 <div className="user-menu-content">
                     <ul className="user-menu-list">

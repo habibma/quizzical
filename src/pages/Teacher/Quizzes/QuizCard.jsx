@@ -1,3 +1,5 @@
+import Button from '../../../components/ui/Button/Button';
+
 
 const QuizCard = ({ quiz, onEdit, onDelete, onDuplicate, onPublish, onArchive, onPreview }) => {
 	const status = quiz.access?.status ?? (quiz.isPublished ? 'published' : 'draft');
@@ -20,12 +22,12 @@ const QuizCard = ({ quiz, onEdit, onDelete, onDuplicate, onPublish, onArchive, o
 				<p className='quiz-card--updated'>Updated {quiz.updatedAt || 'not yet'}</p>
 			</section>
 			<div className='quiz-card-actions'>
-				<button className='btn-primary' onClick={() => onEdit(quiz)}>Edit</button>
-				<button className='btn-secondary' onClick={() => onPreview(quiz)}>Preview</button>
+				<Button className='btn-primary' onClick={() => onEdit(quiz)} text="Edit" />
+				<Button className='btn-secondary' onClick={() => onPreview(quiz)} text="Preview" />
 				<div className='quiz-card-actions__secondary'>
-					<button className='btn-secondary' onClick={() => onDuplicate(quiz.id)}>Duplicate</button>
-					{status === 'published' ? <button className='btn-warning' onClick={() => onArchive(quiz.id)}>Archive</button> : status !== 'archived' ? <button className='btn-success' onClick={() => onPublish(quiz.id)}>Publish</button> : null}
-					<button className='btn-danger' onClick={() => onDelete(quiz.id)}>Delete</button>
+					<Button className='btn-secondary' onClick={() => onDuplicate(quiz.id)} text="Duplicate" />
+					{status === 'published' ? <Button className='btn-warning' onClick={() => onArchive(quiz.id)} text="Archive" /> : status !== 'archived' ? <Button className='btn-success' onClick={() => onPublish(quiz.id)} text="Publish" /> : null}
+					<Button className='btn-danger' onClick={() => onDelete(quiz.id)} text="Delete" />
 				</div>
 			</div>
 		</article>

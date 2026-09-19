@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import SidebarItem from "./SidebarItem";
-import Button from "../../ui/Button";
+import Button from "../../ui/Button/Button";
 
 import './Sidebar.css';
 

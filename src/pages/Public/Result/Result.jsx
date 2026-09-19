@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuiz } from '../../../context/Public/QuizContext.jsx';
 
-import Button from "../../../components/ui/Button";
+import Button from "../../../components/ui/Button/Button";
 
 import "./Result.css"
 

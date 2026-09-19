@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useStudents } from '../../../context/SchoolAdmin/StudentsContext';
 
-import Button from '../../../components/ui/Button';
+import Button from '../../../components/ui/Button/Button';
 import Modal from '../../../components/ui/Modal';
 import Input from '../../../components/ui/Input';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';

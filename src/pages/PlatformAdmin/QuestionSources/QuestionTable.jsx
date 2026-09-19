@@ -1,6 +1,6 @@
 import VisibleIcon from '../../../assets/icons/VisibleIcon'
 import InvisibleIcon from '../../../assets/icons/InvisibleIcon';
-import Button from '../../../components/ui/Button';
+import Button from '../../../components/ui/Button/Button';
 import QuestionState from './QuestionState';
 
 const ApiQuestionsTable = ({ questions, onToggleVisibility, isVisible, loading, error, selectedIds, onSelect, onRetry }) => {

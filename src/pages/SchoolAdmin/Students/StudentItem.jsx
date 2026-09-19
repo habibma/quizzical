@@ -1,3 +1,5 @@
+import Button from '../../../components/ui/Button/Button';
+
 
 import { useNavigate } from 'react-router-dom';
 
@@ -58,8 +60,7 @@ const StudentItem = ({ id, name, className, email, profilePic, grade, status, is
                 </span>
             </div>
 
-            <button
-                type="button"
+            <Button
                 className="student-item--remove"
                 onClick={(event) => {
                     event.stopPropagation();
@@ -67,9 +68,9 @@ const StudentItem = ({ id, name, className, email, profilePic, grade, status, is
                 }}
                 aria-label={`Remove ${name}`}
                 title={`Remove ${name}`}
+                text="×"
             >
-                ×
-            </button>
+            </Button>
         </article>
     );
 };

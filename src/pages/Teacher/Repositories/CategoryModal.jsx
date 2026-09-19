@@ -1,4 +1,5 @@
 import Modal from '../../../components/ui/Modal';
+import Button from '../../../components/ui/Button/Button';
 
 const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory, loading, error, onRetry }) => {
 
@@ -11,7 +12,7 @@ const CategoryModal = ({ isOpen, onClose, list, repoId, onToggleCategory, loadin
       ) : error ? (
         <div className="repository-modal-state repository-modal-state--error">
           <p>{error}</p>
-          <button type="button" className="btn-secondary" onClick={onRetry}>Retry</button>
+          <Button className="btn-secondary" onClick={onRetry} text="Retry" />
         </div>
       ) : list.length > 0 ? (
         <table className="category-table">

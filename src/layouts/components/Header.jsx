@@ -1,6 +1,7 @@
 import UserMenu from "./UserMenu";
 import LightIcon from "../../assets/icons/LightIcon";
 import DarkIcon from "../../assets/icons/DarkIcon";
+import Button from "../../components/ui/Button/Button";
 
 import './Header.css';
 
@@ -8,7 +9,7 @@ const Header = ({ pageTitle = "Dashboard", handleToggleSidebarOpen, theme, toggl
     return (
         <header className="admin-topbar">
             <div className="header-left">
-                <button
+                <Button
                     className="icon-button burger-menu"
                     type="button"
                     aria-label="Open navigation menu"
@@ -20,11 +21,11 @@ const Header = ({ pageTitle = "Dashboard", handleToggleSidebarOpen, theme, toggl
                         <span className="burger-bar"></span>
                         <span className="burger-bar"></span>
                     </div>
-                </button>
+                </Button>
                 <h2 className="page-title">{pageTitle}</h2>
             </div>
             <div className="header-right">
-                <button
+                <Button
                     className="icon-button theme-toggle"
                     type="button"
                     aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
@@ -32,7 +33,7 @@ const Header = ({ pageTitle = "Dashboard", handleToggleSidebarOpen, theme, toggl
                     onClick={toggleTheme}
                 >
                     {theme === 'light' ? <LightIcon /> : <DarkIcon />}
-                </button>
+                </Button>
                 <div className="view-site">
                     <a href="/" target="_blank" rel="noopener noreferrer">
                         View Site

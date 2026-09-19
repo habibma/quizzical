@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useCategories } from '../../../context/Admin/CategoryContext.jsx'
 import { useApi } from '../../../context/Admin/ApiContext.jsx'
-import Button from '../../../components/ui/Button'
+import Button from '../../../components/ui/Button/Button'
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog'
 import CategoriesModal from './CategoriesModal'
 import CategorySummary from './CategorySummary'
