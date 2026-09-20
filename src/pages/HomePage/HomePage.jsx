@@ -49,6 +49,7 @@ const HomePage = () => {
                 <div className="features-grid">
                     <div className="feature">
                         <div className="feature-number">01</div>
+                        <div className="feature-icon" aria-hidden="true">+</div>
                         <h3>Create</h3>
                         <p>
                             Build quizzes from question repositories or create
@@ -58,6 +59,7 @@ const HomePage = () => {
 
                     <div className="feature">
                         <div className="feature-number">02</div>
+                        <div className="feature-icon" aria-hidden="true">↗</div>
                         <h3>Evaluate</h3>
                         <p>
                             Track scores, results, and learning progress in one
@@ -67,6 +69,7 @@ const HomePage = () => {
 
                     <div className="feature">
                         <div className="feature-number">03</div>
+                        <div className="feature-icon" aria-hidden="true">★</div>
                         <h3>Motivate</h3>
                         <p>
                             Reward learners with XP, achievements, and progress
@@ -161,14 +164,14 @@ const HomePage = () => {
                             <span>Medium</span>
                         </div>
 
-                        <div className="quiz-preview-progress">
+                        <div className="quiz-preview-progress" aria-label="Your progress: 65 percent">
                             <div className="progress-label">
                                 <span>Your progress </span>
                                 <span>65%</span>
                             </div>
 
                             <div className="progress-bar">
-                                <div className="progress-value"></div>
+                                <div className="progress-value" style={{ width: "65%" }}></div>
                             </div>
                         </div>
                     </div>
