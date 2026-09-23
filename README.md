@@ -85,7 +85,7 @@ The current student panel supports viewing and searching published quizzes. Star
 - `src/services` — API clients and domain services
 - `src/components` — Shared UI components and icons
 - `src/styles` — Global styles, variables, and form styles
-- `src/utiles` — Small application utilities
+- `src/utils` — Small application utilities
 
 ## Data and persistence
 
