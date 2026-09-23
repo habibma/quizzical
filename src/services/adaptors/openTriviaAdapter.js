@@ -1,4 +1,4 @@
-import { decodeHtml } from "../../utiles/decodeHtml.js";
+import { decodeHtml } from "../../utils/decodeHtml.js";
 
 export function adaptOpenTriviaQuestions(questions) {
   return questions.map(question => ({
