@@ -1,4 +1,4 @@
-const QuestionSummary = ({ apiCount, customCount, visibleCount, selectedRepository }) => (
+const QuestionSummary = ({ apiCount, customCount, visibleCount, selectedApi, isTeacherView }) => (
   <section className="question-summary" aria-label="Question summary">
     <div className="question-summary__card">
       <span>API Questions</span>
@@ -13,8 +13,8 @@ const QuestionSummary = ({ apiCount, customCount, visibleCount, selectedReposito
       <strong>{visibleCount}</strong>
     </div>
     <div className="question-summary__card question-summary__card--wide">
-      <span>Repository</span>
-      <strong>{selectedRepository || 'Choose a repository'}</strong>
+      <span>{isTeacherView ? 'Repository' : 'API'}</span>
+      <strong>{selectedApi || (isTeacherView ? 'Choose a repository' : 'Choose an API')}</strong>
     </div>
   </section>
 );

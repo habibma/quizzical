@@ -2,8 +2,8 @@
 
 export const createFilterConfig = (categoryOptions, repositoryOptions) => [
   {
-    name: "api",
-    label: "Api",
+    name: "repository",
+    label: "API",
     type: "select",
     options: repositoryOptions,
   },

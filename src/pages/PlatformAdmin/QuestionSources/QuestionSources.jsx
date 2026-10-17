@@ -224,7 +224,6 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
       return;
 
     const selectedRepo = availableSources.find(repo => String(repo.id) === String(repository));
-    console.log("Selected repository:", selectedRepo);
     if (!selectedRepo) {
       return;
     }
@@ -260,7 +259,7 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
         <div>
           <p className='questions-eyebrow'>Platform Admin</p>
           <h1>{heading}</h1>
-          <p className='lead'>{isTeacherView ? 'Create, organize, and maintain questions for your quizzes.' : 'Review questions provided by connected API repositories.'}</p>
+          <p className='lead'>{isTeacherView ? 'Create, organize, and maintain questions for your quizzes.' : 'Review questions provided by connected APIs.'}</p>
         </div>
         {isTeacherView && <Button className='btn-primary' text="Add Question" onClick={handleAddQuestion} />}
       </section>
@@ -269,7 +268,8 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
           apiCount={isTeacherView ? 0 : displayedApiQuestions.length}
           customCount={isTeacherView ? filteredCustomQuestions.length : 0}
           visibleCount={isTeacherView ? 0 : displayedApiQuestions.filter((question) => isVisible(question.id)).length}
-          selectedRepository={isTeacherView ? 'My question library' : activeRepositories.find((repo) => repo.id === repository)?.title}
+          selectedApi={isTeacherView ? 'My question library' : activeRepositories.find((repo) => repo.id === repository)?.title}
+          isTeacherView={isTeacherView}
         />
         <QuestionToolbar
           config={isTeacherView ? teacherFilterConfig : filterConfig}
@@ -292,7 +292,7 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
         <div className='questions-list'>
           {!isTeacherView && <QuestionSection
             title="API Questions"
-            description={repository === 'any' ? 'Choose a repository to load external questions.' : 'Questions fetched from the selected repository.'}
+            description={repository === 'any' ? 'Choose an API to load external questions.' : 'Questions fetched from the selected API.'}
             count={displayedApiQuestions.length}
           >
           <ApiQuestionsTable
