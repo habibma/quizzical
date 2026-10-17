@@ -2,7 +2,7 @@ import './About.css';
 
 const About = () => {
     return (
-        <main className="about-page">
+        <article className="about-page">
 
             <section className="about-hero">
                 <div className="container">
@@ -12,10 +12,11 @@ const About = () => {
                         <h1>Learning works better when people want to participate.</h1>
                     </div>
 
-                    <p>
-                        Quizzical helps teachers, parents, and learners create
-                        engaging quizzes, measure progress, and make learning
-                        more rewarding through XP and gamification.
+                    <p className="about-lead">
+                        Quizzical is a quiz and assessment platform for creating,
+                        organizing, and completing learning activities. It brings
+                        question repositories, configurable quizzes, results,
+                        and progression into one place.
                     </p>
                 </div>
             </section>
@@ -24,15 +25,24 @@ const About = () => {
                 <div className="container">
                     <div className="section-heading">
                         <span className="section-label">THE PLATFORM</span>
-                        <h2>More than just questions and answers.</h2>
+                        <h2>A structured way to turn questions into learning activities.</h2>
                     </div>
 
-                    <p className="about-text">
-                        Quizzical is a quiz platform designed to make assessment
-                        more interactive. Create quizzes from question
-                        repositories, customize the rules, track performance,
-                        and reward progress.
-                    </p>
+                    <div className="about-copy">
+                        <p>
+                            A quiz is only one part of assessment. The surrounding
+                            structure determines how useful it is: where questions
+                            come from, how a challenge is configured, what feedback
+                            is available, and how progress is recorded over time.
+                        </p>
+                        <p>
+                            Quizzical separates these concerns into connected parts.
+                            Repositories organize question sources, quiz settings
+                            define the activity, and results make performance easier
+                            to review. This creates a clearer path from preparing
+                            content to understanding what was learned.
+                        </p>
+                    </div>
                 </div>
             </section>
 
@@ -40,7 +50,7 @@ const About = () => {
                 <div className="container">
                     <div className="section-heading">
                         <span className="section-label">WHO IS IT FOR?</span>
-                        <h2>Built for everyone involved in learning.</h2>
+                        <h2>Different responsibilities, connected by the same learning activity.</h2>
                     </div>
 
                     <div className="audience-grid">
@@ -48,24 +58,24 @@ const About = () => {
                         <article className="audience-card">
                             <h3>Teachers</h3>
                             <p>
-                                Create quizzes, manage questions, evaluate
-                                performance, and motivate students.
+                                Prepare question sources, configure quizzes, and
+                                review results to understand how learners perform.
                             </p>
                         </article>
 
                         <article className="audience-card">
                             <h3>Parents</h3>
                             <p>
-                                Create engaging learning challenges and support
-                                your children's progress.
+                                Use structured quiz activities to support practice
+                                and stay aware of a learner's progress.
                             </p>
                         </article>
 
                         <article className="audience-card">
                             <h3>Learners</h3>
                             <p>
-                                Test your knowledge, improve your skills, earn
-                                XP, and work toward new achievements.
+                                Complete quizzes, receive a visible result, and use
+                                repeated practice to identify areas for improvement.
                             </p>
                         </article>
 
@@ -78,7 +88,7 @@ const About = () => {
 
                     <div className="section-heading">
                         <span className="section-label">HOW IT WORKS</span>
-                        <h2>Build. Play. Learn. Improve.</h2>
+                        <h2>From a question source to a measurable result.</h2>
                     </div>
 
                     <div className="feature-list">
@@ -88,9 +98,8 @@ const About = () => {
                             <div>
                                 <h3>Repositories</h3>
                                 <p>
-                                    Repositories organize question sources and
-                                    educational content for different subjects
-                                    or learning areas.
+                                    Repositories provide a home for question sources
+                                    and keep content organized by subject or topic.
                                 </p>
                             </div>
                         </article>
@@ -100,9 +109,8 @@ const About = () => {
                             <div>
                                 <h3>Create a Quiz</h3>
                                 <p>
-                                    Choose your content, select questions, and
-                                    configure rules such as difficulty, time,
-                                    attempts, and scoring.
+                                    Select content and configure the rules that shape
+                                    the activity, including difficulty and scoring.
                                 </p>
                             </div>
                         </article>
@@ -112,8 +120,8 @@ const About = () => {
                             <div>
                                 <h3>Play and Evaluate</h3>
                                 <p>
-                                    Learners answer questions while the platform
-                                    measures their results and performance.
+                                    Learners complete the activity while the platform
+                                    records answers, scores, and performance.
                                 </p>
                             </div>
                         </article>
@@ -123,9 +131,8 @@ const About = () => {
                             <div>
                                 <h3>Earn XP</h3>
                                 <p>
-                                    XP and rewards encourage learners to keep
-                                    improving and coming back for the next
-                                    challenge.
+                                    XP makes progress visible and gives learners a
+                                    simple way to recognize continued participation.
                                 </p>
                             </div>
                         </article>
@@ -139,13 +146,15 @@ const About = () => {
                     <div className="section-heading">
                         <span className="section-label">GAMIFICATION</span>
 
-                        <h2>Progress should feel rewarding.</h2>
+                        <h2>Progress is easier to understand when it is visible.</h2>
                     </div>
 
                     <p>
-                        XP turns progress into something visible. Learners can
-                        earn rewards for completing quizzes, answering questions
-                        correctly, passing challenges, and achieving milestones.
+                        XP is Quizzical's progression layer. It can represent activity
+                        such as completing quizzes, answering questions correctly,
+                        passing challenges, or reaching milestones. The purpose is
+                        not to replace feedback with points, but to give progress a
+                        consistent and understandable form.
                     </p>
 
                     <div className="xp-flow">
@@ -160,7 +169,7 @@ const About = () => {
                 </div>
             </section>
 
-        </main>
+        </article>
     );
 };
 
