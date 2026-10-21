@@ -1,16 +1,34 @@
-import { useState, useMemo } from 'react';
-import Modal from "../../../components/ui/Modal";
-import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button/Button";
+import { useEffect, useState } from 'react';
+import Modal from '../../../components/ui/Modal';
+import Input from '../../../components/ui/Input';
+import Button from '../../../components/ui/Button/Button';
 
-const TeacherModal = ({ isOpen, onClose, onSave }) => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        subject: '',
-        //classesAssigned: []
-    });
+const defaultForm = {
+    name: '',
+    email: '',
+    subject: '',
+    status: 'Active',
+};
+
+const TeacherModal = ({ isOpen, onClose, onSave, teacher = null }) => {
+    const [formData, setFormData] = useState(defaultForm);
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        if (teacher) {
+            setFormData({
+                name: teacher.name ?? '',
+                email: teacher.email ?? '',
+                subject: teacher.subject ?? '',
+                status: teacher.status ?? 'Active',
+            });
+            return;
+        }
+
+        setFormData(defaultForm);
+    }, [isOpen, teacher]);
 
     if (!isOpen) return null;
 
@@ -33,22 +51,20 @@ const TeacherModal = ({ isOpen, onClose, onSave }) => {
         const name = formData.name.trim();
         const email = formData.email.trim();
         const subject = formData.subject.trim();
-        //const classesAssigned = formData.classesAssigned;
 
         if (!name) {
             nextErrors.name = 'Teacher name is required.';
         }
+
         if (!email) {
             nextErrors.email = 'Teacher email is required.';
         } else if (!/\S+@\S+\.\S+/.test(email)) {
             nextErrors.email = 'Teacher email is invalid.';
         }
+
         if (!subject) {
             nextErrors.subject = 'Teacher subject is required.';
         }
-        // if (!classesAssigned || classesAssigned.length === 0) {
-        //     nextErrors.classesAssigned = 'At least one class must be assigned.';
-        // }
 
         return nextErrors;
     };
@@ -64,27 +80,22 @@ const TeacherModal = ({ isOpen, onClose, onSave }) => {
         }
 
         const teacherData = {
-            id: Date.now().toString(),
+            id: teacher?.id ?? null,
             name: formData.name.trim(),
             email: formData.email.trim(),
             subject: formData.subject.trim(),
-            //classesAssigned: formData.classesAssigned
+            status: formData.status || 'active',
+            classesAssigned: teacher?.classesAssigned ?? [],
         };
 
         onSave(teacherData);
 
-        setFormData({
-            name: '',
-            email: '',
-            subject: '',
-            //classesAssigned: []
-        });
+        setFormData(defaultForm);
         setErrors({});
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <h2>Add Teacher</h2>
+        <Modal isOpen={isOpen} onClose={onClose} title={teacher ? 'Edit Teacher' : 'Add Teacher'}>
             <form onSubmit={handleSubmit}>
                 <Input
                     label="Name"
@@ -107,16 +118,21 @@ const TeacherModal = ({ isOpen, onClose, onSave }) => {
                     onChange={handleChange}
                     error={errors.subject}
                 />
-                {/* <Input
-                    label="Classes Assigned"
-                    name="classesAssigned"
-                    value={formData.classesAssigned.join(', ')}
+                <Input
+                    as="select"
+                    label="Status"
+                    name="status"
+                    value={formData.status}
                     onChange={handleChange}
-                    error={errors.classesAssigned}
-                /> */}
+                    options={[
+                        { value: 'active', label: 'Active' },
+                        { value: 'pending', label: 'Pending' },
+                        { value: 'invited', label: 'Invited' },
+                    ]}
+                />
                 <div className="modal-actions">
-                    <Button className='btn-secondary' type="button" text="Cancel" onClick={onClose} />
-                    <Button className='btn-primary' type="submit" text="Save" />
+                    <Button className="btn-secondary" type="button" text="Cancel" onClick={onClose} />
+                    <Button className="btn-primary" type="submit" text={teacher ? 'Update' : 'Save'} />
                 </div>
             </form>
         </Modal>

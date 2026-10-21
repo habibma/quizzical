@@ -257,19 +257,6 @@
     color: var(--card-text-primary-color);
 }
 
-.student-item--grade {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 34px;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
-    background: rgba(34, 197, 94, 0.12);
-    color: var(--success-color);
-    font-size: 0.72rem;
-    font-weight: 700;
-}
-
 .student-item--class,
 .student-item--email {
     margin: 0;

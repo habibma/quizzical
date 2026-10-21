@@ -13,9 +13,11 @@ Live demo: https://quizzical-mote.netlify.app/
 - Manage repositories and quizzes as a teacher.
 - Create, edit, duplicate, publish, archive, preview, and delete teacher quizzes.
 - Display published, non-private quizzes in the student panel.
-- Manage students, teachers, classes, courses, reports, parents, and school settings as a school administrator.
+- Manage students, teachers, and classes with PostgreSQL-backed CRUD operations as a school administrator.
+- View the remaining school administration areas for courses, reports, parents, and school settings.
 - Use shared accessible UI components, including the reusable Button and Modal components.
-- Persist prototype data in browser `localStorage`.
+- Persist school-admin students, teachers, and classes through the Express/PostgreSQL backend.
+- Persist the remaining prototype datasets in browser `localStorage`.
 
 ## Quiz publishing flow
 
@@ -76,22 +78,28 @@ The current student panel supports viewing and searching published quizzes. Star
 - `react-router-dom`
 - ESLint
 - Vite React SWC plugin
+- Express 5
+- PostgreSQL through `pg`
 
 ## Project structure
 
 - `src/pages` — Public, platform-admin, school-admin, teacher, and student pages
 - `src/layouts` — Role-specific layouts and navigation
 - `src/context` — Shared React Context providers for quiz, question, category, repository, API, settings, and school data
-- `src/services` — API clients and domain services
+- `src/services` — API clients and domain services, including the backend CRUD client
 - `src/components` — Shared UI components and icons
 - `src/styles` — Global styles, variables, and form styles
 - `src/utiles` — Small application utilities
+- `backend/src/routes` — Express routes for students, teachers, and classes
+- `backend/src/db.js` — PostgreSQL connection pool configuration
 
 ## Data and persistence
 
-The current frontend prototype stores several datasets in browser storage, including quizzes, categories, APIs, repositories, questions, and settings. Clearing browser storage removes this data.
+The frontend prototype stores several datasets in browser storage, including quizzes, categories, APIs, repositories, questions, and settings. Clearing browser storage removes this data.
 
-There is no authentication or server-side authorization layer in this prototype. Role-specific routes and permissions are represented in the frontend structure and should be backed by an API and authenticated user identity before production use.
+Students, teachers, and classes are loaded from PostgreSQL through the backend API. The backend expects a PostgreSQL database named `quizzical` with the corresponding `students`, `teachers`, and `classes` tables. Update the connection settings in `backend/src/db.js` for your local database before starting the server.
+
+There is no authentication or server-side authorization layer in this prototype. Role-specific routes and permissions are represented in the frontend structure and should be backed by authenticated user identity before production use.
 
 ## Quick start
 
@@ -101,13 +109,35 @@ Install dependencies:
 
 ```bash
 npm install
+cd backend
+npm install
+cd ..
 ```
 
-Start the development server:
+Start the backend in one terminal:
+
+```bash
+cd backend
+npm run dev
+```
+
+Start the frontend in a second terminal:
 
 ```bash
 npm run dev
 ```
+
+The frontend runs at `http://localhost:5173` and the backend API runs at `http://localhost:3000`.
+
+## Backend API
+
+The school administration CRUD endpoints are:
+
+- `/api/students` — list, create, update, and delete students
+- `/api/teachers` — list, create, update, and delete teachers
+- `/api/classes` — list, create, update, and delete classes
+
+The backend allows requests from the local Vite origin `http://localhost:5173`.
 
 Run ESLint:
 

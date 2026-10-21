@@ -1,82 +1,95 @@
-import {useState, useEffect, createContext, useContext} from "react";
+import { useState, useEffect, createContext, useContext } from "react";
+import {
+    getStudents,
+    createStudent,
+    updateStudent as updateStudentRequest,
+    deleteStudent,
+} from "../../services/backendService";
 
 export const StudentsContext = createContext();
 
+const normalizeStudent = (student = {}) => ({
+    id: student.id,
+    name: student.name,
+    email: student.email,
+    class_id: student.class_id ?? student.classId ?? null,
+    status: student.status ?? "pending",
+});
 
-const InitialStudents = [
-    {
-        id: 1,
-        name: 'John Doe',
-        className: 'Class A',
-        profilePic: '/path/to/john_doe.jpg',
-        email: 'john.doe@example.com',
-        grade: 'A'
-    },
-    {
-        id: 2,
-        name: 'Jane Smith',
-        className: 'Class B',
-        profilePic: '/path/to/jane_smith.jpg',
-        email: 'jane.smith@example.com',
-        grade: 'B'
-    },
-    {
-        id: 3,
-        name: 'Alice Johnson',
-        className: 'Class A',
-        profilePic: '/path/to/alice_johnson.jpg',
-        email: 'alice.johnson@example.com',
-        grade: 'A'
-    },
-    {
-        id: 4,
-        name: 'Bob Williams',
-        className: 'Class C',
-        profilePic: '/path/to/bob_williams.jpg',
-        email: 'bob.williams@example.com',
-        grade: 'C'
-    }
-];
+const buildStudentPayload = (student) => ({
+    name: student.name,
+    email: student.email,
+    class_id: student.class_id,
+    profilePic: student.profilePic ?? null,
+    status: student.status ?? "pending",
+});
 
-export const StudentsProvider = ({children}) => {
-    const [students, setStudents] = useState(InitialStudents);
+export const StudentsProvider = ({ children }) => {
+    const [students, setStudents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
-    const addStudent = (student) => {
-        setStudents((prevStudents) => [...prevStudents, student]);
-    }
+    const refreshStudents = async () => {
+        try {
+            setLoading(true);
+            const data = await getStudents();
+            setStudents(Array.isArray(data) ? data.map(normalizeStudent) : []);
+            setError('');
+            return data;
+        } catch (err) {
+            console.error('Error fetching students:', err);
+            setStudents([]);
+            setError('Unable to load students from the database.');
+            return [];
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    const removeStudent = (studentId) => {
-        setStudents((prevStudents) => prevStudents.filter(student => student.id !== studentId));
-    }
+    const addStudent = async (student) => {
+        try {
+            const createdStudent = await createStudent(buildStudentPayload(student));
+            await refreshStudents();
+            return createdStudent;
+        } catch (err) {
+            console.error('Error creating student:', err);
+            throw err;
+        }
+    };
 
-    const updateStudent = (updatedStudent) => {
-        setStudents((prevStudents) => prevStudents.map(student =>
-            student.id === updatedStudent.id ? updatedStudent : student
-        ));
-    }
+    const removeStudent = async (studentId) => {
+        try {
+            await deleteStudent(studentId);
+            await refreshStudents();
+            return true;
+        } catch (err) {
+            console.error('Error deleting student:', err);
+            throw err;
+        }
+    };
 
-    /*useEffect(() => {
-        // Fetch students data from an API or database
-        const fetchStudents = async () => {
-            try {
-                const response = await fetch('/api/students');
-                const data = await response.json();
-                setStudents(data);
-            } catch (error) {
-                console.error('Error fetching students:', error);
-            }
-        };
+    const updateStudent = async (updatedStudent) => {
+        try {
+            const currentId = updatedStudent.id;
+            const updated = await updateStudentRequest(currentId, buildStudentPayload(updatedStudent));
+            await refreshStudents();
+            return normalizeStudent(updated);
+        } catch (err) {
+            console.error('Error updating student:', err);
+            throw err;
+        }
+    };
 
-        fetchStudents();
-    }, []);*/
+    useEffect(() => {
+        refreshStudents();
+    }, []);
 
     return (
-        <StudentsContext.Provider value={{ students, addStudent, removeStudent, updateStudent }}>
+        <StudentsContext.Provider value={{ students, loading, error, addStudent, removeStudent, updateStudent, refreshStudents }}>
             {children}
         </StudentsContext.Provider>
     );
 };
-
 
 export const useStudents = () => {
     const context = useContext(StudentsContext);
@@ -84,4 +97,4 @@ export const useStudents = () => {
         throw new Error('useStudents must be used within a StudentsProvider');
     }
     return context;
-}
+};

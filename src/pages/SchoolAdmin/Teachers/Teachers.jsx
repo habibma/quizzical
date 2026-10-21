@@ -12,11 +12,12 @@ import './Teachers.css';
 
 const SchoolTeachers = () => {
     const navigate = useNavigate();
-    const { teachers, addTeacher, removeTeacher } = useTeachers();
+    const { teachers, addTeacher, updateTeacher, removeTeacher } = useTeachers();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedSubject, setSelectedSubject] = useState('all');
     const [sortBy, setSortBy] = useState('name');
+    const [selectedTeacher, setSelectedTeacher] = useState(null);
     const [selectedTeacherToRemove, setSelectedTeacherToRemove] = useState(null);
 
     const subjectOptions = useMemo(() => {
@@ -27,9 +28,10 @@ const SchoolTeachers = () => {
         const query = searchTerm.trim().toLowerCase();
 
         const filtered = teachers.filter((teacher) => {
-            const matchesSearch = !query || [teacher.name, teacher.email, teacher.subject, teacher.classesAssigned.join(' ')]
+            const classesText = Array.isArray(teacher.classesAssigned) ? teacher.classesAssigned.join(' ') : '';
+            const matchesSearch = !query || [teacher.name, teacher.email, teacher.subject, classesText]
                 .filter(Boolean)
-                .some((value) => value.toLowerCase().includes(query));
+                .some((value) => String(value).toLowerCase().includes(query));
 
             const matchesSubject = selectedSubject === 'all' || teacher.subject === selectedSubject;
 
@@ -38,7 +40,7 @@ const SchoolTeachers = () => {
 
         return [...filtered].sort((a, b) => {
             if (sortBy === 'subject') {
-                return a.subject.localeCompare(b.subject) || a.name.localeCompare(b.name);
+                return String(a.subject || '').localeCompare(String(b.subject || '')) || a.name.localeCompare(b.name);
             }
 
             if (sortBy === 'newest') {
@@ -53,44 +55,53 @@ const SchoolTeachers = () => {
         total: teachers.length,
         active: teachers.filter((teacher) => teacher.status === 'Active').length,
         departments: new Set(teachers.map((teacher) => teacher.subject).filter(Boolean)).size,
-        //classesAssigned: teachers.reduce((sum, teacher) => sum + teacher.classesAssigned.length, 0),
+        classesAssigned: teachers.reduce((sum, teacher) => sum + (Array.isArray(teacher.classesAssigned) ? teacher.classesAssigned.length : 0), 0),
     }), [teachers]);
 
     const handleViewTeacher = (teacher) => {
-        // Navigate to the teacher's profile page
         navigate(`/principal/teachers/${teacher.id}`);
     };
 
-    const handleRemoveTeacher = (teacher) => {
-        removeTeacher(teacher.id);
-    };
-
-    const handleOpenModal = () => {
+    const handleOpenModal = (teacher = null) => {
+        setSelectedTeacher(teacher);
         setIsModalOpen(true);
-    }
+    };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-    }
+        setSelectedTeacher(null);
+    };
 
-    const handleAddTeacher = (teacherData) => {
-        addTeacher(teacherData);
-        handleCloseModal();
+    const handleSaveTeacher = async (teacherData) => {
+        try {
+            if (selectedTeacher) {
+                await updateTeacher(teacherData);
+            } else {
+                await addTeacher(teacherData);
+            }
+            handleCloseModal();
+        } catch (error) {
+            console.error('Failed to save teacher:', error);
+        }
     };
 
     const handleOpenRemoveModal = (teacher) => {
         setSelectedTeacherToRemove(teacher);
-    }
+    };
 
     const handleCloseRemoveModal = () => {
         setSelectedTeacherToRemove(null);
-    }
+    };
 
-    const handleConfirmRemoveTeacher = () => {
+    const handleConfirmRemoveTeacher = async () => {
         if (!selectedTeacherToRemove) return;
 
-        removeTeacher(selectedTeacherToRemove.id);
-        setSelectedTeacherToRemove(null);
+        try {
+            await removeTeacher(selectedTeacherToRemove.id);
+            setSelectedTeacherToRemove(null);
+        } catch (error) {
+            console.error('Failed to remove teacher:', error);
+        }
     };
 
     return (
@@ -108,7 +119,7 @@ const SchoolTeachers = () => {
                     <Button
                         className="btn-primary teachers-actions--add"
                         text="Add Teacher"
-                        onClick={handleOpenModal}
+                        onClick={() => handleOpenModal()}
                     />
                 </div>
             </section>
@@ -196,6 +207,7 @@ const SchoolTeachers = () => {
                                 key={teacher.id}
                                 teacher={teacher}
                                 onView={handleViewTeacher}
+                                onEdit={() => handleOpenModal(teacher)}
                                 onRemove={() => handleOpenRemoveModal(teacher)}
                             />
                         ))
@@ -211,7 +223,8 @@ const SchoolTeachers = () => {
             <TeacherModal
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
-                onSave={handleAddTeacher}
+                onSave={handleSaveTeacher}
+                teacher={selectedTeacher}
             />
 
             <ConfirmDialog

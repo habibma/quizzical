@@ -8,6 +8,7 @@ import Header from "../components/Header";
 
 import { StudentsProvider } from "../../context/SchoolAdmin/StudentsContext";
 import { TeachersProvider } from "../../context/SchoolAdmin/TeachersContext";
+import { ClassesProvider } from "../../context/SchoolAdmin/ClassesContext";
 
 const SchoolAdminLayout = ({ theme, toggleTheme }) => {
 
@@ -33,14 +34,16 @@ const SchoolAdminLayout = ({ theme, toggleTheme }) => {
     return (
         <StudentsProvider>
             <TeachersProvider>
-                <div className="admin-layout">
-                    <Sidebar className="admin-sidebar" title="School Admin" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} handleCloseSidebar={() => setOpened(false)} items={sidebarItems} />
-                    {opened && <div className="overlay" onClick={() => setOpened(false)}></div>}
-                    <Header handleToggleSidebarOpen={handleToggleSidebarOpen} theme={theme} toggleTheme={toggleTheme} />
-                    <main className="admin-main">
-                        <Outlet />
-                    </main>
-                </div>
+                <ClassesProvider>
+                    <div className="admin-layout">
+                        <Sidebar className="admin-sidebar" title="School Admin" collapsed={collapsed} handleToggleSidebar={handleToggleSidebar} opened={opened} handleCloseSidebar={() => setOpened(false)} items={sidebarItems} />
+                        {opened && <div className="overlay" onClick={() => setOpened(false)}></div>}
+                        <Header handleToggleSidebarOpen={handleToggleSidebarOpen} theme={theme} toggleTheme={toggleTheme} />
+                        <main className="admin-main">
+                            <Outlet />
+                        </main>
+                    </div>
+                </ClassesProvider>
             </TeachersProvider>
         </StudentsProvider>
     )

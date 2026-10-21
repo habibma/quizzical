@@ -1,9 +1,8 @@
 import Button from '../../../components/ui/Button/Button';
 
-
-const TeacherItem = ({ teacher, onView, onRemove }) => {
+const TeacherItem = ({ teacher, onView, onEdit, onRemove }) => {
     const initials = teacher.name?.charAt(0).toUpperCase() || '?';
-    const statusClass = teacher.status?.toLowerCase().replace(/\s+/g, '-');
+    const statusClass = (teacher.status || 'Active').toLowerCase().replace(/\s+/g, '-');
 
     return (
         <div className="teacher-item">
@@ -27,30 +26,35 @@ const TeacherItem = ({ teacher, onView, onRemove }) => {
             </div>
 
             <div>
-                <p className="teacher-item--subject">{teacher.subject}</p>
+                <p className="teacher-item--subject">{teacher.subject || 'General'}</p>
             </div>
 
             <div>
                 <p className="teacher-item--classes">
-                    {teacher.classesAssigned?.join(', ')}
+                    {teacher.classesAssigned?.join(', ') || 'No classes assigned'}
                 </p>
             </div>
 
             <div>
                 <span className={`status-badge status-badge--${statusClass}`}>
-                    {teacher.status}
+                    {teacher.status || 'Active'}
                 </span>
             </div>
 
             <div className="teacher-item__actions">
                 <Button
                     className="teacher-item__view"
-                    onClick={() => onView(teacher)}
+                    onClick={() => onView && onView(teacher)}
                     text="View"
                 />
                 <Button
+                    className="teacher-item__edit"
+                    onClick={() => onEdit && onEdit(teacher)}
+                    text="Edit"
+                />
+                <Button
                     className="teacher-item__remove"
-                    onClick={() => onRemove(teacher)}
+                    onClick={() => onRemove && onRemove(teacher)}
                     text="Remove"
                 />
             </div>

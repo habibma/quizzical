@@ -1,16 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Modal from "../../../components/ui/Modal";
-import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button/Button";
+import Modal from '../../../components/ui/Modal';
+import Input from '../../../components/ui/Input';
+import Button from '../../../components/ui/Button/Button';
+import { useClasses } from '../../../context/SchoolAdmin/ClassesContext';
 
-const StudentModal = ({ isOpen, onClose, onSave }) => {
-    const [formData, setFormData] = useState({
-        name: '',
-        className: '',
-        email: '',
-    });
+const defaultForm = {
+    name: '',
+    class_id: '',
+    email: '',
+    status: 'active',
+};
+
+const StudentModal = ({ isOpen, onClose, onSave, student = null }) => {
+    const { classes } = useClasses();
+    const [formData, setFormData] = useState(defaultForm);
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        if (student) {
+            setFormData({
+                name: student.name ?? '',
+                class_id: student.class_id ?? '',
+                email: student.email ?? '',
+                status: student.status ?? 'active',
+            });
+            return;
+        }
+
+        setFormData(defaultForm);
+    }, [isOpen, student]);
 
     if (!isOpen) return null;
 
@@ -31,15 +52,10 @@ const StudentModal = ({ isOpen, onClose, onSave }) => {
     const validateForm = () => {
         const nextErrors = {};
         const name = formData.name.trim();
-        const className = formData.className.trim();
         const email = formData.email.trim();
 
         if (!name) {
             nextErrors.name = 'Student name is required.';
-        }
-
-        if (!className) {
-            nextErrors.className = 'Class is required.';
         }
 
         if (!email) {
@@ -62,31 +78,22 @@ const StudentModal = ({ isOpen, onClose, onSave }) => {
         }
 
         const studentData = {
-            id: Date.now().toString(),
+            id: student?.id ?? null,
             name: formData.name.trim(),
-            className: formData.className.trim(),
+            class_id: formData.class_id ? Number(formData.class_id) : null,
             email: formData.email.trim(),
-            profilePic: null,
-            grade: null,
+            profilePic: student?.profilePic ?? null,
+            status: formData.status || 'active',
         };
 
         onSave(studentData);
 
-        setFormData({
-            name: '',
-            className: '',
-            email: '',
-        });
+        setFormData(defaultForm);
         setErrors({});
     };
 
     return (
-        <Modal onClose={onClose} isOpen={isOpen} customClass="student-modal">
-            <div className="student-modal__header">
-                <h2>Add New Student</h2>
-                <p>Enter student details below to add them to this school.</p>
-            </div>
-
+        <Modal onClose={onClose} isOpen={isOpen} customClass="student-modal" title={student ? 'Edit Student' : 'Add Student'}>
             <form className="student-modal__form" onSubmit={handleSubmit}>
                 <div className="student-modal__field">
                     <Input
@@ -96,20 +103,24 @@ const StudentModal = ({ isOpen, onClose, onSave }) => {
                         placeholder="Enter student name"
                         value={formData.name}
                         onChange={handleChange}
+                        error={errors.name}
                     />
-                    {errors.name && <span className="field-error">{errors.name}</span>}
                 </div>
 
                 <div className="student-modal__field">
                     <Input
                         id="student-class"
+                        as="select"
                         label="Class"
-                        name="className"
-                        placeholder="Enter class name"
-                        value={formData.className}
+                        name="class_id"
+                        value={formData.class_id}
                         onChange={handleChange}
+                        error={errors.class_id}
+                        options={classes.map((classItem) => ({
+                            value: classItem.id,
+                            label: classItem.name,
+                        }))}
                     />
-                    {errors.className && <span className="field-error">{errors.className}</span>}
                 </div>
 
                 <div className="student-modal__field">
@@ -121,8 +132,24 @@ const StudentModal = ({ isOpen, onClose, onSave }) => {
                         placeholder="Enter email address"
                         value={formData.email}
                         onChange={handleChange}
+                        error={errors.email}
                     />
-                    {errors.email && <span className="field-error">{errors.email}</span>}
+                </div>
+
+                <div className="student-modal__field">
+                    <Input
+                        id="student-status"
+                        as="select"
+                        label="Status"
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        options={[
+                            { value: 'active', label: 'Active' },
+                            { value: 'pending', label: 'Pending' },
+                            { value: 'invited', label: 'Invited' },
+                        ]}
+                    />
                 </div>
 
                 <div className="modal-actions">
@@ -135,7 +162,7 @@ const StudentModal = ({ isOpen, onClose, onSave }) => {
 
                     <Button
                         className="btn-primary"
-                        text="Save"
+                        text={student ? 'Update' : 'Save'}
                         type="submit"
                     />
                 </div>

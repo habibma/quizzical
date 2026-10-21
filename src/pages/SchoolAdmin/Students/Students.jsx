@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { useStudents } from '../../../context/SchoolAdmin/StudentsContext';
+import { useClasses } from '../../../context/SchoolAdmin/ClassesContext';
 
 import Button from '../../../components/ui/Button/Button';
-import Modal from '../../../components/ui/Modal';
-import Input from '../../../components/ui/Input';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
 
 import StudentModal from './StudentModal';
@@ -11,10 +10,26 @@ import StudentItem from './StudentItem';
 
 import './Students.css';
 
+const normalizeStudent = (student = {}) => {
+    const className = student.class_name ?? student.className ?? 'Unassigned';
+
+    return {
+        id: student.id,
+        name: student.name ?? 'Unnamed student',
+        class_id: student.class_id ?? student.classId ?? null,
+        className,
+        email: student.email ?? '',
+        profilePic: student.profilePic ?? student.profilepic ?? null,
+        status: student.status ?? 'Active',
+    };
+};
+
 const SchoolStudents = () => {
+    const { classes } = useClasses();
     const {
-        students,
+        students: rawStudents,
         addStudent,
+        updateStudent,
         removeStudent,
     } = useStudents();
 
@@ -23,16 +38,22 @@ const SchoolStudents = () => {
     const [selectedClass, setSelectedClass] = useState('all');
     const [sortBy, setSortBy] = useState('name');
     const [studentToRemove, setStudentToRemove] = useState(null);
+    const [selectedStudent, setSelectedStudent] = useState(null);
     const [selectedStudentId, setSelectedStudentId] = useState(null);
 
-    const classOptions = useMemo(() => {
-        return [...new Set(students.map((student) => student.className).filter(Boolean))];
-    }, [students]);
+    const students = useMemo(
+        () => rawStudents.map(normalizeStudent),
+        [rawStudents]
+    );
 
-    const getStudentStatus = (student, index) => {
-        const statuses = ['Active', 'Invited', 'Pending'];
-        return statuses[index % statuses.length] || 'Active';
-    }; // TODO: Replace with actual status logic when available
+    const classOptions = useMemo(() => {
+        const names = new Set([
+            ...classes.map((item) => item.name).filter(Boolean),
+            ...students.map((student) => student.className).filter(Boolean),
+        ]);
+
+        return [...names];
+    }, [classes, students]);
 
     const visibleStudents = useMemo(() => {
         const query = searchTerm.trim().toLowerCase();
@@ -40,7 +61,7 @@ const SchoolStudents = () => {
         const filtered = students.filter((student) => {
             const matchesSearch = !query || [student.name, student.email, student.className]
                 .filter(Boolean)
-                .some((value) => value.toLowerCase().includes(query));
+                .some((value) => String(value).toLowerCase().includes(query));
 
             const matchesClass = selectedClass === 'all' || student.className === selectedClass;
 
@@ -49,7 +70,7 @@ const SchoolStudents = () => {
 
         return [...filtered].sort((a, b) => {
             if (sortBy === 'class') {
-                return a.className.localeCompare(b.className) || a.name.localeCompare(b.name);
+                return String(a.className || '').localeCompare(String(b.className || '')) || a.name.localeCompare(b.name);
             }
 
             if (sortBy === 'newest') {
@@ -63,20 +84,30 @@ const SchoolStudents = () => {
     const stats = useMemo(() => ({
         total: students.length,
         classCount: new Set(students.map((student) => student.className).filter(Boolean)).size,
-        graded: students.filter((student) => student.grade).length,
+        active: students.filter((student) => student.status === 'Active').length,
     }), [students]);
 
-    const handleOpenModal = () => {
+    const handleOpenModal = (student = null) => {
+        setSelectedStudent(student);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setSelectedStudent(null);
     };
 
-    const handleAddStudent = (studentData) => {
-        addStudent(studentData);
-        handleCloseModal();
+    const handleSaveStudent = async (studentData) => {
+        try {
+            if (selectedStudent) {
+                await updateStudent(studentData);
+            } else {
+                await addStudent(studentData);
+            }
+            handleCloseModal();
+        } catch (error) {
+            console.error('Failed to save student:', error);
+        }
     };
 
     const handleImportStudents = () => {
@@ -95,11 +126,15 @@ const SchoolStudents = () => {
         setStudentToRemove(null);
     };
 
-    const handleRemoveStudent = () => {
+    const handleRemoveStudent = async () => {
         if (!studentToRemove) return;
 
-        removeStudent(studentToRemove.id);
-        setStudentToRemove(null);
+        try {
+            await removeStudent(studentToRemove.id);
+            setStudentToRemove(null);
+        } catch (error) {
+            console.error('Failed to remove student:', error);
+        }
     };
 
     return (
@@ -117,7 +152,7 @@ const SchoolStudents = () => {
                     <Button
                         className="btn-primary students-actions--add"
                         text="Add Student"
-                        onClick={handleOpenModal}
+                        onClick={() => handleOpenModal()}
                     />
                 </div>
             </section>
@@ -132,8 +167,8 @@ const SchoolStudents = () => {
                     <strong>{stats.classCount}</strong>
                 </div>
                 <div className="student-summary-card">
-                    <span>Graded</span>
-                    <strong>{stats.graded}</strong>
+                    <span>Active</span>
+                    <strong>{stats.active}</strong>
                 </div>
             </section>
 
@@ -197,18 +232,19 @@ const SchoolStudents = () => {
 
                 <div className="students-list">
                     {visibleStudents.length > 0 ? (
-                        visibleStudents.map((student, index) => (
+                        visibleStudents.map((student) => (
                             <StudentItem
                                 key={student.id}
                                 id={student.id}
                                 name={student.name}
+                                class_id={student.class_id}
                                 className={student.className}
                                 email={student.email}
-                                grade={student.grade}
                                 profilePic={student.profilePic}
-                                status={getStudentStatus(student, index)}
+                                status={student.status}
                                 isSelected={selectedStudentId === student.id}
                                 onSelect={() => setSelectedStudentId(student.id)}
+                                onEdit={() => handleOpenModal(student)}
                                 onRemove={() => handleOpenRemoveModal(student)}
                             />
                         ))
@@ -228,7 +264,8 @@ const SchoolStudents = () => {
             <StudentModal
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
-                onSave={handleAddStudent}
+                onSave={handleSaveStudent}
+                student={selectedStudent}
             />
 
             <ConfirmDialog
