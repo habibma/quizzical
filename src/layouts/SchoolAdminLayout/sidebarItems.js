@@ -45,6 +45,12 @@ export const sidebarItems = [
     icon: ReportsIcon,
   },
   {
+    section: "Overview",
+    title: "Activity log",
+    path: "/principal/activity",
+    icon: ReportsIcon,
+  },
+  {
     section: "People",
     title: "Parents",
     path: "/principal/parents",

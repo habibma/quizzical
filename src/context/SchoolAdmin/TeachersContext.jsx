@@ -1,30 +1,38 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
+
 import {
     getTeachers,
     createTeacher,
     updateTeacher as updateTeacherRequest,
     deleteTeacher,
+    resolveSchoolId,
 } from '../../services/backendService';
 
-export const TeachersContext = createContext();
+const TeachersContext = createContext(null);
 
-const normalizeTeacher = (teacher = {}) => ({
-    id: teacher.id,
-    name: teacher.name,
-    email: teacher.email,
-    subject: teacher.subject ?? 'General',
-    classes_assigned: Array.isArray(teacher.classes_assigned) ? teacher.classes_assigned : [],
-    status: teacher.status ?? 'active',
-    profile_pic: teacher.profile_pic ?? null,
+const normalizeTeacher = (teacher) => ({
+    ...teacher,
+    school_id: teacher.school_id ?? null,
+    user_id: teacher.user_id ?? null,
+    classes_assigned: Array.isArray(teacher.classes_assigned)
+        ? teacher.classes_assigned
+        : [],
+    status: String(teacher.status ?? 'active').toLowerCase(),
 });
 
-const buildTeacherPayload = (teacher) => ({
-    name: teacher.name,
-    email: teacher.email,
-    subject: teacher.subject ?? 'General',
-    status: teacher.status ?? 'active',
-    profile_pic: teacher.profile_pic ?? null,
-    classes_assigned: teacher.classes_assigned ?? [],
+const buildPayload = async (teacher) => ({
+    name: teacher.name.trim(),
+    email: teacher.email.trim(),
+    status: String(teacher.status ?? 'active').toLowerCase(),
+    school_id: teacher.school_id ?? await resolveSchoolId(),
+    classes_assigned: (teacher.classes_assigned ?? []).map(
+        (item) => Number(item.id ?? item)
+    ),
 });
 
 export const TeachersProvider = ({ children }) => {
@@ -35,52 +43,49 @@ export const TeachersProvider = ({ children }) => {
     const refreshTeachers = async () => {
         try {
             setLoading(true);
+
             const data = await getTeachers();
-            setTeachers(Array.isArray(data) ? data.map(normalizeTeacher) : []);
+
+            setTeachers(
+                Array.isArray(data)
+                    ? data.map(normalizeTeacher)
+                    : []
+            );
+
             setError('');
-            return data;
-        } catch (err) {
-            console.error('Error fetching teachers:', err);
+        } catch (error) {
+            console.error(error);
             setTeachers([]);
-            setError('Unable to load teachers from the database.');
-            return [];
+            setError('Unable to load teachers.');
         } finally {
             setLoading(false);
         }
     };
 
     const addTeacher = async (teacher) => {
-        try {
-            const createdTeacher = await createTeacher(buildTeacherPayload(teacher));
-            await refreshTeachers();
-            return normalizeTeacher(createdTeacher);
-        } catch (err) {
-            console.error('Error creating teacher:', err);
-            throw err;
-        }
+        const created = await createTeacher(
+            await buildPayload(teacher)
+        );
+
+        await refreshTeachers();
+
+        return normalizeTeacher(created);
     };
 
-    const removeTeacher = async (teacherId) => {
-        try {
-            await deleteTeacher(teacherId);
-            await refreshTeachers();
-            return true;
-        } catch (err) {
-            console.error('Error deleting teacher:', err);
-            throw err;
-        }
+    const updateTeacher = async (teacher) => {
+        const updated = await updateTeacherRequest(
+            teacher.id,
+            await buildPayload(teacher)
+        );
+
+        await refreshTeachers();
+
+        return normalizeTeacher(updated);
     };
 
-    const updateTeacher = async (updatedTeacher) => {
-        try {
-            const teacherId = updatedTeacher.id;
-            const savedTeacher = await updateTeacherRequest(teacherId, buildTeacherPayload(updatedTeacher));
-            await refreshTeachers();
-            return normalizeTeacher(savedTeacher);
-        } catch (err) {
-            console.error('Error updating teacher:', err);
-            throw err;
-        }
+    const removeTeacher = async (id) => {
+        await deleteTeacher(id);
+        await refreshTeachers();
     };
 
     useEffect(() => {
@@ -88,7 +93,17 @@ export const TeachersProvider = ({ children }) => {
     }, []);
 
     return (
-        <TeachersContext.Provider value={{ teachers, loading, error, addTeacher, removeTeacher, updateTeacher, refreshTeachers }}>
+        <TeachersContext.Provider
+            value={{
+                teachers,
+                loading,
+                error,
+                addTeacher,
+                updateTeacher,
+                removeTeacher,
+                refreshTeachers,
+            }}
+        >
             {children}
         </TeachersContext.Provider>
     );
@@ -98,7 +113,9 @@ export const useTeachers = () => {
     const context = useContext(TeachersContext);
 
     if (!context) {
-        throw new Error('useTeachers must be used within a TeachersProvider');
+        throw new Error(
+            'useTeachers must be used inside TeachersProvider'
+        );
     }
 
     return context;

@@ -1,138 +1,173 @@
 import { useEffect, useState } from 'react';
+
 import Modal from '../../../components/ui/Modal';
 import Input from '../../../components/ui/Input';
 import Button from '../../../components/ui/Button/Button';
 
-const defaultForm = {
+import { useClasses } from '../../../context/SchoolAdmin/ClassesContext';
+
+const EMPTY_FORM = {
     name: '',
     email: '',
-    subject: '',
-    status: 'Active',
+    status: 'active',
+    classes_assigned: [],
 };
 
-const TeacherModal = ({ isOpen, onClose, onSave, teacher = null }) => {
-    const [formData, setFormData] = useState(defaultForm);
+const TeacherModal = ({
+    isOpen,
+    onClose,
+    onSave,
+    teacher = null,
+}) => {
+    const { classes } = useClasses();
+
+    const [form, setForm] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (!isOpen) return;
 
         if (teacher) {
-            setFormData({
+            setForm({
                 name: teacher.name ?? '',
                 email: teacher.email ?? '',
-                subject: teacher.subject ?? '',
-                status: teacher.status ?? 'Active',
+                status: teacher.status ?? 'active',
+                classes_assigned:
+                    teacher.classes_assigned?.map(
+                        (item) => String(item.id ?? item)
+                    ) ?? [],
             });
-            return;
+        } else {
+            setForm(EMPTY_FORM);
         }
 
-        setFormData(defaultForm);
+        setErrors({});
     }, [isOpen, teacher]);
 
     if (!isOpen) return null;
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setFormData((prev) => ({
-            ...prev,
+    const updateField = (name, value) => {
+        setForm((current) => ({
+            ...current,
             [name]: value,
         }));
 
-        setErrors((prev) => ({
-            ...prev,
+        setErrors((current) => ({
+            ...current,
             [name]: '',
         }));
     };
 
-    const validateForm = () => {
+    const validate = () => {
         const nextErrors = {};
-        const name = formData.name.trim();
-        const email = formData.email.trim();
-        const subject = formData.subject.trim();
 
-        if (!name) {
-            nextErrors.name = 'Teacher name is required.';
+        if (!form.name.trim()) {
+            nextErrors.name = 'Name is required.';
         }
 
-        if (!email) {
-            nextErrors.email = 'Teacher email is required.';
-        } else if (!/\S+@\S+\.\S+/.test(email)) {
-            nextErrors.email = 'Teacher email is invalid.';
-        }
-
-        if (!subject) {
-            nextErrors.subject = 'Teacher subject is required.';
+        if (!form.email.trim()) {
+            nextErrors.email = 'Email is required.';
+        } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+            nextErrors.email = 'Enter a valid email.';
         }
 
         return nextErrors;
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-        const nextErrors = validateForm();
+        const nextErrors = validate();
 
-        if (Object.keys(nextErrors).length > 0) {
+        if (Object.keys(nextErrors).length) {
             setErrors(nextErrors);
             return;
         }
 
-        const teacherData = {
-            id: teacher?.id ?? null,
-            name: formData.name.trim(),
-            email: formData.email.trim(),
-            subject: formData.subject.trim(),
-            status: formData.status || 'active',
-            classesAssigned: teacher?.classesAssigned ?? [],
-        };
-
-        onSave(teacherData);
-
-        setFormData(defaultForm);
-        setErrors({});
+        await onSave({
+            name: form.name.trim(),
+            email: form.email.trim(),
+            status: form.status,
+            classes_assigned: form.classes_assigned.map(Number),
+        });
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={teacher ? 'Edit Teacher' : 'Add Teacher'}>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            title={teacher ? 'Edit Teacher' : 'Add Teacher'}
+        >
             <form onSubmit={handleSubmit}>
                 <Input
                     label="Name"
                     name="name"
-                    value={formData.name}
-                    onChange={handleChange}
+                    value={form.name}
+                    onChange={(e) =>
+                        updateField('name', e.target.value)
+                    }
                     error={errors.name}
                 />
+
                 <Input
                     label="Email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    value={form.email}
+                    onChange={(e) =>
+                        updateField('email', e.target.value)
+                    }
                     error={errors.email}
                 />
+
                 <Input
-                    label="Subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    error={errors.subject}
+                    as="select"
+                    label="Classes"
+                    name="classes_assigned"
+                    multiple
+                    value={form.classes_assigned}
+                    onChange={(e) =>
+                        updateField(
+                            'classes_assigned',
+                            Array.from(
+                                e.target.selectedOptions,
+                                (option) => option.value
+                            )
+                        )
+                    }
+                    options={classes.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                    }))}
                 />
+
                 <Input
                     as="select"
                     label="Status"
                     name="status"
-                    value={formData.status}
-                    onChange={handleChange}
+                    value={form.status}
+                    onChange={(e) =>
+                        updateField('status', e.target.value)
+                    }
                     options={[
                         { value: 'active', label: 'Active' },
                         { value: 'pending', label: 'Pending' },
                         { value: 'invited', label: 'Invited' },
                     ]}
                 />
+
                 <div className="modal-actions">
-                    <Button className="btn-secondary" type="button" text="Cancel" onClick={onClose} />
-                    <Button className="btn-primary" type="submit" text={teacher ? 'Update' : 'Save'} />
+                    <Button
+                        type="button"
+                        className="btn-secondary"
+                        text="Cancel"
+                        onClick={onClose}
+                    />
+
+                    <Button
+                        type="submit"
+                        className="btn-primary"
+                        text={teacher ? 'Update' : 'Save'}
+                    />
                 </div>
             </form>
         </Modal>

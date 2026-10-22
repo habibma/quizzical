@@ -362,6 +362,33 @@
     width: 100%;
 }
 
+.student-modal__intro,
+.student-modal__field small {
+    color: var(--card-text-secondary-color);
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+.student-modal__section-title {
+    margin: 0.35rem 0 -0.35rem;
+    color: var(--card-text-primary-color);
+    font-size: 1rem;
+}
+
+.student-modal__alert {
+    padding: 0.75rem 0.9rem;
+    border-left: 3px solid var(--danger-color);
+    border-radius: var(--radius-sm);
+    background: rgba(242, 78, 30, 0.08);
+    color: var(--danger-color);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.student-modal select[multiple] {
+    min-height: 7rem;
+}
+
 .student-modal__field {
     display: flex;
     flex-direction: column;

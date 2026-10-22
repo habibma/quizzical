@@ -1,242 +1,103 @@
-const   API_URL = "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const SCHOOL_STORAGE_KEY = 'schoolId';
 
-export async function getCategories() {
-  try {
-    const response = await fetch(`${API_URL}/api/categories`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    return [];
+export const getSchoolId = () => {
+  if (typeof window !== 'undefined') {
+    const storedSchoolId = window.localStorage.getItem(SCHOOL_STORAGE_KEY);
+    if (storedSchoolId) return Number(storedSchoolId);
   }
-}
 
-export async function getStudents() {
-  try {
-    const response = await fetch(`${API_URL}/api/students`);
+  const configuredSchoolId = import.meta.env.VITE_SCHOOL_ID;
+  return configuredSchoolId ? Number(configuredSchoolId) : null;
+};
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching students:", error);
-    return [];
+export const setSchoolId = (schoolId) => {
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(SCHOOL_STORAGE_KEY, String(schoolId));
   }
-}
+};
 
-export async function createStudent(studentData) {
-  try {
-    const response = await fetch(`${API_URL}/api/students`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(studentData),
-    });
+export const resolveSchoolId = async () => {
+  const currentSchoolId = getSchoolId();
+  if (currentSchoolId) return currentSchoolId;
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+  const schools = await request('/api/schools');
+  const firstSchoolId = Array.isArray(schools) ? schools[0]?.id : null;
+
+  if (!firstSchoolId) {
+    throw new Error('No school is configured. Create a school before adding teachers.');
+  }
+
+  setSchoolId(firstSchoolId);
+  return firstSchoolId;
+};
+
+const buildQuery = (params = {}) => {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      searchParams.set(key, value);
     }
+  });
 
-    return await response.json();
-  } catch (error) {
-    console.error("Error creating student:", error);
+  const query = searchParams.toString();
+  return query ? `?${query}` : '';
+};
+
+const request = async (path, options = {}) => {
+  const response = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers: {
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...options.headers,
+    },
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const error = new Error(data?.error || `Request failed with status ${response.status}`);
+    error.status = response.status;
     throw error;
   }
-}
 
-export async function updateStudent(studentId, studentData) {
-  try {
-    const response = await fetch(`${API_URL}/api/students/${studentId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(studentData),
-    });
+  return data;
+};
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+const jsonOptions = (method, body) => ({
+  method,
+  body: JSON.stringify(body),
+});
 
-    return await response.json();
-  } catch (error) {
-    console.error("Error updating student:", error);
-    throw error;
-  }
-}
+const schoolQuery = () => buildQuery({ school_id: getSchoolId() });
 
-export async function deleteStudent(studentId) {
-  try {
-    const response = await fetch(`${API_URL}/api/students/${studentId}`, {
-      method: "DELETE",
-    });
+export const getStudents = () => request(`/api/students${schoolQuery()}`);
+export const getStudent = (studentId) => request(`/api/students/${studentId}`);
+export const createStudent = (studentData) => request('/api/students', jsonOptions('POST', studentData));
+export const updateStudent = (studentId, studentData) => request(`/api/students/${studentId}`, jsonOptions('PUT', studentData));
+export const deleteStudent = (studentId) => request(`/api/students/${studentId}`, { method: 'DELETE' });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+export const getTeachers = () => request(`/api/teachers${schoolQuery()}`);
+export const getTeacher = (teacherId) => request(`/api/teachers/${teacherId}`);
+export const createTeacher = (teacherData) => request('/api/teachers', jsonOptions('POST', teacherData));
+export const updateTeacher = (teacherId, teacherData) => request(`/api/teachers/${teacherId}`, jsonOptions('PUT', teacherData));
+export const deleteTeacher = (teacherId) => request(`/api/teachers/${teacherId}`, { method: 'DELETE' });
 
-    return await response.json();
-  } catch (error) {
-    console.error("Error deleting student:", error);
-    throw error;
-  }
-}
+export const getClasses = () => request(`/api/classes${schoolQuery()}`);
+export const getClass = (classId) => request(`/api/classes/${classId}`);
+export const createClass = (classData) => request('/api/classes', jsonOptions('POST', classData));
+export const updateClass = (classId, classData) => request(`/api/classes/${classId}`, jsonOptions('PUT', classData));
+export const deleteClass = (classId) => request(`/api/classes/${classId}`, { method: 'DELETE' });
 
-export async function getTeachers() {
-  try {
-    const response = await fetch(`${API_URL}/api/teachers`);
+export const getUsers = () => request(`/api/users${schoolQuery()}`);
+export const getUser = (userId) => request(`/api/users/${userId}`);
+export const createUser = (userData) => request('/api/users', jsonOptions('POST', userData));
+export const updateUser = (userId, userData) => request(`/api/users/${userId}`, jsonOptions('PUT', userData));
+export const deleteUser = (userId) => request(`/api/users/${userId}`, { method: 'DELETE' });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching teachers:", error);
-    return [];
-  }
-}
-
-export async function createTeacher(teacherData) {
-  try {
-    const response = await fetch(`${API_URL}/api/teachers`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(teacherData),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error creating teacher:", error);
-    throw error;
-  }
-}
-
-export async function updateTeacher(teacherId, teacherData) {
-  try {
-    const response = await fetch(`${API_URL}/api/teachers/${teacherId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(teacherData),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error updating teacher:", error);
-    throw error;
-  }
-}
-
-export async function deleteTeacher(teacherId) {
-  try {
-    const response = await fetch(`${API_URL}/api/teachers/${teacherId}`, {
-      method: "DELETE",
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error deleting teacher:", error);
-    throw error;
-  }
-}
-
-export async function getClasses() {
-  try {
-    const response = await fetch(`${API_URL}/api/classes`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching classes:", error);
-    return [];
-  }
-}
-
-export async function createClass(classData) {
-  try {
-    const response = await fetch(`${API_URL}/api/classes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(classData),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error creating class:", error);
-    throw error;
-  }
-}
-
-export async function updateClass(classId, classData) {
-  try {
-    const response = await fetch(`${API_URL}/api/classes/${classId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(classData),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error updating class:", error);
-    throw error;
-  }
-}
-
-export async function deleteClass(classId) {
-  try {
-    const response = await fetch(`${API_URL}/api/classes/${classId}`, {
-      method: "DELETE",
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error deleting class:", error);
-    throw error;
-  }
-}
+export const getSchools = () => request('/api/schools');
+export const getSchool = (schoolId) => request(`/api/schools/${schoolId}`);
+export const createSchool = (schoolData) => request('/api/schools', jsonOptions('POST', schoolData));
+export const updateSchool = (schoolId, schoolData) => request(`/api/schools/${schoolId}`, jsonOptions('PUT', schoolData));
+export const deleteSchool = (schoolId) => request(`/api/schools/${schoolId}`, { method: 'DELETE' });

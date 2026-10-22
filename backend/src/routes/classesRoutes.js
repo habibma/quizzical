@@ -1,50 +1,54 @@
+
 const express = require("express");
 const db = require("../db");
 
 const router = express.Router();
 
-const normalizeClass = (classData = {}) => ({
-  id: classData.id,
-  name: classData.name ?? "",
-  description: classData.description ?? "",
-  teacherId: classData.teacher_id ?? null,
-  teacherName: classData.teacher_name ?? "",
-  studentsCount: classData.students_count ?? 0,
-});
+const classQuery = `
+  SELECT
+    c.id,
+    c.name,
+    c.description,
+    c.school_id,
+    COALESCE(
+      json_agg(DISTINCT jsonb_build_object(
+        'id', t.id, 'name', t.name
+      )) FILTER (WHERE t.id IS NOT NULL),
+      '[]'::json
+    ) AS teachers,
+    COUNT(DISTINCT cs.student_id)::int AS students_count
+  FROM classes c
+  LEFT JOIN class_teachers ct ON ct.class_id = c.id
+  LEFT JOIN teachers t ON t.id = ct.teacher_id
+  LEFT JOIN class_students cs ON cs.class_id = c.id
+`;
 
-// GET all classes
+const validClassName = (name) =>
+  typeof name === "string" && name.trim().length > 0;
+
 router.get("/", async (req, res) => {
   try {
+    const schoolFilter = req.query.school_id ? "WHERE c.school_id = $1" : "";
     const result = await db.query(`
-      SELECT c.id, c.name, c.description, c.teacher_id,
-             t.name AS teacher_name,
-             COUNT(s.id)::int AS students_count
-      FROM classes c
-      LEFT JOIN teachers t ON t.id = c.teacher_id
-      LEFT JOIN students s ON s.class_id = c.id
-      GROUP BY c.id, c.name, c.description, c.teacher_id, t.name
+      ${classQuery}
+      ${schoolFilter}
+      GROUP BY c.id
       ORDER BY c.name ASC
-    `);
+    `, req.query.school_id ? [req.query.school_id] : []);
 
-    res.json(result.rows.map(normalizeClass));
+    res.json(result.rows);
   } catch (error) {
-    console.error("Error fetching classes:", error);
+    console.error("Error fetching classes:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// GET a class by ID
 router.get("/:id", async (req, res) => {
   try {
     const result = await db.query(
-      `SELECT c.id, c.name, c.description, c.teacher_id,
-             t.name AS teacher_name,
-             COUNT(s.id)::int AS students_count
-      FROM classes c
-      LEFT JOIN teachers t ON t.id = c.teacher_id
-      LEFT JOIN students s ON s.class_id = c.id
-      WHERE c.id = $1
-      GROUP BY c.id, c.name, c.description, c.teacher_id, t.name`,
+      `${classQuery}
+       WHERE c.id = $1
+       GROUP BY c.id`,
       [req.params.id]
     );
 
@@ -52,63 +56,173 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ error: "Class not found" });
     }
 
-    res.json(normalizeClass(result.rows[0]));
+    res.json(result.rows[0]);
   } catch (error) {
-    console.error("Error fetching class:", error);
+    console.error("Error fetching class:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// POST a new class
 router.post("/", async (req, res) => {
   try {
-    const { name, description, teacher_id } = req.body;
+    const { name, description, school_id, teacher_ids = [] } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ error: "Class name is required" });
+    if (!validClassName(name) || !school_id) {
+      return res.status(400).json({
+        error: "Class name and school_id are required",
+      });
     }
 
-    const result = await db.query(
-      `INSERT INTO classes (name, description, teacher_id)
-       VALUES ($1, $2, $3) RETURNING *`,
-      [name, description ?? null, teacher_id ?? null]
-    );
+    if (
+      !Array.isArray(teacher_ids) ||
+      teacher_ids.some((id) => !Number.isInteger(id) || id <= 0)
+    ) {
+      return res.status(400).json({ error: "Invalid teacher_ids" });
+    }
 
-    res.status(201).json(normalizeClass(result.rows[0]));
+    const client = await db.connect();
+
+    try {
+      await client.query("BEGIN");
+
+      const created = await client.query(
+        `INSERT INTO classes (name, description, school_id)
+         VALUES ($1, $2, $3)
+         RETURNING id`,
+        [name.trim(), description ?? null, school_id]
+      );
+
+      const classId = created.rows[0].id;
+
+      for (const teacherId of [...new Set(teacher_ids)]) {
+        await client.query(
+          `INSERT INTO class_teachers (class_id, teacher_id)
+           SELECT $1, id FROM teachers
+           WHERE id = $2 AND school_id = $3`,
+          [classId, teacherId, school_id]
+        );
+
+        const assignment = await client.query(
+          `SELECT 1 FROM class_teachers
+           WHERE class_id = $1 AND teacher_id = $2`,
+          [classId, teacherId]
+        );
+
+        if (!assignment.rows.length) {
+          throw Object.assign(new Error("Invalid teacher for this school"), {
+            status: 400,
+          });
+        }
+      }
+
+      await client.query("COMMIT");
+
+      const result = await db.query(
+        `${classQuery} WHERE c.id = $1 GROUP BY c.id`,
+        [classId]
+      );
+
+      res.status(201).json(result.rows[0]);
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
   } catch (error) {
-    console.error("Error adding class:", error);
+    console.error("Error creating class:", error.message);
+
+    if (error.status === 400 || error.code === "23503") {
+      return res.status(400).json({ error: error.message });
+    }
+
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// PUT update a class
 router.put("/:id", async (req, res) => {
   try {
-    const { name, description, teacher_id } = req.body;
+    const { name, description, school_id, teacher_ids = [] } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ error: "Class name is required" });
+    if (!validClassName(name) || !school_id) {
+      return res.status(400).json({
+        error: "Class name and school_id are required",
+      });
     }
 
-    const result = await db.query(
-      `UPDATE classes
-       SET name = $1, description = $2, teacher_id = $3
-       WHERE id = $4 RETURNING *`,
-      [name, description ?? null, teacher_id ?? null, req.params.id]
-    );
-
-    if (!result.rows.length) {
-      return res.status(404).json({ error: "Class not found" });
+    if (
+      !Array.isArray(teacher_ids) ||
+      teacher_ids.some((id) => !Number.isInteger(id) || id <= 0)
+    ) {
+      return res.status(400).json({ error: "Invalid teacher_ids" });
     }
 
-    res.json(normalizeClass(result.rows[0]));
+    const client = await db.connect();
+
+    try {
+      await client.query("BEGIN");
+
+      const result = await client.query(
+        `UPDATE classes
+         SET name = $1, description = $2, school_id = $3
+         WHERE id = $4
+         RETURNING id`,
+        [name.trim(), description ?? null, school_id, req.params.id]
+      );
+
+      if (!result.rows.length) {
+        await client.query("ROLLBACK");
+        return res.status(404).json({ error: "Class not found" });
+      }
+
+      await client.query("DELETE FROM class_teachers WHERE class_id = $1", [req.params.id]);
+
+      for (const teacherId of [...new Set(teacher_ids)]) {
+        await client.query(
+          `INSERT INTO class_teachers (class_id, teacher_id)
+           SELECT $1, id FROM teachers
+           WHERE id = $2 AND school_id = $3`,
+          [req.params.id, teacherId, school_id]
+        );
+
+        const assignment = await client.query(
+          `SELECT 1 FROM class_teachers
+           WHERE class_id = $1 AND teacher_id = $2`,
+          [req.params.id, teacherId]
+        );
+
+        if (!assignment.rows.length) {
+          throw Object.assign(new Error("Invalid teacher for this school"), {
+            status: 400,
+          });
+        }
+      }
+
+      await client.query("COMMIT");
+
+      const updated = await db.query(
+        `${classQuery} WHERE c.id = $1 GROUP BY c.id`,
+        [req.params.id]
+      );
+
+      res.json(updated.rows[0]);
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
   } catch (error) {
-    console.error("Error updating class:", error);
+    console.error("Error updating class:", error.message);
+
+    if (error.status === 400 || error.code === "23503") {
+      return res.status(400).json({ error: error.message });
+    }
+
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// DELETE a class
 router.delete("/:id", async (req, res) => {
   try {
     const result = await db.query(
@@ -122,7 +236,7 @@ router.delete("/:id", async (req, res) => {
 
     res.json({ message: "Class deleted successfully" });
   } catch (error) {
-    console.error("Error deleting class:", error);
+    console.error("Error deleting class:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });

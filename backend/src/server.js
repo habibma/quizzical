@@ -6,6 +6,8 @@ const pool = require("./db");
 const studentRoutes = require("./routes/studentRoutes");
 const classRoutes = require("./routes/classesRoutes");
 const teacherRoutes = require("./routes/teachersRoutes");
+const userRoutes = require("./routes/usersRoutes");
+const schoolRoutes = require("./routes/schoolsRoutes");
 
 const app = express();
 const PORT = 3000;
@@ -22,9 +24,15 @@ app.use("/api/classes", classRoutes);
 // Use the teacher routes for any requests to /api/teachers
 app.use("/api/teachers", teacherRoutes);
 
-pool.on("connect", () => {
-  console.log("Connected to the database");
-});
+// Use the user routes for any requests to /api/users
+app.use("/api/users", userRoutes);
+
+// Use the school routes for any requests to /api/schools
+app.use("/api/schools", schoolRoutes);
+
+pool.query("SELECT 1")
+  .then(() => console.log("Connected to PostgreSQL"))
+  .catch((err) => console.error("Database connection failed:", err.message));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

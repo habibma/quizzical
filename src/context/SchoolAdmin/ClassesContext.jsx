@@ -4,6 +4,7 @@ import {
     createClass,
     updateClass,
     deleteClass,
+    getSchoolId,
 } from '../../services/backendService';
 
 const ClassesContext = createContext(null);
@@ -11,13 +12,18 @@ const ClassesContext = createContext(null);
 const normalizeClass = (classroom = {}) => ({
     id: classroom.id,
     name: classroom.name,
-    description: classroom.description ?? ''
+    description: classroom.description ?? '',
+    school_id: classroom.school_id ?? classroom.schoolId ?? null,
+    teachers: Array.isArray(classroom.teachers) ? classroom.teachers : [],
+    studentsCount: classroom.students_count ?? classroom.studentsCount ?? 0,
+    teacher_id: classroom.teachers?.[0]?.id ?? classroom.teacher_id ?? null,
 });
 
 const buildClassPayload = (classData) => ({
     name: classData.name,
     description: classData.description || '',
-    teacher_id: classData.teacher_id
+    school_id: classData.school_id ?? getSchoolId(),
+    teacher_ids: classData.teacher_ids ?? (classData.teacher_id ? [Number(classData.teacher_id)] : []),
 });
 
 export const ClassesProvider = ({ children }) => {

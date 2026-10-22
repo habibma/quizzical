@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Input.css';
 
-const Input = ({ as = "input", options = [], type = "text", value, onChange, label, name, id, radioValue, required, ...rest }) => {
+const Input = ({ as = "input", options = [], type = "text", value, onChange, label, name, id, radioValue, required, error, ...rest }) => {
   const inputProps = {
     type,
     id,
@@ -10,6 +10,8 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
     onChange,
     required,
     ...rest,
+    'aria-invalid': error ? 'true' : undefined,
+    'aria-describedby': error ? `${id}-error` : rest['aria-describedby'],
   };
 
   if (type === "radio") {
@@ -32,6 +34,7 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
         <select {...inputProps}>
           {inputProps.children}
         </select>
+        {error && <span className="input-error" id={`${id}-error`} role="alert">{error}</span>}
       </div>
     );
   }
@@ -50,6 +53,7 @@ const Input = ({ as = "input", options = [], type = "text", value, onChange, lab
     <div className="input-container">
       <label className="label" htmlFor={id}>{label}</label>
       <input className="input" {...inputProps} />
+      {error && <span className="input-error" id={`${id}-error`} role="alert">{error}</span>}
     </div>
   );
 };

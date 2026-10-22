@@ -1,156 +1,219 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import Modal from '../../../components/ui/Modal';
-import Input from '../../../components/ui/Input';
-import Button from '../../../components/ui/Button/Button';
-import { useClasses } from '../../../context/SchoolAdmin/ClassesContext';
+import Modal from "../../../components/ui/Modal";
+import Input from "../../../components/ui/Input";
+import Button from "../../../components/ui/Button/Button";
 
-const defaultForm = {
-    name: '',
-    class_id: '',
-    email: '',
-    status: 'active',
+import { useClasses } from "../../../context/SchoolAdmin/ClassesContext";
+
+const EMPTY_FORM = {
+    name: "",
+    email: "",
+    classes_assigned: [],
+    status: "active",
 };
 
-const StudentModal = ({ isOpen, onClose, onSave, student = null }) => {
-    const { classes } = useClasses();
-    const [formData, setFormData] = useState(defaultForm);
+const StudentModal = ({
+    isOpen,
+    onClose,
+    onSave,
+    student = null,
+    saving = false,
+    saveError = "",
+}) => {
+    const {
+        classes,
+        loading: classesLoading,
+        error: classesError,
+    } = useClasses();
+
+    const [form, setForm] = useState(EMPTY_FORM);
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (!isOpen) return;
 
         if (student) {
-            setFormData({
-                name: student.name ?? '',
-                class_id: student.class_id ?? '',
-                email: student.email ?? '',
-                status: student.status ?? 'active',
+            setForm({
+                name: student.name ?? "",
+                email: student.email ?? "",
+                classes_assigned:
+                    (student.classes_assigned ?? student.classes ?? [])
+                        .map((item) =>
+                            String(item?.id ?? item)
+                        ),
+                status: String(
+                    student.status ?? "active"
+                ).toLowerCase(),
             });
-            return;
+        } else {
+            setForm(EMPTY_FORM);
         }
 
-        setFormData(defaultForm);
+        setErrors({});
     }, [isOpen, student]);
 
     if (!isOpen) return null;
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-
-        setFormData((prev) => ({
-            ...prev,
+    const updateField = (name, value) => {
+        setForm((current) => ({
+            ...current,
             [name]: value,
         }));
 
-        setErrors((prev) => ({
-            ...prev,
-            [name]: '',
+        setErrors((current) => ({
+            ...current,
+            [name]: "",
         }));
     };
 
-    const validateForm = () => {
+    const validate = () => {
         const nextErrors = {};
-        const name = formData.name.trim();
-        const email = formData.email.trim();
 
-        if (!name) {
-            nextErrors.name = 'Student name is required.';
+        if (!form.name.trim()) {
+            nextErrors.name = "Student name is required.";
         }
 
-        if (!email) {
-            nextErrors.email = 'Email is required.';
-        } else if (!/\S+@\S+\.\S+/.test(email)) {
-            nextErrors.email = 'Please enter a valid email address.';
+        if (
+            form.email.trim() &&
+            !/\S+@\S+\.\S+/.test(form.email)
+        ) {
+            nextErrors.email = "Please enter a valid email address.";
         }
 
         return nextErrors;
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-        const nextErrors = validateForm();
+        const nextErrors = validate();
 
-        if (Object.keys(nextErrors).length > 0) {
+        if (Object.keys(nextErrors).length) {
             setErrors(nextErrors);
             return;
         }
 
-        const studentData = {
-            id: student?.id ?? null,
-            name: formData.name.trim(),
-            class_id: formData.class_id ? Number(formData.class_id) : null,
-            email: formData.email.trim(),
-            profilePic: student?.profilePic ?? null,
-            status: formData.status || 'active',
-        };
-
-        onSave(studentData);
-
-        setFormData(defaultForm);
-        setErrors({});
+        await onSave({
+            name: form.name.trim(),
+            email: form.email.trim(),
+            status: form.status,
+            classes_assigned:
+                form.classes_assigned.map(Number),
+        });
     };
 
     return (
-        <Modal onClose={onClose} isOpen={isOpen} customClass="student-modal" title={student ? 'Edit Student' : 'Add Student'}>
-            <form className="student-modal__form" onSubmit={handleSubmit}>
-                <div className="student-modal__field">
-                    <Input
-                        id="student-name"
-                        label="Name"
-                        name="name"
-                        placeholder="Enter student name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        error={errors.name}
-                    />
-                </div>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            customClass="student-modal"
+            title={student ? "Edit student" : "Add student"}
+        >
+            <form
+                className="student-modal__form"
+                onSubmit={handleSubmit}
+            >
+                {saveError && (
+                    <div
+                        className="student-modal__alert"
+                        role="alert"
+                    >
+                        {saveError}
+                    </div>
+                )}
 
-                <div className="student-modal__field">
-                    <Input
-                        id="student-class"
-                        as="select"
-                        label="Class"
-                        name="class_id"
-                        value={formData.class_id}
-                        onChange={handleChange}
-                        error={errors.class_id}
-                        options={classes.map((classItem) => ({
-                            value: classItem.id,
-                            label: classItem.name,
-                        }))}
-                    />
-                </div>
+                <h3 className="student-modal__section-title">
+                    Student information
+                </h3>
 
-                <div className="student-modal__field">
-                    <Input
-                        id="student-email"
-                        label="Email"
-                        name="email"
-                        type="email"
-                        placeholder="Enter email address"
-                        value={formData.email}
-                        onChange={handleChange}
-                        error={errors.email}
-                    />
-                </div>
+                <Input
+                    id="student-name"
+                    label="Name"
+                    name="name"
+                    placeholder="Enter student name"
+                    value={form.name}
+                    onChange={(e) =>
+                        updateField("name", e.target.value)
+                    }
+                    error={errors.name}
+                    required
+                />
 
-                <div className="student-modal__field">
-                    <Input
-                        id="student-status"
-                        as="select"
-                        label="Status"
-                        name="status"
-                        value={formData.status}
-                        onChange={handleChange}
-                        options={[
-                            { value: 'active', label: 'Active' },
-                            { value: 'pending', label: 'Pending' },
-                            { value: 'invited', label: 'Invited' },
-                        ]}
-                    />
-                </div>
+                <Input
+                    id="student-email"
+                    label="Email"
+                    name="email"
+                    type="email"
+                    placeholder="Enter email address"
+                    value={form.email}
+                    onChange={(e) =>
+                        updateField("email", e.target.value)
+                    }
+                    error={errors.email}
+                />
+
+                <h3 className="student-modal__section-title">
+                    Enrollment
+                </h3>
+
+                <Input
+                    id="student-classes"
+                    as="select"
+                    label="Classes"
+                    name="classes_assigned"
+                    multiple
+                    size={Math.min(
+                        Math.max(classes.length, 3),
+                        6
+                    )}
+                    value={form.classes_assigned}
+                    onChange={(e) =>
+                        updateField(
+                            "classes_assigned",
+                            Array.from(
+                                e.target.selectedOptions,
+                                (option) => option.value
+                            )
+                        )
+                    }
+                    disabled={
+                        classesLoading ||
+                        Boolean(classesError)
+                    }
+                    options={classes.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                    }))}
+                />
+
+                <Input
+                    id="student-status"
+                    as="select"
+                    label="Status"
+                    name="status"
+                    value={form.status}
+                    onChange={(e) =>
+                        updateField(
+                            "status",
+                            e.target.value
+                        )
+                    }
+                    options={[
+                        {
+                            value: "active",
+                            label: "Active",
+                        },
+                        {
+                            value: "pending",
+                            label: "Pending",
+                        },
+                        {
+                            value: "invited",
+                            label: "Invited",
+                        },
+                    ]}
+                />
 
                 <div className="modal-actions">
                     <Button
@@ -158,12 +221,20 @@ const StudentModal = ({ isOpen, onClose, onSave, student = null }) => {
                         text="Cancel"
                         type="button"
                         onClick={onClose}
+                        disabled={saving}
                     />
 
                     <Button
                         className="btn-primary"
-                        text={student ? 'Update' : 'Save'}
+                        text={
+                            saving
+                                ? "Saving..."
+                                : student
+                                    ? "Save changes"
+                                    : "Add student"
+                        }
                         type="submit"
+                        disabled={saving}
                     />
                 </div>
             </form>

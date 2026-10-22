@@ -1,83 +1,94 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
+
 import {
     getStudents,
     createStudent,
     updateStudent as updateStudentRequest,
     deleteStudent,
+    resolveSchoolId,
 } from "../../services/backendService";
 
-export const StudentsContext = createContext();
+const StudentsContext = createContext(null);
 
-const normalizeStudent = (student = {}) => ({
-    id: student.id,
-    name: student.name,
-    email: student.email,
-    class_id: student.class_id ?? student.classId ?? null,
-    status: student.status ?? "pending",
+const normalizeStudent = (student) => ({
+    ...student,
+    school_id: student.school_id ?? null,
+    user_id: student.user_id ?? null,
+    classes: Array.isArray(student.classes)
+        ? student.classes
+        : [],
+    classes_assigned: Array.isArray(student.classes)
+        ? student.classes
+        : [],
+    status: String(student.status ?? "pending").toLowerCase(),
 });
 
-const buildStudentPayload = (student) => ({
-    name: student.name,
-    email: student.email,
-    class_id: student.class_id,
-    profilePic: student.profilePic ?? null,
-    status: student.status ?? "pending",
+const buildPayload = async (student) => ({
+    name: student.name.trim(),
+    email: student.email?.trim() || null,
+    school_id: student.school_id ?? await resolveSchoolId(),
+    status: String(student.status ?? "pending").toLowerCase(),
+    classes_assigned: (student.classes_assigned ?? []).map(
+        (item) => Number(item?.id ?? item)
+    ),
 });
 
 export const StudentsProvider = ({ children }) => {
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
 
     const refreshStudents = async () => {
         try {
             setLoading(true);
+
             const data = await getStudents();
-            setStudents(Array.isArray(data) ? data.map(normalizeStudent) : []);
-            setError('');
-            return data;
-        } catch (err) {
-            console.error('Error fetching students:', err);
+
+            setStudents(
+                Array.isArray(data)
+                    ? data.map(normalizeStudent)
+                    : []
+            );
+
+            setError("");
+        } catch (error) {
+            console.error(error);
             setStudents([]);
-            setError('Unable to load students from the database.');
-            return [];
+            setError("Unable to load students.");
         } finally {
             setLoading(false);
         }
     };
 
     const addStudent = async (student) => {
-        try {
-            const createdStudent = await createStudent(buildStudentPayload(student));
-            await refreshStudents();
-            return createdStudent;
-        } catch (err) {
-            console.error('Error creating student:', err);
-            throw err;
-        }
+        const created = await createStudent(
+            await buildPayload(student)
+        );
+
+        await refreshStudents();
+
+        return normalizeStudent(created);
     };
 
-    const removeStudent = async (studentId) => {
-        try {
-            await deleteStudent(studentId);
-            await refreshStudents();
-            return true;
-        } catch (err) {
-            console.error('Error deleting student:', err);
-            throw err;
-        }
+    const updateStudent = async (student) => {
+        const updated = await updateStudentRequest(
+            student.id,
+            await buildPayload(student)
+        );
+
+        await refreshStudents();
+
+        return normalizeStudent(updated);
     };
 
-    const updateStudent = async (updatedStudent) => {
-        try {
-            const currentId = updatedStudent.id;
-            const updated = await updateStudentRequest(currentId, buildStudentPayload(updatedStudent));
-            await refreshStudents();
-            return normalizeStudent(updated);
-        } catch (err) {
-            console.error('Error updating student:', err);
-            throw err;
-        }
+    const removeStudent = async (id) => {
+        await deleteStudent(id);
+        await refreshStudents();
     };
 
     useEffect(() => {
@@ -85,7 +96,17 @@ export const StudentsProvider = ({ children }) => {
     }, []);
 
     return (
-        <StudentsContext.Provider value={{ students, loading, error, addStudent, removeStudent, updateStudent, refreshStudents }}>
+        <StudentsContext.Provider
+            value={{
+                students,
+                loading,
+                error,
+                addStudent,
+                updateStudent,
+                removeStudent,
+                refreshStudents,
+            }}
+        >
             {children}
         </StudentsContext.Provider>
     );
@@ -93,8 +114,12 @@ export const StudentsProvider = ({ children }) => {
 
 export const useStudents = () => {
     const context = useContext(StudentsContext);
+
     if (!context) {
-        throw new Error('useStudents must be used within a StudentsProvider');
+        throw new Error(
+            "useStudents must be used inside StudentsProvider"
+        );
     }
+
     return context;
 };

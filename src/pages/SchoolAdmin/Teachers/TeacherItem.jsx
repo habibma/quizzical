@@ -2,7 +2,10 @@ import Button from '../../../components/ui/Button/Button';
 
 const TeacherItem = ({ teacher, onView, onEdit, onRemove }) => {
     const initials = teacher.name?.charAt(0).toUpperCase() || '?';
-    const statusClass = (teacher.status || 'Active').toLowerCase().replace(/\s+/g, '-');
+    const statusClass = (teacher.status || 'active').toLowerCase().replace(/\s+/g, '-');
+    const assignedClasses = (teacher.classes_assigned || [])
+        .map((assignedClass) => typeof assignedClass === 'string' ? assignedClass : assignedClass.name)
+        .filter(Boolean);
 
     return (
         <div className="teacher-item">
@@ -26,18 +29,14 @@ const TeacherItem = ({ teacher, onView, onEdit, onRemove }) => {
             </div>
 
             <div>
-                <p className="teacher-item--subject">{teacher.subject || 'General'}</p>
-            </div>
-
-            <div>
                 <p className="teacher-item--classes">
-                    {teacher.classesAssigned?.join(', ') || 'No classes assigned'}
+                    {assignedClasses.join(', ') || 'No classes assigned'}
                 </p>
             </div>
 
             <div>
                 <span className={`status-badge status-badge--${statusClass}`}>
-                    {teacher.status || 'Active'}
+                    {teacher.status || 'active'}
                 </span>
             </div>
 

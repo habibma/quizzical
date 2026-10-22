@@ -15,9 +15,10 @@ const normalizeClassItem = (item) => {
   return {
     id: value.id ?? value.class_id ?? value._id ?? 0,
     name: value.name ?? value.class_name ?? value.className ?? `Class ${value.id ?? 'Unknown'}`,
-    description: value.description ?? 'No description available.',
-    teacherId: value.teacher_id ?? value.teacherId ?? null,
-    teacherName: value.teacher_name ?? value.teacherName ?? 'Unassigned',
+    description: value.description ?? '',
+    teachers: Array.isArray(value.teachers) ? value.teachers : [],
+    teacherId: value.teacher_id ?? value.teacherId ?? value.teachers?.[0]?.id ?? null,
+    teacherName: value.teacher_name ?? value.teacherName ?? value.teachers?.map((teacher) => teacher.name).filter(Boolean).join(', ') ?? 'Unassigned',
     studentsCount: Number(value.students_count ?? value.student_count ?? value.studentCount ?? value.total_students ?? 0),
   };
 };
@@ -37,6 +38,8 @@ const Classes = () => {
   const [sortBy, setSortBy] = useState('name');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
 
   const normalizedClasses = useMemo(
     () => rawClasses.map((item) => normalizeClassItem(item)),
@@ -79,21 +82,25 @@ const Classes = () => {
 
   const stats = useMemo(() => ({
     total: normalizedClasses.length,
-    assigned: normalizedClasses.filter((item) => item.teacherId !== null && item.teacherId !== undefined).length,
+    assigned: normalizedClasses.filter((item) => item.teachers.length > 0 || (item.teacherId !== null && item.teacherId !== undefined)).length,
     students: normalizedClasses.reduce((sum, item) => sum + item.studentsCount, 0),
   }), [normalizedClasses]);
 
   const handleOpenModal = (classItem = null) => {
     setSelectedClass(classItem);
+    setSaveError('');
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedClass(null);
+    setSaveError('');
   };
 
   const handleSaveClass = async (payload) => {
+    setSaving(true);
+    setSaveError('');
     try {
       if (selectedClass) {
         await updateClassItem(payload);
@@ -103,6 +110,9 @@ const Classes = () => {
       handleCloseModal();
     } catch (error) {
       console.error('Failed to save class:', error);
+      setSaveError(error.message || 'Unable to save this class.');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -209,6 +219,8 @@ const Classes = () => {
         onClose={handleCloseModal}
         onSave={handleSaveClass}
         classItem={selectedClass}
+        saving={saving}
+        saveError={saveError}
       />
     </div>
   );

@@ -17,6 +17,13 @@ select {
     flex-direction: column;
 }
 
+.input-error {
+  display: block;
+  margin-top: 4px;
+  color: var(--danger-color);
+  font-size: 0.8rem;
+}
+
 .input {
     padding: 0.5rem;
     border: 1px solid #ccc;

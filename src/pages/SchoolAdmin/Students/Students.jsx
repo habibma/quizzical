@@ -11,16 +11,22 @@ import StudentItem from './StudentItem';
 import './Students.css';
 
 const normalizeStudent = (student = {}) => {
-    const className = student.class_name ?? student.className ?? 'Unassigned';
+    const classes = Array.isArray(student.classes)
+        ? student.classes
+        : [];
 
     return {
         id: student.id,
-        name: student.name ?? 'Unnamed student',
-        class_id: student.class_id ?? student.classId ?? null,
-        className,
-        email: student.email ?? '',
-        profilePic: student.profilePic ?? student.profilepic ?? null,
-        status: student.status ?? 'Active',
+        name: student.name ?? "Unnamed student",
+        email: student.email ?? "",
+        classes,
+        className:
+            classes.map((item) => item.name).join(", ") ||
+            "Unassigned",
+        profilePic: student.profilePic ?? null,
+        status: String(
+            student.status ?? "pending"
+        ).toLowerCase(),
     };
 };
 
@@ -40,6 +46,8 @@ const SchoolStudents = () => {
     const [studentToRemove, setStudentToRemove] = useState(null);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [selectedStudentId, setSelectedStudentId] = useState(null);
+    const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState('');
 
     const students = useMemo(
         () => rawStudents.map(normalizeStudent),
@@ -84,31 +92,44 @@ const SchoolStudents = () => {
     const stats = useMemo(() => ({
         total: students.length,
         classCount: new Set(students.map((student) => student.className).filter(Boolean)).size,
-        active: students.filter((student) => student.status === 'Active').length,
+        active: students.filter((student) => student.status === 'active').length,
     }), [students]);
 
     const handleOpenModal = (student = null) => {
         setSelectedStudent(student);
+        setSaveError('');
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setSelectedStudent(null);
+        setSaveError('');
     };
 
     const handleSaveStudent = async (studentData) => {
+        setSaving(true);
+        setSaveError('');
+
         try {
             if (selectedStudent) {
-                await updateStudent(studentData);
+                await updateStudent({
+                    ...studentData,
+                    id: selectedStudent.id,
+                });
             } else {
                 await addStudent(studentData);
             }
+
             handleCloseModal();
         } catch (error) {
             console.error('Failed to save student:', error);
+            setSaveError(error.message || 'Unable to save this student.');
+        } finally {
+            setSaving(false);
         }
     };
+
 
     const handleImportStudents = () => {
         console.log('Import Students button clicked');
@@ -237,7 +258,6 @@ const SchoolStudents = () => {
                                 key={student.id}
                                 id={student.id}
                                 name={student.name}
-                                class_id={student.class_id}
                                 className={student.className}
                                 email={student.email}
                                 profilePic={student.profilePic}
@@ -266,6 +286,8 @@ const SchoolStudents = () => {
                 onClose={handleCloseModal}
                 onSave={handleSaveStudent}
                 student={selectedStudent}
+                saving={saving}
+                saveError={saveError}
             />
 
             <ConfirmDialog

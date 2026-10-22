@@ -1,8 +1,9 @@
-
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import Button from '../../../components/ui/Button/Button';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
+
 import { useTeachers } from '../../../context/SchoolAdmin/TeachersContext';
 
 import TeacherItem from './TeacherItem';
@@ -10,118 +11,111 @@ import TeacherModal from './TeacherModal';
 
 import './Teachers.css';
 
-const SchoolTeachers = () => {
+const Teachers = () => {
     const navigate = useNavigate();
-    const { teachers, addTeacher, updateTeacher, removeTeacher } = useTeachers();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedSubject, setSelectedSubject] = useState('all');
-    const [sortBy, setSortBy] = useState('name');
-    const [selectedTeacher, setSelectedTeacher] = useState(null);
-    const [selectedTeacherToRemove, setSelectedTeacherToRemove] = useState(null);
 
-    const subjectOptions = useMemo(() => {
-        return [...new Set(teachers.map((teacher) => teacher.subject).filter(Boolean))];
-    }, [teachers]);
+    const {
+        teachers,
+        addTeacher,
+        updateTeacher,
+        removeTeacher,
+    } = useTeachers();
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedTeacher, setSelectedTeacher] = useState(null);
+    const [teacherToRemove, setTeacherToRemove] = useState(null);
+    const [search, setSearch] = useState('');
+    const [sortBy, setSortBy] = useState('name');
 
     const visibleTeachers = useMemo(() => {
-        const query = searchTerm.trim().toLowerCase();
+        const query = search.trim().toLowerCase();
 
-        const filtered = teachers.filter((teacher) => {
-            const classesText = Array.isArray(teacher.classesAssigned) ? teacher.classesAssigned.join(' ') : '';
-            const matchesSearch = !query || [teacher.name, teacher.email, teacher.subject, classesText]
-                .filter(Boolean)
-                .some((value) => String(value).toLowerCase().includes(query));
+        return [...teachers]
+            .filter((teacher) => {
+                const classes = teacher.classes_assigned
+                    ?.map((item) => item.name ?? item)
+                    .join(' ');
 
-            const matchesSubject = selectedSubject === 'all' || teacher.subject === selectedSubject;
+                return [
+                    teacher.name,
+                    teacher.email,
+                    classes,
+                ]
+                    .filter(Boolean)
+                    .some((value) =>
+                        String(value).toLowerCase().includes(query)
+                    );
+            })
+            .sort((a, b) => {
+                if (sortBy === 'newest') {
+                    return b.id - a.id;
+                }
 
-            return matchesSearch && matchesSubject;
-        });
+                return a.name.localeCompare(b.name);
+            });
+    }, [teachers, search, sortBy]);
 
-        return [...filtered].sort((a, b) => {
-            if (sortBy === 'subject') {
-                return String(a.subject || '').localeCompare(String(b.subject || '')) || a.name.localeCompare(b.name);
-            }
-
-            if (sortBy === 'newest') {
-                return Number(b.id) - Number(a.id);
-            }
-
-            return a.name.localeCompare(b.name);
-        });
-    }, [teachers, searchTerm, selectedSubject, sortBy]);
-
-    const stats = useMemo(() => ({
+    const stats = {
         total: teachers.length,
-        active: teachers.filter((teacher) => teacher.status === 'Active').length,
-        departments: new Set(teachers.map((teacher) => teacher.subject).filter(Boolean)).size,
-        classesAssigned: teachers.reduce((sum, teacher) => sum + (Array.isArray(teacher.classesAssigned) ? teacher.classesAssigned.length : 0), 0),
-    }), [teachers]);
-
-    const handleViewTeacher = (teacher) => {
-        navigate(`/principal/teachers/${teacher.id}`);
+        active: teachers.filter(
+            (teacher) => teacher.status === 'active'
+        ).length,
+        unassigned: teachers.filter(
+            (teacher) => !teacher.classes_assigned?.length
+        ).length,
     };
 
-    const handleOpenModal = (teacher = null) => {
+    const openModal = (teacher = null) => {
         setSelectedTeacher(teacher);
-        setIsModalOpen(true);
+        setModalOpen(true);
     };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
+    const closeModal = () => {
         setSelectedTeacher(null);
+        setModalOpen(false);
     };
 
-    const handleSaveTeacher = async (teacherData) => {
-        try {
-            if (selectedTeacher) {
-                await updateTeacher(teacherData);
-            } else {
-                await addTeacher(teacherData);
-            }
-            handleCloseModal();
-        } catch (error) {
-            console.error('Failed to save teacher:', error);
+    const saveTeacher = async (data) => {
+        if (selectedTeacher) {
+            await updateTeacher({
+                ...data,
+                id: selectedTeacher.id,
+            });
+        } else {
+            await addTeacher(data);
         }
+
+        closeModal();
     };
 
-    const handleOpenRemoveModal = (teacher) => {
-        setSelectedTeacherToRemove(teacher);
-    };
+    const confirmRemove = async () => {
+        if (!teacherToRemove) return;
 
-    const handleCloseRemoveModal = () => {
-        setSelectedTeacherToRemove(null);
-    };
-
-    const handleConfirmRemoveTeacher = async () => {
-        if (!selectedTeacherToRemove) return;
-
-        try {
-            await removeTeacher(selectedTeacherToRemove.id);
-            setSelectedTeacherToRemove(null);
-        } catch (error) {
-            console.error('Failed to remove teacher:', error);
-        }
+        await removeTeacher(teacherToRemove.id);
+        setTeacherToRemove(null);
     };
 
     return (
         <div className="teachers-container">
             <section className="teachers-header">
-                <div className="teachers-header__content">
-                    <p className="teachers-header__eyebrow">School Admin</p>
-                    <h1 className="teachers-header--title">Teachers</h1>
-                    <p className="teachers-header--description">
-                        Manage and review all teachers assigned to the school.
+                <div>
+                    <p className="teachers-header__eyebrow">
+                        School Admin
+                    </p>
+
+                    <h1>Teachers</h1>
+
+                    <p>
+                        Manage and review all teachers assigned to
+                        the school.
                     </p>
                 </div>
 
-                <div className="teachers-header__actions">
-                    <Button
-                        className="btn-primary teachers-actions--add"
-                        text="Add Teacher"
-                        onClick={() => handleOpenModal()}
-                    />
-                </div>
+                <Button
+                    className="btn-primary"
+                    text="Add Teacher"
+                    onClick={() => openModal()}
+                />
             </section>
 
             <section className="teacher-summary-grid">
@@ -129,115 +123,82 @@ const SchoolTeachers = () => {
                     <span>Total Teachers</span>
                     <strong>{stats.total}</strong>
                 </div>
+
                 <div className="teacher-summary-card">
                     <span>Active</span>
                     <strong>{stats.active}</strong>
                 </div>
+
                 <div className="teacher-summary-card">
-                    <span>Departments</span>
-                    <strong>{stats.departments}</strong>
-                </div>
-                <div className="teacher-summary-card">
-                    <span>Assigned Classes</span>
-                    <strong>{stats.classesAssigned}</strong>
+                    <span>Unassigned</span>
+                    <strong>{stats.unassigned}</strong>
                 </div>
             </section>
 
             <section className="teachers-content">
                 <div className="teachers-toolbar">
-                    <div className="teachers-toolbar__controls">
-                        <input
-                            className="teachers-toolbar__search"
-                            type="search"
-                            value={searchTerm}
-                            placeholder="Search teachers"
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            aria-label="Search teachers"
-                        />
+                    <input
+                        type="search"
+                        value={search}
+                        placeholder="Search teachers"
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
 
-                        <select
-                            className="teachers-toolbar__select"
-                            value={selectedSubject}
-                            onChange={(e) => setSelectedSubject(e.target.value)}
-                            aria-label="Filter by subject"
-                        >
-                            <option value="all">All subjects</option>
-                            {subjectOptions.map((subject) => (
-                                <option key={subject} value={subject}>
-                                    {subject}
-                                </option>
-                            ))}
-                        </select>
-
-                        <select
-                            className="teachers-toolbar__select"
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value)}
-                            aria-label="Sort teachers"
-                        >
-                            <option value="name">Sort by name</option>
-                            <option value="subject">Sort by subject</option>
-                            <option value="newest">Sort by newest</option>
-                        </select>
-                    </div>
-
-                    <div className="teachers-actions">
-                        <Button
-                            className="btn-secondary"
-                            text="Import Teachers"
-                            onClick={() => console.log('Import Teachers clicked')}
-                        />
-                        <Button
-                            className="btn-secondary"
-                            text="Export Teachers"
-                            onClick={() => console.log('Export Teachers clicked')}
-                        />
-                    </div>
-                </div>
-
-                <div className="teachers-list-header">
-                    <h2>Teacher List</h2>
-                    <span>{visibleTeachers.length} teachers</span>
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                    >
+                        <option value="name">Sort by name</option>
+                        <option value="newest">Sort by newest</option>
+                    </select>
                 </div>
 
                 <div className="teachers-list">
-                    {visibleTeachers.length > 0 ? (
+                    {visibleTeachers.length ? (
                         visibleTeachers.map((teacher) => (
                             <TeacherItem
                                 key={teacher.id}
                                 teacher={teacher}
-                                onView={handleViewTeacher}
-                                onEdit={() => handleOpenModal(teacher)}
-                                onRemove={() => handleOpenRemoveModal(teacher)}
+                                onView={() =>
+                                    navigate(
+                                        `/principal/teachers/${teacher.id}`
+                                    )
+                                }
+                                onEdit={() => openModal(teacher)}
+                                onRemove={() =>
+                                    setTeacherToRemove(teacher)
+                                }
                             />
                         ))
                     ) : (
                         <div className="teachers-empty">
-                            <h3>No teachers match this view.</h3>
-                            <p>Try a different search or add a new teacher.</p>
+                            <h3>No teachers found.</h3>
+                            <p>Try another search or add a teacher.</p>
                         </div>
                     )}
                 </div>
             </section>
 
             <TeacherModal
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-                onSave={handleSaveTeacher}
+                isOpen={modalOpen}
                 teacher={selectedTeacher}
+                onClose={closeModal}
+                onSave={saveTeacher}
             />
 
             <ConfirmDialog
-                isOpen={Boolean(selectedTeacherToRemove)}
+                isOpen={Boolean(teacherToRemove)}
                 title="Remove teacher?"
-                message={`Are you sure you want to remove ${selectedTeacherToRemove?.name || 'this teacher'}?`}
+                message={`Are you sure you want to remove ${
+                    teacherToRemove?.name || 'this teacher'
+                }?`}
                 confirmText="Remove"
                 cancelText="Keep teacher"
-                onClose={handleCloseRemoveModal}
-                onConfirm={handleConfirmRemoveTeacher}
+                onClose={() => setTeacherToRemove(null)}
+                onConfirm={confirmRemove}
             />
         </div>
     );
 };
 
-export default SchoolTeachers
+export default Teachers;
