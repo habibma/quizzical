@@ -10,7 +10,7 @@ const userRoutes = require("./routes/usersRoutes");
 const schoolRoutes = require("./routes/schoolsRoutes");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
@@ -34,6 +34,6 @@ pool.query("SELECT 1")
   .then(() => console.log("Connected to PostgreSQL"))
   .catch((err) => console.error("Database connection failed:", err.message));
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });

@@ -2,7 +2,7 @@
 
 Quizzical is a React and Vite quiz platform for creating, publishing, and taking quizzes from configurable question repositories. The application includes public quiz creation, teacher quiz management, platform administration, school administration, and a student quiz view.
 
-Live demo: https://quizzical-mote.netlify.app/
+Live demo: [https://quizzical-mote.netlify.app/](https://quizzical-mote.netlify.app/)
 
 ## Features
 
@@ -13,11 +13,10 @@ Live demo: https://quizzical-mote.netlify.app/
 - Manage repositories and quizzes as a teacher.
 - Create, edit, duplicate, publish, archive, preview, and delete teacher quizzes.
 - Display published, non-private quizzes in the student panel.
-- Manage students, teachers, and classes with PostgreSQL-backed CRUD operations as a school administrator.
+- Manage students, teachers, classes, and schools through PostgreSQL-backed CRUD operations.
 - View the remaining school administration areas for courses, reports, parents, and school settings.
-- Use shared accessible UI components, including the reusable Button and Modal components.
-- Persist school-admin students, teachers, and classes through the Express/PostgreSQL backend.
-- Persist the remaining prototype datasets in browser `localStorage`.
+- Use shared accessible UI components, including reusable Button and Modal components.
+- Persist prototype datasets in browser `localStorage`.
 
 ## Quiz publishing flow
 
@@ -28,7 +27,6 @@ The current student panel supports viewing and searching published quizzes. Star
 ## Routes
 
 ### Public
-
 - `/` — Home page
 - `/custom-quiz` — Custom quiz builder
 - `/quiz` — Active quiz
@@ -36,7 +34,6 @@ The current student panel supports viewing and searching published quizzes. Star
 - `/about` — About page
 
 ### Platform administrator
-
 - `/admin/api` — API sources and endpoints
 - `/admin/categories` — Category availability and metadata
 - `/admin/question-sources` — Question source management
@@ -46,7 +43,6 @@ The current student panel supports viewing and searching published quizzes. Star
 - `/admin/statistics` — Statistics
 
 ### School administrator
-
 - `/principal` — Dashboard
 - `/principal/students` — Student management
 - `/principal/teachers` — Teacher management
@@ -57,7 +53,6 @@ The current student panel supports viewing and searching published quizzes. Star
 - `/principal/settings` — School settings
 
 ### Teacher
-
 - `/teacher` — Dashboard
 - `/teacher/repositories` — Repository availability and category status
 - `/teacher/question-bank` — Question bank
@@ -65,7 +60,6 @@ The current student panel supports viewing and searching published quizzes. Star
 - `/teacher/quizzes` — Quiz management
 
 ### Student
-
 - `/student` — Dashboard
 - `/student/quizzes` — Published quizzes
 - `/student/insights` — Insights
@@ -73,79 +67,220 @@ The current student panel supports viewing and searching published quizzes. Star
 
 ## Tech stack
 
+**Frontend**
 - React 18
 - Vite
-- `react-router-dom`
+- React Router
 - ESLint
 - Vite React SWC plugin
+
+**Backend**
+- Node.js
 - Express 5
-- PostgreSQL through `pg`
+- PostgreSQL
+- `pg` (node-postgres)
+
+**Development environment**
+- Docker
+- Docker Compose
+- Make
 
 ## Project structure
 
-- `src/pages` — Public, platform-admin, school-admin, teacher, and student pages
-- `src/layouts` — Role-specific layouts and navigation
-- `src/context` — Shared React Context providers for quiz, question, category, repository, API, settings, and school data
-- `src/services` — API clients and domain services, including the backend CRUD client
-- `src/components` — Shared UI components and icons
-- `src/styles` — Global styles, variables, and form styles
-- `src/utiles` — Small application utilities
-- `backend/src/routes` — Express routes for students, teachers, and classes
-- `backend/src/db.js` — PostgreSQL connection pool configuration
+```text
+Quizzical/
+├── backend/
+│   ├── src/
+│   │   ├── routes/
+│   │   ├── db.js
+│   │   └── server.js
+│   ├── Dockerfile
+│   └── package.json
+├── database/
+│   ├── init.sql
+│   └── seed.sql
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── layouts/
+│   │   ├── context/
+│   │   ├── services/
+│   │   ├── components/
+│   │   ├── styles/
+│   │   └── utiles/
+│   ├── Dockerfile
+│   └── package.json
+├── docker-compose.yml
+├── Makefile
+└── README.md
+```
 
 ## Data and persistence
 
-The frontend prototype stores several datasets in browser storage, including quizzes, categories, APIs, repositories, questions, and settings. Clearing browser storage removes this data.
+The application currently uses two persistence approaches:
 
-Students, teachers, and classes are loaded from PostgreSQL through the backend API. The backend expects a PostgreSQL database named `quizzical` with the corresponding `students`, `teachers`, and `classes` tables. Update the connection settings in `backend/src/db.js` for your local database before starting the server.
+- PostgreSQL stores schools, users, user roles, teachers, students, classes, and their relationships.
+- Browser `localStorage` stores prototype datasets such as quizzes, categories, APIs, repositories, questions, and settings.
 
-There is no authentication or server-side authorization layer in this prototype. Role-specific routes and permissions are represented in the frontend structure and should be backed by authenticated user identity before production use.
+The database schema is maintained in `database/init.sql`. Initial development data is maintained separately in `database/seed.sql`.
 
-## Quick start
+The backend connects to PostgreSQL using environment variables. The database hostname is `db` inside the Docker network.
 
-Requirements: Node.js 18+ and npm.
+There is currently no authentication or server-side authorization layer. Role-specific routes and permissions are represented in the frontend and should be backed by authenticated user identity before production use.
 
-Install dependencies:
+## Getting started with Docker
 
-```bash
-npm install
-cd backend
-npm install
-cd ..
-```
+### Requirements
 
-Start the backend in one terminal:
+- Docker Desktop (or Docker Engine with Docker Compose)
+- Git
 
-```bash
-cd backend
-npm run dev
-```
+Node.js and PostgreSQL do not need to be installed locally when using Docker.
 
-Start the frontend in a second terminal:
+### 1. Clone the repository
 
 ```bash
-npm run dev
+git clone https://github.com/habibma/quizzical.git
+cd Quizzical
 ```
 
-The frontend runs at `http://localhost:5173` and the backend API runs at `http://localhost:3000`.
+### 2. Configure environment variables
+
+Create a root `.env` file:
+
+```env
+DB_USER=postgres
+DB_PASSWORD=your_strong_password
+DB_NAME=quizzical
+DB_PORT=5432
+PORT=3000
+```
+
+Use a strong password. Do not commit `.env` to Git.
+
+### 3. Build and start the application
+
+```bash
+make build
+```
+
+This builds the frontend and backend images and starts all services.
+
+### 4. Access the application
+
+- Frontend: [http://localhost:5173](http://localhost:5173)
+- Backend API: [http://localhost:3000](http://localhost:3000)
+- PostgreSQL: `localhost:5432`
+
+### 5. Verify the services
+
+```bash
+make status
+```
+
+Check backend and database logs:
+
+```bash
+docker compose logs -f backend db
+```
+
+## Makefile commands
+
+| Command | Description |
+|---|---|
+| `make up` | Start containers |
+| `make down` | Stop and remove containers |
+| `make build` | Rebuild images and start services |
+| `make restart` | Restart services |
+| `make logs` | Follow container logs |
+| `make status` | Show container status |
+| `make db` | Open PostgreSQL shell |
+| `make shell-backend` | Open backend container shell |
+| `make shell-frontend` | Open frontend container shell |
+| `make clean` | Remove containers and volumes |
+
+**Warning:** `make clean` removes the PostgreSQL volume and permanently deletes its stored database data.
+
+## Database management
+
+The database schema is initialized from `database/init.sql` when PostgreSQL first initializes an empty data volume.
+
+To apply the schema manually:
+
+```bash
+docker compose exec -T db psql -U postgres -d quizzical < database/init.sql
+```
+
+To insert initial development data:
+
+```bash
+docker compose exec -T db psql -U postgres -d quizzical < database/seed.sql
+```
+
+To access PostgreSQL:
+
+```bash
+make db
+```
+
+Useful PostgreSQL commands:
+
+```sql
+\dt
+\d users
+SELECT * FROM schools;
+```
+
+The PostgreSQL data is stored in the named Docker volume `postgres_data`. It persists when containers are stopped or rebuilt.
 
 ## Backend API
 
-The school administration CRUD endpoints are:
+The school administration endpoints include:
 
-- `/api/students` — list, create, update, and delete students
-- `/api/teachers` — list, create, update, and delete teachers
-- `/api/classes` — list, create, update, and delete classes
+| Endpoint | Operations |
+|---|---|
+| `/api/schools` | List, create, update, delete |
+| `/api/users` | User management |
+| `/api/students` | List, create, update, delete |
+| `/api/teachers` | List, create, update, delete |
+| `/api/classes` | List, create, update, delete |
 
-The backend allows requests from the local Vite origin `http://localhost:5173`.
+The backend uses Express and connects to PostgreSQL through a connection pool.
 
-Run ESLint:
+The frontend uses `VITE_API_URL` to configure the backend API address. For local Docker development, it points to `http://localhost:3000`.
+
+## Running without Docker
+
+For development without Docker, install Node.js 22+ and npm, and provide a separately running PostgreSQL database.
+
+Install frontend dependencies:
 
 ```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+In another terminal, install backend dependencies:
+
+```bash
+cd backend
+npm ci
+npm run dev
+```
+
+Configure the backend database environment variables appropriately. When running outside Docker, `DB_HOST` should normally be `localhost`, not `db`.
+
+## Linting and production builds
+
+Run frontend ESLint:
+
+```bash
+cd frontend
 npm run lint
 ```
 
-Build for production:
+Build the frontend:
 
 ```bash
 npm run build
@@ -156,3 +291,10 @@ Preview the production build:
 ```bash
 npm run preview
 ```
+
+## Current limitations
+
+- Authentication and server-side authorization are not implemented.
+- Several platform and teacher datasets still use browser `localStorage`.
+- The student panel does not yet support starting assigned teacher quizzes.
+- Production deployment and production database configuration require additional setup.
