@@ -16,8 +16,7 @@
 }
 
 .school-settings-header > p:last-child,
-.section-heading p,
-.school-toggle small {
+.section-heading p {
 	color: var(--text-secondary-color);
 	line-height: 1.6;
 }
@@ -65,35 +64,6 @@
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 20px;
-}
-
-.school-toggle {
-	display: flex;
-	align-items: flex-start;
-	gap: 12px;
-	margin-top: 22px;
-	cursor: pointer;
-}
-
-.school-toggle input {
-	width: 18px;
-	height: 18px;
-	margin-top: 3px;
-	accent-color: var(--primary-color);
-}
-
-.school-toggle span {
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-}
-
-.school-toggle strong {
-	font-size: 0.95rem;
-}
-
-.school-toggle small {
-	font-size: 0.875rem;
 }
 
 .color-field {

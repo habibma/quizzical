@@ -16,11 +16,6 @@
     align-items: center;
 }
 
-.header-center {
-    flex-grow: 1;
-    text-align: center;
-}
-
 .header-right {
     display: flex;
     align-items: center;

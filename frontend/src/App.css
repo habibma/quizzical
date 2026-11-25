@@ -1,9 +1,4 @@
 
-.link {
-  color: var(--link-color);
-  text-decoration: none;
-}
-
 .error {
   color: rgb(249, 55, 55);
   font-size: 12px;
@@ -17,31 +12,9 @@ p.info {
   margin-top: 10px;
 }
 
-/* footer */
-.footer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.link {
-    text-decoration: none;
-    color: var(--link-color);
-}
-
-.link:hover {
-    color: var(--hover-color);
-}
-
 .lead {
     font-size: 1.25rem;
     font-weight: 300;
-}
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
 /* =========================
@@ -259,16 +232,4 @@ li {
 
 legend {
     color: var(--text-secondary-color);
-}
-
-
-/* =========================
-   CONTAINERS
-========================= */
-
-.container {
-    width: 100%;
-    max-width: 1100px;
-    margin-left: auto;
-    margin-right: auto;
 }

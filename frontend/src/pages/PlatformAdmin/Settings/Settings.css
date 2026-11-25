@@ -149,7 +149,6 @@
   border-top: 1px solid color-mix(in srgb, var(--text-secondary-color) 20%, transparent);
 }
 
-.reset-btn,
 .form-btn {
   min-height: 46px;
   padding: 0 20px;
@@ -157,17 +156,6 @@
   font: inherit;
   font-weight: 600;
   cursor: pointer;
-}
-
-.reset-btn {
-  border: 1px solid color-mix(in srgb, var(--text-secondary-color) 35%, transparent);
-  background: transparent;
-  color: var(--text-secondary-color);
-}
-
-.reset-btn:hover {
-  border-color: var(--danger-color);
-  color: var(--danger-color);
 }
 
 .form-btn {

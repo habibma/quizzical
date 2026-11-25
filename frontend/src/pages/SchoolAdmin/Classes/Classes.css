@@ -212,12 +212,6 @@
   color: #0f9f6e;
 }
 
-.class-card__status--inactive,
-.class-card__status--archived {
-  background: rgba(148, 163, 184, 0.12);
-  color: var(--card-text-secondary-color);
-}
-
 .class-card__description {
   margin: 0;
   color: var(--card-text-secondary-color);

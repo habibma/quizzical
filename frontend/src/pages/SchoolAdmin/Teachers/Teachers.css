@@ -31,13 +31,6 @@
     font-weight: 700;
 }
 
-.teachers-header--title {
-    margin: 0;
-    font-size: clamp(1.75rem, 2vw, 2.5rem);
-    font-weight: 800;
-    color: var(--card-text-primary-color);
-}
-
 .teachers-header--description {
     margin: 0;
     font-size: 0.96rem;
@@ -90,59 +83,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-}
-
-.teachers-toolbar__controls {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-    flex: 1;
-}
-
-.teachers-toolbar__search,
-.teachers-toolbar__select {
-    min-height: 44px;
-    padding: 0.75rem 0.9rem;
-    border: 1px solid rgba(148, 163, 184, 0.4);
-    background-color: var(--background-color);
-    border-radius: var(--radius-md);
-    color: var(--card-text-primary-color);
-    font: inherit;
-}
-
-.teachers-toolbar__search {
-    min-width: min(100%, 260px);
-    flex: 1 1 220px;
-}
-
-.teachers-toolbar__select {
-    min-width: 170px;
-}
-
-.teachers-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-
-.teachers-list-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-top: 0.5rem;
-}
-
-.teachers-list-header h2 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: var(--card-text-primary-color);
-}
-
-.teachers-list-header span {
-    color: var(--card-text-secondary-color);
-    font-size: 0.9rem;
 }
 
 .teachers-list {
@@ -338,24 +278,4 @@
     .teacher-summary-grid {
         grid-template-columns: 1fr;
     }
-
-    .teachers-toolbar__controls,
-    .teachers-actions {
-        width: 100%;
-    }
-
-    .teachers-toolbar__search,
-    .teachers-toolbar__select {
-        width: 100%;
-    }
-}
-
-
-/* ======================
-    Confirm Remove Modal
-=========================*/
-.confirm-modal__header h2 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: var(--danger-color);
 }
