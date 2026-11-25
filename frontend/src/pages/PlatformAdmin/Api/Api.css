@@ -354,6 +354,7 @@
         .input-container {
             display: flex;
             flex-direction: row;
+            flex-basis: 50%;
             align-items: center;
             gap: 0.5rem;
         }
