@@ -1,0 +1,30 @@
+:where(.summary-cards) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+:where(.summary-cards__item) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 1.1rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: var(--radius-md);
+  background: var(--surface-color);
+  box-shadow: var(--shadow-sm);
+}
+
+:where(.summary-cards__item) span {
+  color: var(--card-text-secondary-color);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+:where(.summary-cards__item) strong {
+  color: var(--card-text-primary-color);
+  font-size: 1.6rem;
+}

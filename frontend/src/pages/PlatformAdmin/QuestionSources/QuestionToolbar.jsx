@@ -1,4 +1,5 @@
 import Button from '../../../components/ui/Button/Button';
+import SearchInput from '../../../components/ui/SearchInput/SearchInput';
 import QuestionFilters from './QuestionFilters';
 
 const QuestionToolbar = ({
@@ -16,12 +17,12 @@ const QuestionToolbar = ({
     <div className="question-toolbar__top">
       <div className="question-search">
         <label htmlFor="question-search">Search questions</label>
-        <input
+        <SearchInput
           id="question-search"
-          type="search"
           value={searchTerm}
           onChange={(event) => onSearchChange(event.target.value)}
           placeholder="Search question text"
+          ariaLabel="Search questions"
         />
       </div>
       <span className="question-result-count">{resultCount} results</span>

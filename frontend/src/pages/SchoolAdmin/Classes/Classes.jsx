@@ -3,9 +3,10 @@ import Button from '../../../components/ui/Button/Button';
 import { useClasses } from '../../../context/SchoolAdmin/ClassesContext';
 import ClassItem from './ClassItem';
 import ClassModal from './ClassModal';
-import ClassesSummaryCard from './ClassesSummaryCard';
 import ClassesToolbar from './ClassesToolbar';
-import ClassesEmptyState from './ClassesEmptyState';
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
+import PageState from '../../../components/ui/PageState/PageState';
+import SummaryCards from '../../../components/ui/SummaryCards/SummaryCards';
 
 import './Classes.css';
 
@@ -135,10 +136,11 @@ const Classes = () => {
   if (loading) {
     return (
       <div className="classes-container">
-        <ClassesEmptyState
+        <PageState
           title="Loading classes..."
           message="Fetching school classes from the database."
           variant="loading"
+          className="classes-empty"
         />
       </div>
     );
@@ -146,30 +148,38 @@ const Classes = () => {
 
   return (
     <div className="classes-container">
-      <section className="classes-header">
-        <div className="classes-header__content">
-          <p className="classes-header__eyebrow">School Admin</p>
-          <h1 className="classes-header--title">Classes</h1>
-          <p className="classes-header--description">
-            Manage school sections, grade levels, and class assignments.
-          </p>
-        </div>
-
-        <div className="classes-header__actions">
+      <AdminPageHeader
+        eyebrow="School Admin"
+        title="Classes"
+        description="Manage school sections, grade levels, and class assignments."
+        actions={
           <Button
             className="btn-primary classes-actions--add"
             text="Add Class"
             onClick={() => handleOpenModal()}
           />
-        </div>
-      </section>
+        }
+        classNames={{
+          root: 'classes-header',
+          content: 'classes-header__content',
+          eyebrow: 'classes-header__eyebrow',
+          title: 'classes-header--title',
+          description: 'classes-header--description',
+          actions: 'classes-header__actions',
+        }}
+      />
 
-      <section className="classes-summary-grid">
-        <ClassesSummaryCard label="Total Classes" value={stats.total} />
-        <ClassesSummaryCard label="Assigned Teachers" value={stats.assigned} />
-        <ClassesSummaryCard label="Students" value={stats.students} />
-        <ClassesSummaryCard label="Teachers" value={new Set(normalizedClasses.map((item) => item.teacherName).filter(Boolean)).size} />
-      </section>
+      <SummaryCards
+        ariaLabel="Class summary"
+        className="classes-summary-grid"
+        cardClassName="classes-summary-card"
+        items={[
+          { label: 'Total Classes', value: stats.total },
+          { label: 'Assigned Teachers', value: stats.assigned },
+          { label: 'Students', value: stats.students },
+          { label: 'Teachers', value: new Set(normalizedClasses.map((item) => item.teacherName).filter(Boolean)).size },
+        ]}
+      />
 
       <section className="classes-content">
         <ClassesToolbar
@@ -190,10 +200,11 @@ const Classes = () => {
         </div>
 
         {classesError ? (
-          <ClassesEmptyState
+          <PageState
             title="Unable to fetch classes"
             message={classesError}
             variant="error"
+            className="classes-empty"
           />
         ) : visibleClasses.length > 0 ? (
           <div className="classes-list">
@@ -207,9 +218,10 @@ const Classes = () => {
             ))}
           </div>
         ) : (
-          <ClassesEmptyState
+          <PageState
             title="No classes match this view."
             message="Try a different search or add a new class."
+            className="classes-empty"
           />
         )}
       </section>

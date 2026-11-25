@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../../components/ui/Button/Button';
+import SearchInput from '../../../components/ui/SearchInput/SearchInput';
 
 const ClassesToolbar = ({
   searchTerm,
@@ -15,13 +16,12 @@ const ClassesToolbar = ({
   return (
     <div className="classes-toolbar">
       <div className="classes-toolbar__controls">
-        <input
+        <SearchInput
           className="classes-toolbar__search"
-          type="search"
           value={searchTerm}
           placeholder="Search classes"
           onChange={(e) => onSearchChange(e.target.value)}
-          aria-label="Search classes"
+          ariaLabel="Search classes"
         />
 
         <select

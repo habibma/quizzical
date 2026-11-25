@@ -1,8 +1,10 @@
-import React from 'react'
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader'
 
 const Reports = () => {
   return (
-    <div>Reports</div>
+    <div className="school-reports">
+      <AdminPageHeader eyebrow="School Admin" title="Reports" />
+    </div>
   )
 }
 

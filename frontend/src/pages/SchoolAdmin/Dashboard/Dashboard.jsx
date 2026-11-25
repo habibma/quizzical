@@ -9,6 +9,7 @@ import { useClasses } from '../../../context/SchoolAdmin/ClassesContext';
 import { useStudents } from '../../../context/SchoolAdmin/StudentsContext';
 import { useTeachers } from '../../../context/SchoolAdmin/TeachersContext';
 import { buildActivities, formatActivityDate } from '../ActivityLog/activityUtils';
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
 
 const formatNumber = (value) => new Intl.NumberFormat().format(value);
 
@@ -41,17 +42,23 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-container">
-            <section className="dashboard-header">
-                <div>
-                    <p className="dashboard-eyebrow">School overview</p>
-                    <h1 className="dashboard-header--title">Good morning, Admin</h1>
-                    <p className="dashboard-header--description">A clear view of the people and classes that need your attention.</p>
-                </div>
-                <div className="dashboard-actions">
+            <AdminPageHeader
+                eyebrow="School overview"
+                title="Good morning, Admin"
+                description="A clear view of the people and classes that need your attention."
+                actions={
+                    <div className="dashboard-actions">
                     <Link className="dashboard-action dashboard-action--secondary" to="/principal/reports">View reports</Link>
                     <Link className="dashboard-action dashboard-action--primary" to="/principal/students">Manage students <span aria-hidden="true">-&gt;</span></Link>
-                </div>
-            </section>
+                    </div>
+                }
+                classNames={{
+                    root: 'dashboard-header',
+                    eyebrow: 'dashboard-eyebrow',
+                    title: 'dashboard-header--title',
+                    description: 'dashboard-header--description',
+                }}
+            />
 
             {errors.length > 0 && (
                 <div className="dashboard-alert" role="status">

@@ -1,10 +1,15 @@
 
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
+
 const Dashboard = () => {
   return (
     <div className='container'>
-      <main className='dashboard'>
-        <h1>Admin Dashboard</h1>
-        <p>Welcome to the admin dashboard. Here you can manage the quiz questions and categories.</p>
+      <div className='dashboard'>
+        <AdminPageHeader
+          eyebrow="Platform Admin"
+          title="Admin Dashboard"
+          description="Welcome to the admin dashboard. Here you can manage the quiz questions and categories."
+        />
         <p> A quick overview of the available actions is provided below.</p>
         <ul>
           <li>Number of Questions {/*questions.length*/}</li>
@@ -13,7 +18,7 @@ const Dashboard = () => {
           <li>Number of Quizzes Taken {/*quizzesTaken.length*/}</li>
           <li>Recent activities</li>
         </ul>
-      </main>
+      </div>
     </div>
   )
 }

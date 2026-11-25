@@ -1,9 +1,14 @@
 
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
+
 const Dashboard = () => {
     return (
-        <div>
-            <h1>Teacher Dashboard</h1>
-            <p>Welcome to your dashboard!</p>
+        <div className="teacher-dashboard">
+            <AdminPageHeader
+                eyebrow="Teacher"
+                title="Teacher Dashboard"
+                description="Welcome to your dashboard!"
+            />
         </div>
     );
 };

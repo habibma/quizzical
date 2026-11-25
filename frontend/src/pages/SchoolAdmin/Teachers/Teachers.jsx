@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../components/ui/Button/Button';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
+import PageState from '../../../components/ui/PageState/PageState';
+import SearchInput from '../../../components/ui/SearchInput/SearchInput';
+import SummaryCards from '../../../components/ui/SummaryCards/SummaryCards';
 
 import { useTeachers } from '../../../context/SchoolAdmin/TeachersContext';
 
@@ -97,51 +101,37 @@ const Teachers = () => {
 
     return (
         <div className="teachers-container">
-            <section className="teachers-header">
-                <div>
-                    <p className="teachers-header__eyebrow">
-                        School Admin
-                    </p>
+            <AdminPageHeader
+                eyebrow="School Admin"
+                title="Teachers"
+                description="Manage and review all teachers assigned to the school."
+                actions={<Button className="btn-primary" text="Add Teacher" onClick={() => openModal()} />}
+                classNames={{
+                    root: 'teachers-header',
+                    content: 'teachers-header__content',
+                    eyebrow: 'teachers-header__eyebrow',
+                    description: 'teachers-header--description',
+                }}
+            />
 
-                    <h1>Teachers</h1>
-
-                    <p>
-                        Manage and review all teachers assigned to
-                        the school.
-                    </p>
-                </div>
-
-                <Button
-                    className="btn-primary"
-                    text="Add Teacher"
-                    onClick={() => openModal()}
-                />
-            </section>
-
-            <section className="teacher-summary-grid">
-                <div className="teacher-summary-card">
-                    <span>Total Teachers</span>
-                    <strong>{stats.total}</strong>
-                </div>
-
-                <div className="teacher-summary-card">
-                    <span>Active</span>
-                    <strong>{stats.active}</strong>
-                </div>
-
-                <div className="teacher-summary-card">
-                    <span>Unassigned</span>
-                    <strong>{stats.unassigned}</strong>
-                </div>
-            </section>
+            <SummaryCards
+                ariaLabel="Teacher summary"
+                className="teacher-summary-grid"
+                cardClassName="teacher-summary-card"
+                items={[
+                    { label: 'Total Teachers', value: stats.total },
+                    { label: 'Active', value: stats.active },
+                    { label: 'Unassigned', value: stats.unassigned },
+                ]}
+            />
 
             <section className="teachers-content">
                 <div className="teachers-toolbar">
-                    <input
-                        type="search"
+                    <SearchInput
                         value={search}
                         placeholder="Search teachers"
                         onChange={(e) => setSearch(e.target.value)}
+                        ariaLabel="Search teachers"
                     />
 
                     <select
@@ -171,10 +161,11 @@ const Teachers = () => {
                             />
                         ))
                     ) : (
-                        <div className="teachers-empty">
-                            <h3>No teachers found.</h3>
-                            <p>Try another search or add a teacher.</p>
-                        </div>
+                        <PageState
+                            className="teachers-empty"
+                            title="No teachers found."
+                            message="Try another search or add a teacher."
+                        />
                     )}
                 </div>
             </section>

@@ -1,10 +1,12 @@
-import Button from '../../../components/ui/Button/Button';
+import PageState from '../../../components/ui/PageState/PageState';
 
 const CategoryState = ({ type, message, onRetry }) => (
-  <div className={`category-state category-state--${type}`} role={type === 'error' ? 'alert' : undefined}>
-    <p>{message}</p>
-    {onRetry && <Button onClick={onRetry} text="Retry" />}
-  </div>
+  <PageState
+    variant={type}
+    message={message}
+    onAction={onRetry}
+    className="category-state"
+  />
 );
 
 export default CategoryState;

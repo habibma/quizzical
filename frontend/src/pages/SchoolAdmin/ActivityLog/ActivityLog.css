@@ -41,6 +41,10 @@
     text-decoration: none;
 }
 
+.activity-log-back-link {
+    white-space: nowrap;
+}
+
 .activity-log-notice {
     margin-bottom: 20px;
     padding: 12px 16px;

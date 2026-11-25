@@ -1,8 +1,10 @@
-import React from 'react'
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader'
 
 const Statistics = () => {
   return (
-    <div>Statistics</div>
+    <div className="platform-statistics">
+      <AdminPageHeader eyebrow="Platform Admin" title="Statistics" />
+    </div>
   )
 }
 

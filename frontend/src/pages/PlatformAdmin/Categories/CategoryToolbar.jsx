@@ -1,4 +1,5 @@
 import Button from '../../../components/ui/Button/Button';
+import SearchInput from '../../../components/ui/SearchInput/SearchInput';
 import CategoriesFilters from './CategoriesFilters';
 
 const CategoryToolbar = ({
@@ -22,12 +23,12 @@ const CategoryToolbar = ({
       />
       <div className="category-search">
         <label htmlFor="category-search">Search categories</label>
-        <input
+        <SearchInput
           id="category-search"
-          type="search"
           value={searchTerm}
           onChange={(event) => onSearchChange(event.target.value)}
           placeholder="Search category names"
+          ariaLabel="Search categories"
         />
       </div>
       <Button className="btn-secondary" text="Clear" onClick={onClear} />

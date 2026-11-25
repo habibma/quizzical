@@ -5,6 +5,9 @@ import { useCategories } from '../../../context/Admin/CategoryContext.jsx';
 
 import Card from './RepositoryCard.jsx';
 import CategoryModal from './CategoryModal.jsx';
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
+import PageState from '../../../components/ui/PageState/PageState';
+import SearchInput from '../../../components/ui/SearchInput/SearchInput';
 
 import './Repos.css';
 
@@ -82,15 +85,19 @@ const Repositories = () => {
 
   return (
     <div className="repositories">
-        <section className="repositories-header">
-            <h1>Repositories</h1>
-          <p className="lead">Manage connected question repositories and choose which sources are available to teachers.</p>
-        </section>
+        <AdminPageHeader
+          title="Repositories"
+          description="Manage connected question repositories and choose which sources are available to teachers."
+          classNames={{
+            root: 'repositories-header',
+            description: 'lead',
+          }}
+        />
         <section className="repositories-content">
             <div className="repositories-toolbar">
               <div className="repository-search">
                 <label htmlFor="repository-search">Search repositories</label>
-                <input id="repository-search" type="search" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Search by name or adaptor" />
+                <SearchInput id="repository-search" ariaLabel="Search repositories" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Search by name or adaptor" />
               </div>
               <div className="repository-filter">
                 <label htmlFor="repository-status">Status</label>
@@ -102,9 +109,9 @@ const Repositories = () => {
               </div>
             </div>
             {repositories.length === 0 ? (
-                <p className="repository-state">No repositories configured. Add an API source to make it available here.</p>
+                <PageState className="repository-state" message="No repositories configured. Add an API source to make it available here." />
             ) : filteredRepositories.length === 0 ? (
-                <p className="repository-state">No repositories match your search or filter.</p>
+                <PageState className="repository-state" message="No repositories match your search or filter." />
             ) : (
                 <RepositoriesList
                   repositories={filteredRepositories}

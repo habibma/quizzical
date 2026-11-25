@@ -1,22 +1,21 @@
+import SummaryCards from '../../../components/ui/SummaryCards/SummaryCards';
+
 const QuestionSummary = ({ apiCount, customCount, visibleCount, selectedApi, isTeacherView }) => (
-  <section className="question-summary" aria-label="Question summary">
-    <div className="question-summary__card">
-      <span>API Questions</span>
-      <strong>{apiCount}</strong>
-    </div>
-    <div className="question-summary__card">
-      <span>Custom Questions</span>
-      <strong>{customCount}</strong>
-    </div>
-    <div className="question-summary__card">
-      <span>Visible</span>
-      <strong>{visibleCount}</strong>
-    </div>
-    <div className="question-summary__card question-summary__card--wide">
-      <span>{isTeacherView ? 'Repository' : 'API'}</span>
-      <strong>{selectedApi || (isTeacherView ? 'Choose a repository' : 'Choose an API')}</strong>
-    </div>
-  </section>
+  <SummaryCards
+    ariaLabel="Question summary"
+    className="question-summary"
+    cardClassName="question-summary__card"
+    items={[
+      { label: 'API Questions', value: apiCount },
+      { label: 'Custom Questions', value: customCount },
+      { label: 'Visible', value: visibleCount },
+      {
+        label: isTeacherView ? 'Repository' : 'API',
+        value: selectedApi || (isTeacherView ? 'Choose a repository' : 'Choose an API'),
+        className: 'question-summary__card--wide',
+      },
+    ]}
+  />
 );
 
 export default QuestionSummary;

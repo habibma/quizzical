@@ -15,6 +15,7 @@ import { useApi } from '../../../context/Admin/ApiContext';
 import Button from '../../../components/ui/Button/Button';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
 import Pagination from '../../../components/ui/Pagination/Pagination';
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
 
 const QUESTIONS_PAGE_SIZE = 10;
 
@@ -255,14 +256,17 @@ const Questions = ({ mode = 'sources', pageTitle }) => {
 
   return (
     <div className='questions'>
-      <section className='questions-header'>
-        <div>
-          <p className='questions-eyebrow'>Platform Admin</p>
-          <h1>{heading}</h1>
-          <p className='lead'>{isTeacherView ? 'Create, organize, and maintain questions for your quizzes.' : 'Review questions provided by connected APIs.'}</p>
-        </div>
-        {isTeacherView && <Button className='btn-primary' text="Add Question" onClick={handleAddQuestion} />}
-      </section>
+      <AdminPageHeader
+        eyebrow="Platform Admin"
+        title={heading}
+        description={isTeacherView ? 'Create, organize, and maintain questions for your quizzes.' : 'Review questions provided by connected APIs.'}
+        actions={isTeacherView && <Button className='btn-primary' text="Add Question" onClick={handleAddQuestion} />}
+        classNames={{
+          root: 'questions-header',
+          eyebrow: 'questions-eyebrow',
+          description: 'lead',
+        }}
+      />
       <section className='questions-content'>
         <QuestionSummary
           apiCount={isTeacherView ? 0 : displayedApiQuestions.length}

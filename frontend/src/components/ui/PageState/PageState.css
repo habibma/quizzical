@@ -1,0 +1,26 @@
+:where(.page-state) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border: 1px dashed rgba(148, 163, 184, 0.4);
+  border-radius: var(--radius-lg);
+  background: rgba(148, 163, 184, 0.03);
+  color: var(--card-text-secondary-color);
+  text-align: center;
+}
+
+:where(.page-state) h2,
+:where(.page-state) h3,
+:where(.page-state) p {
+  margin: 0;
+}
+
+:where(.page-state--error) {
+  border-style: solid;
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.04);
+  color: var(--card-text-primary-color);
+}

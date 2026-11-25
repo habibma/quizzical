@@ -4,6 +4,10 @@ import { useClasses } from '../../../context/SchoolAdmin/ClassesContext';
 
 import Button from '../../../components/ui/Button/Button';
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog';
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
+import PageState from '../../../components/ui/PageState/PageState';
+import SearchInput from '../../../components/ui/SearchInput/SearchInput';
+import SummaryCards from '../../../components/ui/SummaryCards/SummaryCards';
 
 import StudentModal from './StudentModal';
 import StudentItem from './StudentItem';
@@ -160,49 +164,47 @@ const SchoolStudents = () => {
 
     return (
         <div className="students-container">
-            <section className="students-header">
-                <div className="students-header__content">
-                    <p className="students-header__eyebrow">School Admin</p>
-                    <h1 className="students-header--title">Students</h1>
-                    <p className="students-header--description">
-                        Manage and view all the students in your school.
-                    </p>
-                </div>
-
-                <div className="students-header__actions">
+            <AdminPageHeader
+                eyebrow="School Admin"
+                title="Students"
+                description="Manage and view all the students in your school."
+                actions={
                     <Button
                         className="btn-primary students-actions--add"
                         text="Add Student"
                         onClick={() => handleOpenModal()}
                     />
-                </div>
-            </section>
+                }
+                classNames={{
+                    root: 'students-header',
+                    content: 'students-header__content',
+                    eyebrow: 'students-header__eyebrow',
+                    title: 'students-header--title',
+                    description: 'students-header--description',
+                    actions: 'students-header__actions',
+                }}
+            />
 
-            <section className="student-summary-grid">
-                <div className="student-summary-card">
-                    <span>Total Students</span>
-                    <strong>{stats.total}</strong>
-                </div>
-                <div className="student-summary-card">
-                    <span>Classes</span>
-                    <strong>{stats.classCount}</strong>
-                </div>
-                <div className="student-summary-card">
-                    <span>Active</span>
-                    <strong>{stats.active}</strong>
-                </div>
-            </section>
+            <SummaryCards
+                ariaLabel="Student summary"
+                className="student-summary-grid"
+                cardClassName="student-summary-card"
+                items={[
+                    { label: 'Total Students', value: stats.total },
+                    { label: 'Classes', value: stats.classCount },
+                    { label: 'Active', value: stats.active },
+                ]}
+            />
 
             <section className="students-content">
                 <div className="students-toolbar">
                     <div className="students-toolbar__controls">
-                        <input
+                        <SearchInput
                             className="students-toolbar__search"
-                            type="search"
                             value={searchTerm}
                             placeholder="Search students"
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            aria-label="Search students"
+                            ariaLabel="Search students"
                         />
 
                         <select
@@ -269,10 +271,11 @@ const SchoolStudents = () => {
                             />
                         ))
                     ) : (
-                        <div className="students-empty">
-                            <h3>No students match this view.</h3>
-                            <p>Try a different search or add a new student.</p>
-                        </div>
+                        <PageState
+                            className="students-empty"
+                            title="No students match this view."
+                            message="Try a different search or add a new student."
+                        />
                     )}
                 </div>
             </section>

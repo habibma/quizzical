@@ -9,6 +9,9 @@ import QuizModal from './QuizModal'
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog'
 import Modal from '../../../components/ui/Modal'
 import Button from '../../../components/ui/Button/Button'
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader'
+import PageState from '../../../components/ui/PageState/PageState'
+import SearchInput from '../../../components/ui/SearchInput/SearchInput'
 
 import './Quizzes.css'
 
@@ -287,23 +290,34 @@ const Quizzes = () => {
 
   return (
     <div className='quizzes'>
-      <section className='quizzes-header'>
-        <div className="quiz-header--content">
-          <h1>Quizzes</h1>
-          <p className='lead'>Manage your quizzes here.</p>
-        </div>
-        <div className="quiz-header--actions">
-          <Button className='btn btn-primary quizzes-add' onClick={handleOpenCreateModal}>
-            Add quiz
-          </Button>
-          <Button className='btn btn-secondary quizzes-add-sample' onClick={handleAddSampleQuiz} text='Add sample quiz' />
-        </div>
-      </section>
+      <AdminPageHeader
+        title="Quizzes"
+        description="Manage your quizzes here."
+        actions={
+          <>
+            <Button className='btn btn-primary quizzes-add' onClick={handleOpenCreateModal}>
+              Add quiz
+            </Button>
+            <Button className='btn btn-secondary quizzes-add-sample' onClick={handleAddSampleQuiz} text='Add sample quiz' />
+          </>
+        }
+        classNames={{
+          root: 'quizzes-header',
+          content: 'quiz-header--content',
+          description: 'lead',
+          actions: 'quiz-header--actions',
+        }}
+      />
       <section className='quizzes-content'>
         <div className='quizzes-toolbar'>
           <label className='quiz-search'>
             <span>Search quizzes</span>
-            <input type='search' value={searchTerm} onChange={event => setSearchTerm(event.target.value)} placeholder='Search by title or description' />
+            <SearchInput
+              value={searchTerm}
+              onChange={event => setSearchTerm(event.target.value)}
+              placeholder='Search by title or description'
+              ariaLabel="Search quizzes"
+            />
           </label>
           <label>
             <span>Status</span>
@@ -336,8 +350,24 @@ const Quizzes = () => {
         <div className='quizzes-list'>
           {loading && <p>Loading quizzes...</p>}
           {error && <p className='error'>{error}</p>}
-          {!loading && !error && quizzes.length === 0 && <div className='quiz-empty-state'><h2>No quizzes yet</h2><p>Create your first quiz to start building assessments.</p><Button className='btn btn-primary' onClick={handleOpenCreateModal} text='Add quiz' /></div>}
-          {!loading && !error && quizzes.length > 0 && filteredQuizzes.length === 0 && <div className='quiz-empty-state'><h2>No matching quizzes</h2><p>Try changing your search or filters.</p></div>}
+          {!loading && !error && quizzes.length === 0 && (
+            <PageState
+              className='quiz-empty-state'
+              title="No quizzes yet"
+              message="Create your first quiz to start building assessments."
+              headingLevel="h2"
+              actionLabel="Add quiz"
+              onAction={handleOpenCreateModal}
+            />
+          )}
+          {!loading && !error && quizzes.length > 0 && filteredQuizzes.length === 0 && (
+            <PageState
+              className='quiz-empty-state'
+              title="No matching quizzes"
+              message="Try changing your search or filters."
+              headingLevel="h2"
+            />
+          )}
           {!loading && !error && filteredQuizzes.length > 0 && (
             <div className='quizzes-grid'>
               {filteredQuizzes.map(quiz => (

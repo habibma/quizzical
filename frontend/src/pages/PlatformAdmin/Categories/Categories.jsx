@@ -3,6 +3,7 @@ import { useCategories } from '../../../context/Admin/CategoryContext.jsx'
 import { useApi } from '../../../context/Admin/ApiContext.jsx'
 import Button from '../../../components/ui/Button/Button'
 import ConfirmDialog from '../../../components/ui/ConfirmDialog/ConfirmDialog'
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader'
 import CategoriesModal from './CategoriesModal'
 import CategorySummary from './CategorySummary'
 import CategoryToolbar from './CategoryToolbar'
@@ -146,13 +147,16 @@ const Categories = () => {
 
   return (
     <div className='categories'>
-      <section className='categories-header'>
-        <div>
-          <p className="categories-eyebrow">Platform Admin</p>
-          <h1>Categories</h1>
-          <p className='lead'>Manage category visibility and display names for each API source.</p>
-        </div>
-      </section>
+      <AdminPageHeader
+        eyebrow="Platform Admin"
+        title="Categories"
+        description="Manage category visibility and display names for each API source."
+        classNames={{
+          root: 'categories-header',
+          eyebrow: 'categories-eyebrow',
+          description: 'lead',
+        }}
+      />
       <section className='categories-table-container'>
         <CategorySummary
           total={categories.length}

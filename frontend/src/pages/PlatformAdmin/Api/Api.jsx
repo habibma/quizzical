@@ -1,22 +1,16 @@
 import { useState, useMemo } from "react";
 import { useApi } from "../../../context/Admin/ApiContext.jsx";
 
-import Input from "../../../components/ui/Input";
-import Button from "../../../components/ui/Button/Button";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog/ConfirmDialog";
-import EditIcon from "../../../assets/icons/EditIcon";
-import DeleteIcon from "../../../assets/icons/DeleteIcon";
-import InfoTooltip from "../../../components/ui/InfoTooltip/InfoTooltip.jsx";
 import ApiModal from "./ApiModal";
-
+import ApiHeader from "./ApiHeader";
+import ApiSummary from "./ApiSummary";
+import ApiToolbar from "./ApiToolbar";
+import ApiTable from "./ApiTable";
+import SuggestedApis from "./SuggestedApis";
 import { apiSources } from "./sources.js";
 
 import './Api.css'
-
-// This is a temporary settings object. In the future, these settings will be managed through the SettingsContext and persisted in localStorage.
-const settings = {
-  showStatusExplanations: true, // Set to true to show explanations for health status
-};
 
 const Api = () => {
 
@@ -79,7 +73,7 @@ const Api = () => {
     setIsModalOpen(true);
   }
 
-  const hanldeEditApi = (api) => {
+  const handleEditApi = (api) => {
     setSelectedApiSource(api);
     setIsEditing(true);
     setIsModalOpen(true);
@@ -113,159 +107,33 @@ const Api = () => {
     handleCloseModal();
   };
 
-  const addOpenTDBApiSource = () => {
-    addApi({ ...apiSources[0], id: Date.now().toString() });
+  const handleAddSuggestedApi = (api) => {
+    addApi({ ...api, id: Date.now().toString() });
   };
 
-  const addTriviaApiSource = () => {
-    addApi({ ...apiSources[1], id: Date.now().toString() });
-  }
-
-
-  const totalApis = apis.length;
-  const enabledApis = apis.filter((api) => api.enabled).length;
-  const defaultApis = apis.filter((api) => api.isDefault).length;
-  const healthyApis = apis.filter((api) => getHealthStatus(api).label === 'Healthy').length;
-  const offlineApis = apis.filter((api) => getHealthStatus(api).label === 'Offline').length;
+  const stats = {
+    total: apis.length,
+    enabled: apis.filter(api => api.enabled).length,
+    healthy: apis.filter(api => getHealthStatus(api).label === 'Healthy').length,
+    offline: apis.filter(api => getHealthStatus(api).label === 'Offline').length,
+  };
 
   return (
     <div className="api-container">
-      <section className="api-header">
-        <div className="api-header--content">
-          <p className="api-header--eyebrow">Platform Admin</p>
-          <h1>APIs</h1>
-          <p className="lead">Manage and monitor your connected quiz providers.</p>
-        </div>
-
-        <div className="api-header__actions">
-          <Button className="btn-primary" text="Add API" onClick={handleAddApi} />
-        </div>
-      </section>
-
-      <section className="api-summary-grid">
-        <div className="api-summary-card">
-          <span>Total APIs</span>
-          <strong>{totalApis}</strong>
-        </div>
-        <div className="api-summary-card">
-          <span>Enabled</span>
-          <strong>{enabledApis}</strong>
-        </div>
-        <div className="api-summary-card">
-          <span>Healthy</span>
-          <strong>{healthyApis}</strong>
-        </div>
-        <div className="api-summary-card">
-          <span>Offline</span>
-          <strong>{offlineApis}</strong>
-        </div>
-      </section>
-
-      <section className="api-toolbar">
-        <div className="api-toolbar--search">
-          <label htmlFor="api-search">Search APIs</label>
-          <input
-            id="api-search"
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by name, adaptor, or URL"
-          />
-        </div>
-
-        <div className="api-toolbar--filter">
-          <label htmlFor="api-status-filter">Filter</label>
-          <select id="api-status-filter" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">All</option>
-            <option value="healthy">Healthy</option>
-            <option value="warning">Warning</option>
-            <option value="offline">Offline</option>
-            <option value="enabled">Enabled</option>
-            <option value="disabled">Disabled</option>
-          </select>
-        </div>
-      </section>
-
-      <section className="api-table-container">
-        <table className="api-table">
-          <thead className="api-table--header">
-            <tr>
-              <th>Name</th>
-              <th>Adaptor</th>
-              <th>Status</th>
-              <th>Health
-                <InfoTooltip
-                  content="Healthy: enabled and has at least one endpoint
-Warning: enabled but no endpoint configured
-Offline: API is disabled"
-                  disabled={!settings.showStatusExplanations}
-                />
-              </th>
-              <th>Default</th>
-              <th>Endpoints</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody className="api-table--body">
-            {filteredApis.length > 0 ? filteredApis.map((api) => {
-              const healthStatus = getHealthStatus(api);
-
-              return (
-                <tr key={api.id}>
-                  <td className="api-table__name">{api.name}</td>
-                  <td>{api.adaptor}</td>
-                  <td>
-                    <span className={`status-badge ${api.enabled ? 'status-badge--enabled' : 'status-badge--disabled'}`}>
-                      {api.enabled ? 'Enabled' : 'Disabled'}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`health-badge ${healthStatus.className}`}>
-                      {healthStatus.label}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`status-badge ${api.isDefault ? 'status-badge--default' : 'status-badge--muted'}`}>
-                      {api.isDefault ? 'Default' : 'Optional'}
-                    </span>
-                  </td>
-                  <td>
-                    <ul className="api-endpoints-list">
-                      {api.endpoints.map((endpoint) => (
-                        <li key={endpoint.id}>
-                          {endpoint.name} <span>({endpoint.method})</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </td>
-                  <td className="api-table--actions">
-                    <Button
-                      type="button"
-                      className="btn-secondary action-btn"
-                      text="edit"
-                      onClick={() => hanldeEditApi(api)}
-                      title="Edit API"
-                    />
-                    <Button
-                      type="button"
-                      className="btn-danger action-btn"
-                      text="delete"
-                      onClick={() => handleDeleteApi(api)}
-                      title="Delete API"
-                    />
-                  </td>
-                </tr>
-              );
-            }) : (
-              <tr>
-                <td colSpan="7" className="api-empty-state">
-                  No APIs match the current search or filter.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </section>
+      <ApiHeader onAddApi={handleAddApi} />
+      <ApiSummary {...stats} />
+      <ApiToolbar
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        statusFilter={statusFilter}
+        onStatusChange={setStatusFilter}
+      />
+      <ApiTable
+        apis={filteredApis}
+        getHealthStatus={getHealthStatus}
+        onEdit={handleEditApi}
+        onDelete={handleDeleteApi}
+      />
 
       <ApiModal
         isOpen={isModalOpen}
@@ -286,11 +154,7 @@ Offline: API is disabled"
         onClose={() => setApiToDelete(null)}
       />
 
-      {/* These buttons are temporary. TODO: will be replaced with a more permanent solution */}
-      <section className="api-actions">
-        <Button className="btn-primary" size="lg" text="Add OpenTDB API" onClick={addOpenTDBApiSource} />
-        <Button className="btn-primary" size="lg" text="Add Trivia API" onClick={addTriviaApiSource} />
-      </section>
+      <SuggestedApis apis={apiSources} onAddApi={handleAddSuggestedApi} />
 
       <footer className="api-footer">
         <p>Quizical &copy; 2024 | in progress...</p>

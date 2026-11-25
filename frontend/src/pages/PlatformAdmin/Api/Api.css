@@ -173,15 +173,22 @@
 }
 
 .api-table--actions .action-btn {
-    min-width: 32px;
-    height: 32px;
-    padding: 15px;
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: var(--radius-lg);
     background-color: rgba(148, 163, 184, 0.08);
     color: var(--card-text-secondary-color);
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
 
     &:hover {
         background-color: rgba(148, 163, 184, 0.16);
@@ -289,9 +296,40 @@
 /* Api actions */
 .api-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
     flex-wrap: wrap;
+    padding: 1rem 1.25rem;
+    background: var(--surface-color);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: var(--radius-md);
+}
+
+.api-actions__content h2,
+.api-actions__content p {
+    margin: 0;
+}
+
+.api-actions__content p {
+    margin-top: 0.35rem;
+    color: var(--card-text-secondary-color);
+}
+
+.api-actions__buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+    .api-actions__buttons {
+        width: 100%;
+    }
+
+    .api-actions__buttons .btn {
+        flex: 1 1 100%;
+    }
 }
 
 .add-api-btn {

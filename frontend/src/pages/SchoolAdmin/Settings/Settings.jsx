@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Input from '../../../components/ui/Input'
 import Button from '../../../components/ui/Button/Button'
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader'
 
 import './Settings.css'
 
@@ -60,11 +61,16 @@ const Settings = () => {
 
   return (
     <div className="school-settings">
-      <header className="school-settings-header">
-        <p className="eyebrow">School administration</p>
-        <h1>School Settings</h1>
-        <p>Manage the policies and identity that apply to this school.</p>
-      </header>
+      <AdminPageHeader
+        as="header"
+        eyebrow="School administration"
+        title="School Settings"
+        description="Manage the policies and identity that apply to this school."
+        classNames={{
+          root: 'school-settings-header',
+          eyebrow: 'eyebrow',
+        }}
+      />
 
       <form className="school-settings-form" onSubmit={handleSubmit}>
         <section className="school-settings-section">

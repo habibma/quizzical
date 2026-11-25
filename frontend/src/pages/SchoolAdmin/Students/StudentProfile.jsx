@@ -1,6 +1,8 @@
 
 import { useParams } from 'react-router-dom';
 import { useStudents } from '../../../context/SchoolAdmin/StudentsContext';
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader';
+import PageState from '../../../components/ui/PageState/PageState';
 
 const StudentProfile = () => {
     const { studentId } = useParams();
@@ -11,14 +13,16 @@ const StudentProfile = () => {
     );
 
     if (!student) {
-        return <p>Student not found.</p>;
+        return <PageState variant="error" message="Student not found." />;
     }
 
     return (
-        <div>
-            <h1>{student.name}</h1>
-            <p>Class: {student.className}</p>
-            <p>Email: {student.email}</p>
+        <div className="student-profile">
+            <AdminPageHeader eyebrow="School Admin" title={student.name} />
+            <section className="student-profile__details">
+                <p>Class: {student.className}</p>
+                <p>Email: {student.email}</p>
+            </section>
         </div>
     );
 };

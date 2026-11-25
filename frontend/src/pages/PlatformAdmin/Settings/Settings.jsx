@@ -3,6 +3,7 @@ import { useSettings } from '../../../context/Admin/SettingsContext'
 
 import Input from '../../../components/ui/Input'
 import Button from '../../../components/ui/Button/Button'
+import AdminPageHeader from '../../../components/ui/AdminPageHeader/AdminPageHeader'
 
 import { defaultSettings } from '../../../config/defaultSettings'
 
@@ -38,13 +39,16 @@ const Settings = () => {
 
   return (
     <div className='settings'>
-      <section className='settings-header'>
-        <div>
-          <p className='eyebrow'>Platform administration</p>
-          <h1>Settings</h1>
-          <p className='lead'>Manage defaults and policies that apply across the platform.</p>
-        </div>
-      </section>
+      <AdminPageHeader
+        eyebrow="Platform administration"
+        title="Settings"
+        description="Manage defaults and policies that apply across the platform."
+        classNames={{
+          root: 'settings-header',
+          eyebrow: 'eyebrow',
+          description: 'lead',
+        }}
+      />
       <div className='settings-sections'>
         <section className='settings-panel settings-panel--active'>
           <div className='panel-heading'>
