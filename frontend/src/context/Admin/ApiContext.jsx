@@ -8,6 +8,8 @@ const normalizeEndpoint = (endpoint, index) => ({
     method: endpoint.method ?? "GET",
     path: endpoint.path ?? "",
     description: endpoint.description ?? "",
+    type: endpoint.type ?? "",
+    mapping: endpoint.mapping ?? {},
 });
 
 const normalizeApi = (api) => ({

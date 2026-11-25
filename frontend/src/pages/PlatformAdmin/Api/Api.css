@@ -333,8 +333,12 @@
 }
 
 /* ==================
-     Api modal
-=====================*/
+   API Modal
+===================== */
+
+.modal.api-modal {
+    width: min(760px, 100%);
+}
 
 .api-modal--header {
     padding: 1.25rem 1.25rem 0;
@@ -343,67 +347,191 @@
 .api-modal--form {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 1.25rem;
     padding: 1rem;
-
-    .api-form-checkboxes {
-        flex-direction: row;
-        gap: 20px;
-        align-items: center;
-
-        .input-container {
-            display: flex;
-            flex-direction: row;
-            flex-basis: 50%;
-            align-items: center;
-            gap: 0.5rem;
-        }
-    }
-
 }
 
-/* Endpoint row */
+/* Modal sections */
+
+.api-modal--form fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    background: var(--surface-color);
+}
+
+.api-modal--form legend {
+    padding: 0 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary-color);
+}
+
+/* Settings */
+
+.api-modal--form fieldset.api-form-checkboxes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+}
+
+.api-modal--form .api-form-checkboxes .input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1 1 12rem;
+}
+
+.api-form-checkboxes .input-container .label {
+    margin: 0;
+    cursor: pointer;
+}
+
+.api-form-checkboxes input[type="checkbox"] {
+    width: auto;
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+/* Endpoints section */
+
+.api-form-endpoints {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ==================
+   Endpoint Row
+===================== */
+
 .api-form-endpoint {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
+    gap: 1rem;
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-    padding: 0.9rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--background-color);
 }
+
+/* Endpoint fields */
+
+.api-form-endpoint .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.api-form-endpoint input,
+.api-form-endpoint select,
+.api-form-endpoint textarea {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Field mapping */
+
+.api-modal--form fieldset.endpoint-mapping {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--surface-color);
+}
+
+.endpoint-mapping .input-container {
+    min-width: 0;
+}
+
+/* Endpoint actions */
+
+.endpoint-actions,
+.api-endpoint-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.connect-endpoint,
+.remove-endpoint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+/* Modal actions */
 
 .api-form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.75rem;
+    align-items: center;
     flex-wrap: wrap;
+    gap: 0.75rem;
     margin-top: 0.25rem;
 }
 
+/* Connection feedback */
+
 .connection-error {
-    color: rgb(249, 55, 55);
-    font-size: 12px;
-    margin-top: 10px;
-    font-weight: light;
+    margin-top: 0.5rem;
+    color: var(--danger-color);
+    font-size: 0.8rem;
 }
 
 .connection-success {
-    color: rgb(55, 249, 55);
-    font-size: 12px;
-    margin-top: 10px;
-    font-weight: light;
+    margin-top: 0.5rem;
+    color: var(--success-color);
+    font-size: 0.8rem;
 }
 
-/* capabilities */
-.api-form-capabilities {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border: 1px solid var(--border-color);
-    padding: 10px;
+/* ==================
+   Responsive
+===================== */
 
-    & > div {
-        border: 1px solid var(--border-color);
+@media (max-width: 640px) {
+    .api-modal--form {
+        padding: 0.75rem;
+    }
+
+    .api-modal--form fieldset.api-form-checkboxes {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .api-modal--form fieldset.endpoint-mapping {
+        grid-template-columns: 1fr;
+    }
+
+    .api-modal--form .api-form-checkboxes .input-container {
+        flex: 0 1 auto;
+    }
+
+    .api-form-actions,
+    .endpoint-actions,
+    .api-endpoint-actions {
+        width: 100%;
+    }
+
+    .api-form-actions button,
+    .endpoint-actions button,
+    .api-endpoint-actions button {
+        flex: 1;
     }
 }

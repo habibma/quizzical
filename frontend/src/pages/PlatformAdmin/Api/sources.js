@@ -15,6 +15,7 @@ export const apiSources = [
       {
         id: 1,
         name: "Categories",
+        type: "categories",
         method: "GET",
         path: "/api_category.php",
         description: "all available categories",
@@ -22,9 +23,17 @@ export const apiSources = [
       {
         id: 2,
         name: "Questions",
+        type: "questions",
         method: "GET",
         path: "/api.php",
         description: "trivia questions",
+
+        mapping: {
+          question: "question",
+          answer: "correct_answer",
+          incorrectAnswers: "incorrect_answers",
+          category: "category",
+        },
       },
     ],
     difficulty: ["easy", "medium", "hard"],
@@ -46,6 +55,7 @@ export const apiSources = [
       {
         id: 1,
         name: "Categories",
+        type: "categories",
         method: "GET",
         path: "/categories",
         description: "all available categories",
@@ -53,9 +63,16 @@ export const apiSources = [
       {
         id: 2,
         name: "Questions",
+        type: "questions",
         method: "GET",
         path: "/questions",
         description: "trivia questions",
+        mapping: {
+          question: "question",
+          answer: "correctAnswer",
+          incorrectAnswers: "incorrectAnswers",
+          category: "category",
+        },
       },
     ],
     difficulty: ["easy", "medium", "hard"],

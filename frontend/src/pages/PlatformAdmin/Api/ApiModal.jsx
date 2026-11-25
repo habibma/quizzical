@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 
 import Modal from "../../../components/ui/Modal";
@@ -5,307 +6,461 @@ import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button/Button";
 import EndpointRow from "./EndpointRow";
 
-import './Api.css'
+import "./Api.css";
 
-const INITIAL_API_DATA = {
+const createInitialApiData = () => ({
     id: null,
-    name: '',
-    baseUrl: '',
+    name: "",
+    description: "",
+    provider: "",
+    baseUrl: "",
     enabled: true,
     isDefault: false,
-    version: '',
-    authentication: 'none',
+    version: "",
+    authentication: "none",
     authDetails: {
         apiKey: null,
+        token: null,
+    },
+    adapter: {
+        type: "generic-rest",
+        version: 1,
     },
     endpoints: [],
+});
+
+const normalizeApiData = (api) => {
+    if (!api) return createInitialApiData();
+
+    return {
+        ...createInitialApiData(),
+        ...api,
+        adapter: {
+            type: "generic-rest",
+            version: 1,
+        },
+        authDetails: {
+            ...createInitialApiData().authDetails,
+            ...api.authDetails,
+        },
+        endpoints: (api.endpoints || []).map((endpoint) => ({
+            ...endpoint,
+            id: endpoint.id || crypto.randomUUID(),
+            type:
+                endpoint.type ||
+                (endpoint.name?.toLowerCase() === "categories"
+                    ? "categories"
+                    : endpoint.name?.toLowerCase() === "questions"
+                      ? "questions"
+                      : "other"),
+            method: endpoint.method || "GET",
+            path: endpoint.path || "",
+            mapping: endpoint.mapping || {},
+        })),
+    };
 };
 
-const ApiModal = ({ isOpen, onClose, apiSource, isEditing, onSubmit, customClass }) => {
+const ApiModal = ({
+    isOpen,
+    onClose,
+    apiSource,
+    isEditing,
+    onSubmit,
+    customClass,
+}) => {
+    const [apiData, setApiData] = useState(createInitialApiData);
+    const [connectionResults, setConnectionResults] = useState({});
 
-    const [apiData, setApiData] = useState(INITIAL_API_DATA);
-    const [isConnected, setIsConnected] = useState(false);
-    const [connectionError, setConnectionError] = useState(null);
+    useEffect(() => {
+        if (isOpen) {
+            setApiData(
+                isEditing && apiSource
+                    ? normalizeApiData(apiSource)
+                    : createInitialApiData()
+            );
+            setConnectionResults({});
+        }
+    }, [isOpen, isEditing, apiSource]);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setApiData(prevData => ({
-            ...prevData,
-            [name]: type === 'checkbox' ? checked : value
+
+        setApiData((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
         }));
     };
 
     const handleAuthChange = (e) => {
         const { name, value } = e.target;
-        setApiData(prevData => ({
-            ...prevData,
+
+        setApiData((prev) => ({
+            ...prev,
             authDetails: {
-                ...prevData.authDetails,
-                [name]: value
-            }
+                ...prev.authDetails,
+                [name]: value,
+            },
         }));
     };
 
     const handleEndpointChange = (index, field, value) => {
-        setApiData(prev => ({
+        setApiData((prev) => ({
             ...prev,
-            endpoints: prev.endpoints.map((ep, i) =>
-                i === index ? { ...ep, [field]: value } : ep
-            )
+            endpoints: prev.endpoints.map((endpoint, i) =>
+                i === index
+                    ? { ...endpoint, [field]: value }
+                    : endpoint
+            ),
+        }));
+    };
+
+    const handleMappingChange = (index, field, value) => {
+        setApiData((prev) => ({
+            ...prev,
+            endpoints: prev.endpoints.map((endpoint, i) =>
+                i === index
+                    ? {
+                          ...endpoint,
+                          mapping: {
+                              ...endpoint.mapping,
+                              [field]: value,
+                          },
+                      }
+                    : endpoint
+            ),
+        }));
+    };
+
+    const addEndpoint = (type) => {
+        if (
+            type !== "other" &&
+            apiData.endpoints.some((endpoint) => endpoint.type === type)
+        ) {
+            return;
+        }
+
+        const names = {
+            categories: "Categories",
+            questions: "Questions",
+            other: "Other",
+        };
+
+        setApiData((prev) => ({
+            ...prev,
+            endpoints: [
+                ...prev.endpoints,
+                {
+                    id: crypto.randomUUID(),
+                    name: names[type],
+                    type,
+                    method: "GET",
+                    path: "",
+                    description: "",
+                    mapping: {},
+                },
+            ],
         }));
     };
 
     const removeEndpoint = (index) => {
-        const updatedEndpoints = apiData.endpoints.filter((_, i) => i !== index);
-        setApiData(prevData => ({
-            ...prevData,
-            endpoints: updatedEndpoints
+        setApiData((prev) => ({
+            ...prev,
+            endpoints: prev.endpoints.filter((_, i) => i !== index),
         }));
     };
 
-    const addCategoryEndpoint = () => {
-        if (apiData.endpoints.some(ep => ep.name === 'Categories')) {
-            alert("Category endpoint already exists.");
-            return;
-        }
-        setApiData(prevData => ({
-            ...prevData,
-            endpoints: [...prevData.endpoints, { name: 'Categories', method: '', path: '', description: '' }]
-        }));
-    }
+    const handleConnect = async (endpoint) => {
+        const endpointId = endpoint.id;
 
-    const addQuestionEndpoint = () => {
-        if (apiData.endpoints.some(ep => ep.name === 'Questions')) {
-            alert("Question endpoint already exists.");
-            return;
-        }
-        setApiData(prevData => ({
-            ...prevData,
-            endpoints: [...prevData.endpoints, { name: 'Questions', method: '', path: '', description: '' }]
+        setConnectionResults((prev) => ({
+            ...prev,
+            [endpointId]: {
+                loading: true,
+                connected: false,
+                error: null,
+            },
         }));
-    }
+
+        try {
+            if (!apiData.baseUrl.trim()) {
+                throw new Error("Base URL is required.");
+            }
+
+            if (!endpoint.path.trim()) {
+                throw new Error("Endpoint path is required.");
+            }
+
+            const headers = {};
+
+            if (apiData.authentication === "bearer") {
+                if (!apiData.authDetails.token) {
+                    throw new Error("Bearer token is required.");
+                }
+
+                headers.Authorization =
+                    `Bearer ${apiData.authDetails.token}`;
+            }
+
+            if (apiData.authentication === "apiKey") {
+                if (!apiData.authDetails.apiKey) {
+                    throw new Error("API key is required.");
+                }
+
+                headers["X-API-Key"] = apiData.authDetails.apiKey;
+            }
+
+            const baseUrl = apiData.baseUrl.endsWith("/")
+                ? apiData.baseUrl
+                : `${apiData.baseUrl}/`;
+
+            const path = endpoint.path.replace(/^\/+/, "");
+            const url = new URL(path, baseUrl);
+
+            const response = await fetch(url, {
+                method: endpoint.method || "GET",
+                headers,
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    `Request failed with status ${response.status}.`
+                );
+            }
+
+            setConnectionResults((prev) => ({
+                ...prev,
+                [endpointId]: {
+                    loading: false,
+                    connected: true,
+                    error: null,
+                },
+            }));
+        } catch (error) {
+            setConnectionResults((prev) => ({
+                ...prev,
+                [endpointId]: {
+                    loading: false,
+                    connected: false,
+                    error:
+                        error.message ||
+                        "Unable to connect to this endpoint.",
+                },
+            }));
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(apiData);
-        setApiData(INITIAL_API_DATA);
-        onClose();
-    }
 
-    // connection handlers
-    const handleConnect = async (endpnt) => {
-        setConnectionError(null);
-        setIsConnected(false);
-        try {
-            if (!apiData.baseUrl.trim()) {
-                throw new Error("Base URL is empty");
-            }
-            const headers = {};
-            if (apiData.authentication === "bearer") {
-                headers.Authorization = `Bearer ${apiData.authDetails.token}`;
-            }
-            if (apiData.authentication === "apiKey") {
-                headers["X-API-Key"] = apiData.authDetails.apiKey;
-            }
-            const url = new URL(endpnt?.path || "", apiData.baseUrl).toString();
-            const response = await fetch(url, {
-                method: endpnt?.method || 'GET',
-                headers: headers,
-            });
-            if (response.ok) {
-                setIsConnected(true);
-                setConnectionError(null);
-            } else {
-                throw new Error(`Connection failed with status: ${response.status}`);
-            }
-        } catch (error) {
-            setConnectionError(error.message || "An error occurred while trying to connect");
-        }
+        const preparedApi = {
+            ...apiData,
+            adapter: {
+                type: "generic-rest",
+                version: 1,
+            },
+        };
+
+        onSubmit(preparedApi);
     };
-
-    useEffect(() => {
-        if (isEditing && apiSource) {
-            setApiData(structuredClone(apiSource));
-        }
-        else {
-            setApiData(INITIAL_API_DATA);
-        }
-    }, [isEditing, apiSource]);
 
     if (!isOpen) return null;
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} customClass={customClass}>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            customClass={customClass}
+        >
             <header className="api-modal--header">
                 <h2>{isEditing ? "Edit" : "Add"} API</h2>
             </header>
-            <form className="api-modal--form" onSubmit={handleSubmit}>
+
+            <form
+                className="api-modal--form"
+                onSubmit={handleSubmit}
+            >
+                {/* Identity */}
                 <fieldset className="form-fieldset api-form-general">
                     <legend>Identity</legend>
+
                     <Input
                         label="Name"
                         id="name"
                         name="name"
-                        value={apiData?.name || ''}
+                        value={apiData.name}
                         onChange={handleInputChange}
+                        required
                     />
+
                     <Input
                         label="Description"
                         id="description"
                         name="description"
-                        value={apiData?.description || ''}
+                        value={apiData.description}
                         onChange={handleInputChange}
                     />
+
                     <Input
-                        label="provider"
+                        label="Provider"
                         id="provider"
                         name="provider"
-                        value={apiData?.provider || ''}
+                        value={apiData.provider}
                         onChange={handleInputChange}
                     />
                 </fieldset>
+
+                {/* Connection */}
                 <fieldset className="form-fieldset api-form-connection">
                     <legend>Connection</legend>
+
                     <Input
                         label="Base URL"
                         id="baseUrl"
                         name="baseUrl"
-                        value={apiData?.baseUrl || ''}
+                        value={apiData.baseUrl}
                         onChange={handleInputChange}
+                        required
                     />
+
                     <Input
                         label="Version"
                         id="version"
                         name="version"
-                        value={apiData?.version || ''}
+                        value={apiData.version}
                         onChange={handleInputChange}
                     />
                 </fieldset>
+
+                {/* Adapter */}
+                <fieldset className="form-fieldset api-form-adapter">
+                    <legend>Adapter Configuration</legend>
+
+                    <p>
+                        All APIs use Quizzical's Generic REST adapter.
+                        Configure endpoints and response-field mappings
+                        to integrate your API.
+                    </p>
+                </fieldset>
+
+                {/* Authentication */}
                 <fieldset className="form-fieldset api-form-authentication">
                     <legend>Authentication</legend>
+
                     <Input
                         as="select"
                         label="Authentication Type"
                         id="authentication"
                         name="authentication"
-                        value={apiData?.authentication || 'none'}
+                        value={apiData.authentication}
                         options={[
                             { value: "none", label: "None" },
                             { value: "apiKey", label: "API Key" },
                             { value: "bearer", label: "Bearer Token" },
-                            // { value: "basic", label: "Basic Auth" },
-                            // { value: "oauth2", label: "OAuth 2.0" },
                         ]}
                         onChange={handleInputChange}
                     />
+
                     {apiData.authentication === "apiKey" && (
                         <Input
+                            type="password"
                             label="API Key"
                             id="apiKey"
                             name="apiKey"
-                            value={apiData?.authDetails?.apiKey || ''}
+                            value={apiData.authDetails.apiKey || ""}
+                            onChange={handleAuthChange}
+                        />
+                    )}
+
+                    {apiData.authentication === "bearer" && (
+                        <Input
+                            type="password"
+                            label="Bearer Token"
+                            id="token"
+                            name="token"
+                            value={apiData.authDetails.token || ""}
                             onChange={handleAuthChange}
                         />
                     )}
                 </fieldset>
-                {/* This fieldset isn't functional yet TODO: Implement the functionality */}
-                {/* <fieldset className="api-form-capabilities">
-                    <legend>Question capabilities</legend>
-                    <div>
-                        <Input
-                            type="checkbox"
-                            label="Supports multiple choice questions"
-                            id="supportsMultipleChoice"
-                            name="supportsMultipleChoice"
-                            checked={apiData?.supportsMultipleChoice || false}
-                            onChange={handleInputChange}
-                        />
-                        <Input
-                            type="checkbox"
-                            label="Supports true/false questions"
-                            id="supportsTrueFalse"
-                            name="supportsTrueFalse"
-                            checked={apiData?.supportsTrueFalse || false}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div>
-                        <Input
-                            type="checkbox"
-                            label="easy difficulty"
-                            id="easyDifficulty"
-                            name="easyDifficulty"
-                            checked={apiData?.easyDifficulty || false}
-                            onChange={handleInputChange}
-                        />
-                        <Input
-                            type="checkbox"
-                            label="medium difficulty"
-                            id="mediumDifficulty"
-                            name="mediumDifficulty"
-                            checked={apiData?.mediumDifficulty || false}
-                            onChange={handleInputChange}
-                        />
-                        <Input
-                            type="checkbox"
-                            label="hard difficulty"
-                            id="hardDifficulty"
-                            name="hardDifficulty"
-                            checked={apiData?.hardDifficulty || false}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                </fieldset> */}
+
+                {/* Settings */}
                 <fieldset className="form-fieldset api-form-checkboxes">
                     <legend>Settings</legend>
+
                     <Input
                         type="checkbox"
                         label="Enabled"
                         id="enabled"
                         name="enabled"
-                        checked={apiData?.enabled || false}
+                        checked={apiData.enabled}
                         onChange={handleInputChange}
                     />
+
                     <Input
                         type="checkbox"
                         label="Default"
                         id="isDefault"
                         name="isDefault"
-                        checked={apiData?.isDefault || false}
+                        checked={apiData.isDefault}
                         onChange={handleInputChange}
                     />
                 </fieldset>
+
+                {/* Endpoints */}
                 <fieldset className="form-fieldset api-form-endpoints">
                     <legend>Endpoints</legend>
+
                     {apiData.endpoints.map((endpoint, index) => (
                         <EndpointRow
-                            key={index}
+                            key={endpoint.id}
                             index={index}
                             endpoint={endpoint}
                             onChange={handleEndpointChange}
+                            onMappingChange={handleMappingChange}
                             onRemove={removeEndpoint}
                             onConnect={handleConnect}
-                            isConnected={isConnected}
-                            error={connectionError}
+                            connectionResult={connectionResults[endpoint.id]}
                         />
                     ))}
-                    <Button type="button" className="btn-primary" text="Add Category Endpoint" onClick={addCategoryEndpoint} />
-                    <Button type="button" className="btn-primary" text="Add Question Endpoint" onClick={addQuestionEndpoint} />
+
+                    <div className="api-endpoint-actions">
+                        <Button
+                            type="button"
+                            className="btn-primary"
+                            text="Add Category Endpoint"
+                            onClick={() => addEndpoint("categories")}
+                        />
+
+                        <Button
+                            type="button"
+                            className="btn-primary"
+                            text="Add Question Endpoint"
+                            onClick={() => addEndpoint("questions")}
+                        />
+
+                        <Button
+                            type="button"
+                            className="btn-secondary"
+                            text="Add Other Endpoint"
+                            onClick={() => addEndpoint("other")}
+                        />
+                    </div>
                 </fieldset>
-                <fieldset className="form-fieldset api-form--adaptor-name">
-                    <legend>Adaptor Name</legend>
-                    {/* this name is used to identify the API adaptor. it should be unique. TODO: Add validation and error handling and info for users */}
-                    <Input
-                        type="text"
-                        id="adaptor"
-                        name="adaptor"
-                        value={apiData?.adaptor || ""}
-                        onChange={handleInputChange}
-                    />
-                </fieldset>
+
+                {/* Actions */}
                 <div className="api-form-actions">
-                    <Button type="submit" className="btn-primary" text={isEditing ? "Update API" : "Add API"} />
-                    <Button className="btn-secondary" text="Cancel" onClick={onClose} />
+                    <Button
+                        type="submit"
+                        className="btn-primary"
+                        text={isEditing ? "Update API" : "Add API"}
+                    />
+
+                    <Button
+                        type="button"
+                        className="btn-secondary"
+                        text="Cancel"
+                        onClick={onClose}
+                    />
                 </div>
             </form>
         </Modal>
